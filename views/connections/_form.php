@@ -21,11 +21,11 @@ use kvelaro\TreeHelper\TreeHelper;
     $units = Units::find()->all();
     $items_units = ArrayHelper::map($units,'id','name');
     //var_dump($items_units);
-    TreeHelper::makeTree($units, 'id', 'parent_id'); //build tree
+    //TreeHelper::makeTree($units, 'id', 'parent_id'); //build tree
 
-    var_dump($tree = TreeHelper::getTree($units, '&nbsp;'));
-    echo Html::activeDropDownList($model,'unit_id',$items_units, ['encodeSpaces'=>true]);
-    $tree = TreeHelper::getTree(); //get tree
+    //var_dump($tree = TreeHelper::getTree($units, '&nbsp;'));
+    //echo Html::activeDropDownList($model,'unit_id',$items_units, ['encodeSpaces'=>true]);
+    //$tree = TreeHelper::getTree(); //get tree
 
 
 
@@ -40,7 +40,7 @@ use kvelaro\TreeHelper\TreeHelper;
 
     <?= $form->field($model, 'device_type_id')->dropDownList($items_devices); ?>
 
-
+    <?= $form->field($model, 'unit_id')->dropDownList($items_units); ?>
 
 
 
