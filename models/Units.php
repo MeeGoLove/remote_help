@@ -82,9 +82,6 @@ class Units extends \yii\db\ActiveRecord {
         global $unit_res;
         $unit_res = [];
         Units::childsTree();
-
-//var_dump($units);
-//$data = Connections::find()->where(['unit_id' => $unit_id])->asArray()->all();
         return array_filter($unit_res);
     }
 
@@ -101,7 +98,6 @@ class Units extends \yii\db\ActiveRecord {
                 'name' => $name]);
             array_push($unit_res, Units::childsTree($unit['id'], $nesting_level));
         }
-        //return $result;
     }
 
 }
