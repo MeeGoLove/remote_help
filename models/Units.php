@@ -16,21 +16,21 @@ use Yii;
  * @property Units $parent
  * @property Units[] $units
  */
-class Units extends \yii\db\ActiveRecord
-{
+$unit_res = [];
+
+class Units extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'units';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['name'], 'required'],
             [['parent_id'], 'integer'],
@@ -42,8 +42,7 @@ class Units extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'name' => 'Name',
@@ -57,8 +56,7 @@ class Units extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getConnections()
-    {
+    public function getConnections() {
         return $this->hasMany(Connections::className(), ['unit_id' => 'id']);
     }
 
@@ -67,8 +65,7 @@ class Units extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getParent()
-    {
+    public function getParent() {
         return $this->hasOne(Units::className(), ['id' => 'parent_id']);
     }
 
@@ -77,8 +74,34 @@ class Units extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUnits()
-    {
+    public function getUnits() {
         return $this->hasMany(Units::className(), ['parent_id' => 'id']);
     }
+
+    public static function unitsDropdownList() {
+        global $unit_res;
+        $unit_res = [];
+        Units::childsTree();
+
+//var_dump($units);
+//$data = Connections::find()->where(['unit_id' => $unit_id])->asArray()->all();
+        return array_filter($unit_res);
+    }
+
+    public static function childsTree($parent_id = null, $nesting_level = 0) {
+        global $unit_res;
+        $units = Units::find()->where(['parent_id' => $parent_id])->orderBy('name ASC')->asArray()->all();
+        $nesting_level++;
+        foreach ($units as $unit) {
+            $name = $unit['name'];
+            for ($i = 1; $i < $nesting_level; $i++) {
+                $name = ' - ' . $name;
+            }
+            array_push($unit_res, ['id' => $unit['id'],
+                'name' => $name]);
+            array_push($unit_res, Units::childsTree($unit['id'], $nesting_level));
+        }
+        //return $result;
+    }
+
 }
