@@ -8,17 +8,17 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * ConnectionTypesController implements the CRUD actions for ConnectionTypes model.
  */
-class ConnectionTypesController extends Controller
-{
+class ConnectionTypesController extends Controller {
+
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -33,14 +33,13 @@ class ConnectionTypesController extends Controller
      * Lists all ConnectionTypes models.
      * @return mixed
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $dataProvider = new ActiveDataProvider([
             'query' => ConnectionTypes::find(),
         ]);
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -50,10 +49,9 @@ class ConnectionTypesController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
-    {
+    public function actionView($id) {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+                    'model' => $this->findModel($id),
         ]);
     }
 
@@ -62,16 +60,21 @@ class ConnectionTypesController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
+    public function actionCreate() {
         $model = new ConnectionTypes();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            // загружаем изображение и выполняем resize исходного изображения
+            $model->upload = UploadedFile::getInstance($model, 'icon');
+            if ($name = $model->uploadIcon()) { // если изображение было загружено
+                // сохраняем в БД имя файла изображения
+                $model->icon = $name;
+            }
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
-            'model' => $model,
+                    'model' => $model,
         ]);
     }
 
@@ -82,16 +85,29 @@ class ConnectionTypesController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        // старое изображение, которое надо удалить, если загружено новое
+        $old = $model->icon;
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            // загружаем изображение и выполняем resize исходного изображения
+            $model->upload = UploadedFile::getInstance($model, 'icon');
+            if ($new = $model->uploadIcon()) { // если изображение было загружено
+                // удаляем старое изображение
+                if (!empty($old)) {
+                    $model::removeIcon($old);
+                }
+                // сохраняем в БД новое имя
+                $model->icon = $new;
+            } else { // оставляем старое изображение
+                $model->icon = $old;
+            }
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
-            'model' => $model,
+                    'model' => $model,
         ]);
     }
 
@@ -102,8 +118,7 @@ class ConnectionTypesController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -116,12 +131,12 @@ class ConnectionTypesController extends Controller
      * @return ConnectionTypes the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
         if (($model = ConnectionTypes::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
 }

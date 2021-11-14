@@ -16,10 +16,22 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'protocol_link')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'icon')->textInput(['maxlength' => true]) ?>
 
+    <fieldset>
+        <legend>Загрузить изображение</legend>
+        <?= $form->field($model, 'icon')->fileInput(); ?>
+        <?php
+        if (!empty($model->icon)) {
+            $img = Yii::getAlias('@webroot') . '/icons-remote/source/' . $model->icon;
+            if (is_file($img)) {
+                $url = Yii::getAlias('@web') . '/icons-remote/source/' . $model->icon;
+                echo 'Уже загружено ', Html::a('изображение', $url, ['target' => '_blank']);
+            }
+        }
+        ?>
+    </fieldset>
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

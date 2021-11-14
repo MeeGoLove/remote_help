@@ -21,8 +21,8 @@
         "kartik-v/yii2-icons": "dev-master",
         "leandrogehlen/yii2-treegrid": "*",
         "kartik-v/yii2-context-menu": "dev-master",
-        "kvelaro/php-trees": "^1.0",
-        "kvelaro/tree-helper": "^1.0"
+        "kvelaro/php-trees": "^1.0",        
+        "yiisoft/yii2-imagine": "~2.2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
