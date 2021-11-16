@@ -40,10 +40,10 @@ class TreeController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-        $connections = Connections::connectionsByUnitId($unit_id);
+        $connections = Connections::connectionsByUnitId($unit_id);        
         return $this->render('index', [
             'dataProvider' => $dataProvider,
-            'connections' => $connections,
+            'connections' => $connections                      
         ]);
     }
 

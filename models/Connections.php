@@ -72,7 +72,7 @@ class Connections extends \yii\db\ActiveRecord {
     }
 
     public static function connectionsByUnitId($unit_id) {        
-        $data = Connections::find()->where(['unit_id' => $unit_id])->asArray()->all();
+        $data = Connections::find()->where(['unit_id' => $unit_id])->all();
         return $data;
     }
 

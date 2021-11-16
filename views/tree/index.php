@@ -61,8 +61,7 @@ $this->title = 'Trees';
                             </div>
                         </div>
 
-                        <?= ConnectionsGridWidget::widget(['connections' => $connections]); ?>  
-
+                        <?= ConnectionsGridWidget::widget(['connections' => $connections]); ?>                          
                     </div>
 
                     <?php Pjax::end(); ?> 
