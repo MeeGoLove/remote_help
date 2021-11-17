@@ -14,7 +14,25 @@ use leandrogehlen\treegrid\TreeGrid;
 
 $this->title = 'Trees';
 ?>
-<div class="tree-index">
+<div class="tree-index ">
+
+    
+    
+    
+    
+    <div class="container-m-nx container-m-ny bg-lightest mb-3">
+        <ol class="breadcrumb text-big container-p-x py-3 m-0">
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0)">home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="javascript:void(0)">projects</a>
+            </li>
+            <li class="breadcrumb-item active">site</li>
+        </ol>
+
+        <hr class="m-0" />
+
 
 
     <?php // echo $this->render('_search', ['model' => $searchModel]);  ?>
@@ -27,47 +45,45 @@ $this->title = 'Trees';
         ?>
     </p>
     <div class="row">
-        <div class="col-md-12">            
-            <div class="panel panel-default">
-                <div class="panel-body pb-filemng-panel-body">
+        <div class="col-md-12">          
+
+                           
 
                     <?php Pjax::begin(); ?>  
 
-                    <div class="row">
-                        <div class="col-sm-3 col-md-4 pb-filemng-template-treeview">
-                            <div class="collapse navbar-collapse" id="treeview-toggle">
-                                <!-- блок с tree -->
+                    <div class="col-md-4">
+                        
+                            <!-- блок с tree -->
 
-                                <?=
-                                TreeGrid::widget([
-                                    'dataProvider' => $dataProvide,
-                                    'keyColumnName' => 'id',
-                                    'showOnEmpty' => FALSE,
-                                    'parentColumnName' => 'parent_id',
-                                    'columns' =>
+                            <?=
+                            TreeGrid::widget([
+                                'dataProvider' => $dataProvide,
+                                'keyColumnName' => 'id',
+                                'showOnEmpty' => FALSE,
+                                'parentColumnName' => 'parent_id',
+                                'columns' =>
+                                [
+                                    //'name',
                                     [
-                                        //'name',
-                                        [
-                                            //'attribute' => 'name',
-                                            'label' => 'Иерархия',
-                                            'value' => function (\app\models\Units $data) {
-                                                return Html::a(Html::encode($data->name), Url::to(['tree/index', 'unit_id' => $data->id]));
-                                            },
-                                            'format' => 'raw',
-                                        ],
-                                    ]
-                                ]);
-                                ?>
-                            </div>
-                        </div>
-
-                        <?= ConnectionsGridWidget::widget(['connections' => $connections]); ?>                          
+                                        //'attribute' => 'name',
+                                        'label' => 'Иерархия',
+                                        'value' => function (\app\models\Units $data) {
+                                            return Html::a(Html::encode($data->name), Url::to(['tree/index', 'unit_id' => $data->id]));
+                                        },
+                                        'format' => 'raw',
+                                    ],
+                                ]
+                            ]);
+                            ?>                       
                     </div>
 
-                    <?php Pjax::end(); ?> 
-
+                    <?= ConnectionsGridWidget::widget(['connections' => $connections]); ?>                          
+                
                 </div>
+
+                <?php Pjax::end(); ?> 
+
+
             </div>
         </div>
     </div>
-</div>

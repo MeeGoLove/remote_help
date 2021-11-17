@@ -22,8 +22,7 @@ use yii\web\View;
 class ConnectionsGridWidget extends Widget {
 
     public $connections;
-    public $connections_types;
-    public $device_types;
+    public $child_units;    
 
     public function init() {
         parent::init();
