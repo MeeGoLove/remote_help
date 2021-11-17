@@ -43,11 +43,44 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this t
 .file-item.focused {
     z-index: 2;
 }
+
+/* начало доработок CSS*/
+.file-item a {
+    text-decoration: none;
+    color: black;
+}
+.file-item a:hover {
+    text-decoration: none;
+    color: black;
+}
+
+.file-item a:visited {
+    text-decoration: none;
+    color: black;
+}
+
+.file-item .dropdown-menu
+{
+    min-width: 120px;
+}
+
+
+.file-item .file-item-dropdown-menu
+{
+    font-size: 13px;
+    margin-left: 10px
+}
+
+.file-item-actions .btn
+{
+    opacity: 0.7;
+}
+/* конец доработок CSS*/
 .file-item * {
     -ms-flex-negative: 0;
     flex-shrink: 0;
     text-decoration:none;
-    word-wrap: break-word; /* Перенос слов */ 
+    word-wrap: break-word; /* Перенос слов */
     font-size: 13px;
 }
 .dark-style .file-item:hover,

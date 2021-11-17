@@ -22,11 +22,12 @@ use yii\web\View;
 class ConnectionsGridWidget extends Widget {
 
     public $connections;
-    public $child_units;    
+    public $child_units;
+    public $parent_id;      
 
     public function init() {
         parent::init();
-        if ($this->connections === null) {
+        if ($this->connections === null or $this->child_units === null) {
             throw new InvalidConfigException('The "connections" property must be set.');
         }
     }
@@ -34,7 +35,9 @@ class ConnectionsGridWidget extends Widget {
     public function run() {
         $this->registerAssets(); //выносим регистрацию стилей в отдельный метод
 
-        return $this->render('index', ['connections' => $this->connections]);
+        return $this->render('index', ['connections' => $this->connections,
+            'child_units' => $this->child_units,
+            'parent_id' => $this->parent_id]);
     }
 
     /**

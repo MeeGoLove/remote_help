@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Connections;
 use app\models\Units;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -15,11 +16,9 @@ use yii\data\ActiveDataProvider;
 /**
  * TreeController implements the CRUD actions for Tree model.
  */
-class TreeController extends Controller
-{
+class TreeController extends Controller {
 
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -34,16 +33,27 @@ class TreeController extends Controller
      * Lists all Tree models.
      * @return mixed
      */
-    public function actionIndex($unit_id = 0)
-    {
+    public function actionIndex($unit_id = 0) {
         $query = Units::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-        $connections = Connections::connectionsByUnitId($unit_id);        
+        $connections = Connections::connectionsByUnitId($unit_id);
+        $child_units = Units::find()->where(['parent_id' => $unit_id])->orderBy('name')->all();
+        $unit = Units::findOne(['id' => $unit_id]);
+        if ($unit !== null) {
+            $parent_id = $unit->parent_id;
+        } else {
+            $parent_id = null;
+            $unit = Units::findOne(['parent_id' => null]);
+            $unit_id = $unit->id;
+            return $this->redirect(Url::to(['tree/index', 'unit_id' => $unit_id]));
+        }
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
-            'connections' => $connections                      
+                    'dataProvider' => $dataProvider,
+                    'connections' => $connections,
+                    'child_units' => $child_units,
+                    'parent_id' => $parent_id
         ]);
     }
 
@@ -52,10 +62,9 @@ class TreeController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
-    {
+    public function actionView($id) {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+                    'model' => $this->findModel($id),
         ]);
     }
 
@@ -64,37 +73,29 @@ class TreeController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
+    public function actionCreate() {
         $model = new Units();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save())
-        {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
-        }
-        else
-        {
+        } else {
             return $this->render('create', [
-                'model' => $model,
+                        'model' => $model,
             ]);
         }
     }
 
-    public function actionAdd()
-    {
+    public function actionAdd() {
         $model = new Units();
         $model->loadDefaultValues();
         $id = Yii::$app->request->get('id');
         $model->parent_id = $id;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save())
-        {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
-        }
-        else
-        {
+        } else {
             return $this->render('create', [
-                'model' => $model,
+                        'model' => $model,
             ]);
         }
     }
@@ -105,18 +106,14 @@ class TreeController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save())
-        {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
-        }
-        else
-        {
+        } else {
             return $this->render('update', [
-                'model' => $model,
+                        'model' => $model,
             ]);
         }
     }
@@ -127,8 +124,7 @@ class TreeController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -141,14 +137,10 @@ class TreeController extends Controller
      * @return Tree the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
-        if (($model = Units::findOne($id)) !== null)
-        {
+    protected function findModel($id) {
+        if (($model = Units::findOne($id)) !== null) {
             return $model;
-        }
-        else
-        {
+        } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
