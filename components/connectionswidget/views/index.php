@@ -2,7 +2,7 @@
 
 use yii\helpers\Url;
 ?>
-<div class="file-manager-container file-manager-col-view col-md-8">
+<div class="file-manager-container file-manager-col-view col-md-7">
 
     <?php
     if ($parent_id !== null) {

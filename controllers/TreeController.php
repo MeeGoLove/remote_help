@@ -34,9 +34,12 @@ class TreeController extends Controller {
      * @return mixed
      */
     public function actionIndex($unit_id = 0) {
-        $query = Units::find();
+        $query = Units::find()->orderBy(['name' => SORT_ASC]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 0,  // ALL results, no pagination
+            ],
         ]);
         $connections = Connections::connectionsByUnitId($unit_id);
         $child_units = Units::find()->where(['parent_id' => $unit_id])->orderBy('name')->all();

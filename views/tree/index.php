@@ -22,7 +22,7 @@ $this->title = 'Адресная книга';
         <?php
         if ($dataProvider->count == 0)
             echo Html::a('Создать корневой элемент', ['add'], ['class' => 'btn btn-success']);
-        $dataProvider = new ActiveDataProvider(['query' => \app\models\Units::find()->orderBy(['name' => SORT_ASC])]);
+        //$dataProvider = new ActiveDataProvider(['query' => \app\models\Units::find()->orderBy(['name' => SORT_ASC])]);
         ?>
     </p>
     <div class="row">
@@ -32,7 +32,9 @@ $this->title = 'Адресная книга';
 
             <?php Pjax::begin(); ?>  
 
-            <div class="col-md-4">
+            <div class="col-md-5">
+                <!--style="
+                 overflow-y: scroll;"-->
 
                 <!-- блок с tree -->
 
@@ -62,6 +64,14 @@ $this->title = 'Адресная книга';
                             },
                             'format' => 'raw',
                         ],
+                        ['class' => 'yii\grid\ActionColumn',
+                            'template' => '{update} {delete} {add}',
+                            'buttons' => [
+                                'add' => function ($url, $model, $key) {
+                                    return Html::a('<span class="glyphicon glyphicon-plus"></span>', $url);
+                                },
+                            ]
+                        ]
                     ]
                 ]);
                 ?>                       
