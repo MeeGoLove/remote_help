@@ -38,7 +38,7 @@ class TreeController extends Controller {
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => 0,  // ALL results, no pagination
+                'pageSize' => 0, // ALL results, no pagination
             ],
         ]);
         $connections = Connections::connectionsByUnitId($unit_id);
@@ -79,8 +79,21 @@ class TreeController extends Controller {
     public function actionCreate() {
         $model = new Units();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                if (Yii::$app->request->isAjax) {
+                    // JSON response is expected in case of successful save
+                    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    return ['success' => true];
+                }
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('create', [
+                        'model' => $model,
+            ]);
         } else {
             return $this->render('create', [
                         'model' => $model,
@@ -90,12 +103,25 @@ class TreeController extends Controller {
 
     public function actionAdd() {
         $model = new Units();
-        $model->loadDefaultValues();
-        $id = Yii::$app->request->get('id');
+        $model->loadDefaultValues();        
+        $id = Yii::$app->request->get('id');        
         $model->parent_id = $id;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                if (Yii::$app->request->isAjax) {
+                    // JSON response is expected in case of successful save
+                    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    return ['success' => true];
+                }
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('create', [
+                        'model' => $model,
+            ]);
         } else {
             return $this->render('create', [
                         'model' => $model,

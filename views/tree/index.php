@@ -6,6 +6,7 @@ use yii\grid\GridView;
 use yii\data\ActiveDataProvider;
 use yii\widgets\Pjax;
 use app\components\connectionswidget\ConnectionsGridWidget;
+use lo\widgets\modal\ModalAjax;
 /* * *ext** */
 use leandrogehlen\treegrid\TreeGrid;
 
@@ -68,7 +69,24 @@ $this->title = 'Адресная книга';
                             'template' => '{update} {delete} {add}',
                             'buttons' => [
                                 'add' => function ($url, $model, $key) {
-                                    return Html::a('<span class="glyphicon glyphicon-plus"></span>', $url);
+                                    return ModalAjax::widget([
+                                        'id' => 'createUnit' . $key,
+                                        'header' => 'Создать подразделение',
+                                        'toggleButton' => [
+                                            'label' => '',
+                                            'class' => 'glyphicon glyphicon-plus'
+                                        ],
+                                        'url' => '/tree/add?id=' . $key, // Ajax view with form to load
+                                        'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
+                                        'size' => ModalAjax::SIZE_LARGE,
+                                        'options' => ['class' => 'header-primary'],
+                                        'autoClose' => true,
+                                        'pjaxContainer' => '#grid-company-pjax',
+                                        'events' =>[
+                                            ModalAjax::EVENT_MODAL_SUBMIT  => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
+                                        ]
+                                    ]);
+                                    // return Html::a('<span class="glyphicon glyphicon-plus"></span>', $url);
                                 },
                             ]
                         ]
@@ -81,8 +99,7 @@ $this->title = 'Адресная книга';
 
         </div>
 
-        <?php Pjax::end();
-        ?> 
+        <?php Pjax::end(); ?>       
 
 
     </div>

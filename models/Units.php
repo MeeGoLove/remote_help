@@ -45,9 +45,9 @@ class Units extends \yii\db\ActiveRecord {
     public function attributeLabels() {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'location' => 'Location',
-            'parent_id' => 'Parent ID',
+            'name' => 'Имя',
+            'location' => 'Расположение',
+            'parent_id' => 'ID родителя',
         ];
     }
 
