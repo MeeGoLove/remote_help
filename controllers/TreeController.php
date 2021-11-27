@@ -153,9 +153,10 @@ class TreeController extends Controller {
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id) {
+    public function actionDelete($id, $from_tree = 0, $unit_id = 0) {
         $this->findModel($id)->delete();
-
+        if ($from_tree == 1)
+            return $this->redirect(['/tree/index?unit_id=' . $unit_id]);
         return $this->redirect(['index']);
     }
 

@@ -30,7 +30,7 @@ use yii\helpers\Url;
                 <div class="dropdown-menu dropdown-menu-right">
                     <a class="file-item-dropdown-menu" href="javascript:void(0)">Переименовать</a>
                     <?=
-                    Html::a('Удалить', ['delete', 'id' => $child_unit->id], [
+                    Html::a('Удалить', ['delete', 'id' => $child_unit->id, 'from_tree' => 1, 'unit_id'=> $child_unit->parent_id], [
                         'class' => 'file-item-dropdown-menu',
                         'data' => [
                             'confirm' => 'Вы действительно хотите удалить ' . $child_unit->name . '?',
