@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\Html;
 use yii\helpers\Url;
 ?>
 <div class="file-manager-container file-manager-col-view col-md-7">
@@ -21,14 +22,22 @@ use yii\helpers\Url;
         <div class="file-item">
             <div class="file-item-select-bg bg-primary"></div>
             <a href=<?= Url::to(['tree/index', 'unit_id' => $child_unit->id]) ?> class="file-item-name">
-            <div class="file-item-icon far fa-folder text-secondary"></div>            
-                <?= $child_unit->name ?>
+                <div class="file-item-icon far fa-folder text-secondary"></div>            
+    <?= $child_unit->name ?>
             </a>            
             <div class="file-item-actions btn-group">
                 <button type="button" class="btn btn-default btn-sm rounded-pill icon-btn borderless md-btn-flat hide-arrow dropdown-toggle" data-toggle="dropdown"><i class="ion ion-ios-more"></i></button>
                 <div class="dropdown-menu dropdown-menu-right">
                     <a class="file-item-dropdown-menu" href="javascript:void(0)">Переименовать</a>
-                    <a class="file-item-dropdown-menu" href="javascript:void(0)">Удалить</a>
+                    <?=
+                    Html::a('Удалить', ['delete', 'id' => $child_unit->id], [
+                        'class' => 'file-item-dropdown-menu',
+                        'data' => [
+                            'confirm' => 'Вы действительно хотите удалить ' . $child_unit->name . '?',
+                            'method' => 'post',
+                        ],
+                    ])
+                    ?>
                 </div>
             </div>
         </div>
@@ -36,9 +45,9 @@ use yii\helpers\Url;
         <?php
     }
     ?>
-    <?php
-    foreach ($connections as $connection) {
-        ?>
+<?php
+foreach ($connections as $connection) {
+    ?>
         <div class="file-item">
             <div class="file-item-select-bg bg-primary"></div>
 
@@ -60,14 +69,22 @@ use yii\helpers\Url;
             }
             ?>
             <hr class="m-0" />
-            <?= '<a href="' . $connection->deviceType->defaultConnectionType->protocol_link . $connection->ipaddr . '">' ?>
-            <?= $connection->name ?></a>
+    <?= '<a href="' . $connection->deviceType->defaultConnectionType->protocol_link . $connection->ipaddr . '">' ?>
+    <?= $connection->name ?></a>
 
             <div class="file-item-actions">
                 <button type="button" class="btn btn-default btn-sm rounded-pill icon-btn borderless md-btn-flat hide-arrow dropdown-toggle" data-toggle="dropdown"><i class="ion ion-ios-more"></i></button>
                 <div class="dropdown-menu dropdown-menu-right">
                     <a class="file-item-dropdown-menu" href="javascript:void(0)">Переименовать</a>
-                    <a class="file-item-dropdown-menu" href="javascript:void(0)">Удалить</a>
+                    <?=
+                    Html::a('Удалить', ['/connections/delete', 'id' => $connection->id, 'from_tree' => 1, 'unit_id'=> $connection->unit_id], [
+                        'class' => 'file-item-dropdown-menu',
+                        'data' => [
+                            'confirm' => 'Вы действительно хотите удалить ' . $connection->name . '?',
+                            'method' => 'post',
+                        ],
+                    ])
+                    ?>
                 </div>
             </div>
         </div>
