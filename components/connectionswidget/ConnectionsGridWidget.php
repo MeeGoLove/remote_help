@@ -34,8 +34,8 @@ class ConnectionsGridWidget extends Widget {
 
     public function run() {
         $this->registerAssets(); //выносим регистрацию стилей в отдельный метод
-
-        return $this->render('index', ['connections' => $this->connections,
+        $view = $this->getView();
+        return $this->render('index-new', ['connections' => $this->connections,
             'child_units' => $this->child_units,
             'parent_id' => $this->parent_id]);
     }
@@ -47,5 +47,6 @@ class ConnectionsGridWidget extends Widget {
         $view = $this->getView(); // получаем объект вида, в который рендерится виджет
         ConnectionsGridAsset::register($view); // регестрируем файл с классом наборов css, js.
     }
-
+    
+    
 }

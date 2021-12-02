@@ -52,12 +52,21 @@ class TreeController extends Controller {
             $unit_id = $unit->id;
             return $this->redirect(Url::to(['tree/index', 'unit_id' => $unit_id]));
         }
-        return $this->render('index', [
-                    'dataProvider' => $dataProvider,
-                    'connections' => $connections,
-                    'child_units' => $child_units,
-                    'parent_id' => $parent_id
-        ]);
+        if (Yii::$app->request->getHeaders()->has('X-PJAX')) {
+            return $this->renderAjax('index', [
+                        'dataProvider' => $dataProvider,
+                        'connections' => $connections,
+                        'child_units' => $child_units,
+                        'parent_id' => $parent_id
+            ]);
+        } else {
+            return $this->render('index', [
+                        'dataProvider' => $dataProvider,
+                        'connections' => $connections,
+                        'child_units' => $child_units,
+                        'parent_id' => $parent_id
+            ]);
+        }
     }
 
     /**
@@ -78,33 +87,19 @@ class TreeController extends Controller {
      */
     public function actionCreate() {
         $model = new Units();
-
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                if (Yii::$app->request->isAjax) {
-                    // JSON response is expected in case of successful save
-                    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                    return ['success' => true];
-                }
-                return $this->redirect(['view', 'id' => $model->id]);
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('create', [
-                        'model' => $model,
-            ]);
-        } else {
-            return $this->render('create', [
-                        'model' => $model,
-            ]);
-        }
+        return $this->render('create', [
+                    'model' => $model,
+        ]);
     }
 
     public function actionAdd() {
         $model = new Units();
-        $model->loadDefaultValues();        
-        $id = Yii::$app->request->get('id');        
+        $model->loadDefaultValues();
+        $id = Yii::$app->request->get('id');
         $model->parent_id = $id;
 
         if ($model->load(Yii::$app->request->post())) {
@@ -137,11 +132,71 @@ class TreeController extends Controller {
      */
     public function actionUpdate($id) {
         $model = $this->findModel($id);
+        /*
+          if ($model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['view', 'id' => $model->id]);
+          } else {
+          return $this->render('update', [
+          'model' => $model,
+          ]);
+          } */
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                if (Yii::$app->request->isAjax) {
+                    // JSON response is expected in case of successful save
+                    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    return ['success' => true];
+                }
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('update', [
+                        'model' => $model,
+            ]);
         } else {
             return $this->render('update', [
+                        'model' => $model,
+            ]);
+        }
+    }
+
+    /**
+     * Updates an existing Tree model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionUpdateConnection($id) {
+        $model = $this->findModelConnection($id);
+        /*
+          if ($model->load(Yii::$app->request->post()) && $model->save()) {
+          return $this->redirect(['view', 'id' => $model->id]);
+          } else {
+          return $this->render('update', [
+          'model' => $model,
+          ]);
+          } */
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                if (Yii::$app->request->isAjax) {
+                    // JSON response is expected in case of successful save
+                    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    return ['success' => true];
+                }
+                return $this->redirect(['index']);
+            }
+        }
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('update-connection', [
+                        'model' => $model,
+            ]);
+        } else {
+            return $this->render('update-connection', [
                         'model' => $model,
             ]);
         }
@@ -169,6 +224,21 @@ class TreeController extends Controller {
      */
     protected function findModel($id) {
         if (($model = Units::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    /**
+     * Finds the Tree model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Tree the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModelConnection($id) {
+        if (($model = Connections::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

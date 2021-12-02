@@ -81,13 +81,26 @@ class ConnectionsController extends Controller {
     public function actionUpdate($id) {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                if (Yii::$app->request->isAjax) {
+                    // JSON response is expected in case of successful save
+                    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    return ['success' => true];
+                }
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
-        return $this->render('update', [
-                    'model' => $model,
-        ]);
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('update', [
+                        'model' => $model,
+            ]);
+        } else {
+            return $this->render('update', [
+                        'model' => $model,
+            ]);
+        }
     }
 
     /**

@@ -28,9 +28,9 @@ $this->params['breadcrumbs'][] = 'Редактирование';
         //$dataProvider = new ActiveDataProvider(['query' => \app\models\Units::find()->orderBy(['name' => SORT_ASC])]);
         ?>
     </p>
-    
 
-    
+
+
     <div class="row">      
         <?php Pjax::begin(); ?>  
 
@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = 'Редактирование';
                         'format' => 'raw',
                     ],
                     ['class' => 'yii\grid\ActionColumn',
-                        'template' => '{update} {delete} {add}',
+                        'template' => '{update}{delete}{add}',
                         'buttons' => [
                             'add' => function ($url, $model, $key) {
                                 return ModalAjax::widget([
@@ -94,6 +94,34 @@ $this->params['breadcrumbs'][] = 'Редактирование';
                                 ]);
                                 // return Html::a('<span class="glyphicon glyphicon-plus"></span>', $url);
                             },
+                            'update' => function ($url, $model, $key) {
+                                return ModalAjax::widget([
+                                    'id' => 'updateUnit' . $key,
+                                    'header' => 'Изменить подразделение',
+                                    'toggleButton' => [
+                                        'label' => '',
+                                        'class' => 'glyphicon glyphicon-pencil'
+                                    ],
+                                    'url' => '/tree/update?id=' . $key, // Ajax view with form to load
+                                    'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
+                                    'size' => ModalAjax::SIZE_LARGE,
+                                    'options' => ['class' => 'header-primary'],
+                                    'autoClose' => true,
+                                    'pjaxContainer' => '#grid-company-pjax',
+                                    'events' => [
+                                        ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
+                                    ]
+                                ]);
+                            },
+                            'delete' => function ($url, $model, $key) {
+                                return Html::a('<button class="glyphicon glyphicon-trash"></button>', ['delete', 'id' => $key], [
+                                    'class' => 'file-item-dropdown-menu',
+                                    'data' => [
+                                        'confirm' => 'Вы действительно хотите удалить ' . $model->name . '?',
+                                        'method' => 'post',
+                                    ],
+                                ]);
+                            },
                         ]
                     ]
                 ]
@@ -102,12 +130,12 @@ $this->params['breadcrumbs'][] = 'Редактирование';
         </div>
 
 
-
+ 
 
         <?= ConnectionsGridWidget::widget(['connections' => $connections, 'child_units' => $child_units, 'parent_id' => $parent_id,]); ?>                          
+<?php Pjax::end(); ?>   
 
-
-        <?php Pjax::end(); ?>     
+          
     </div>
 </div>
 </div>

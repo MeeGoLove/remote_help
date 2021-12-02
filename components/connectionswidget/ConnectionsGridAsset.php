@@ -19,7 +19,6 @@ class ConnectionsGridAsset extends AssetBundle {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        '/css/style.css',
         '/css/connectionswidget/style.css',
         '/css/connectionswidget/ionicons.min.css',
         '/css/connectionswidget/font-awesome.css',
@@ -29,6 +28,7 @@ class ConnectionsGridAsset extends AssetBundle {
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
+        'yii\web\JqueryAsset'
     ];
     public $publishOptions = [
         'forceCopy' => true,
