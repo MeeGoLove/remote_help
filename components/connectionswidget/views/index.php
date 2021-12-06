@@ -78,7 +78,7 @@ use lo\widgets\modal\ModalAjax;
         echo
         ModalAjax::widget([
             'id' => 'updateConnection' . ($connection->id),
-            'header' => 'Изменить подразделение',
+            'header' => 'Изменить подключение <b>' . $connection->name . '</b>',
             'url' => '/connections/update?id=' . $connection->id, // Ajax view with form to load
             'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
             'size' => ModalAjax::SIZE_LARGE,

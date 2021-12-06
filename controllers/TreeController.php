@@ -51,15 +51,14 @@ class TreeController extends Controller {
             $unit = Units::findOne(['parent_id' => null]);
             if ($unit !== null) {
                 $unit_id = $unit->id;
-                return $this->redirect(Url::to(['tree/index', 'unit_id' => $unit_id]));            
-            }
-            else {
+                return $this->redirect(Url::to(['tree/index', 'unit_id' => $unit_id]));
+            } else {
                 return $this->render('index', [
-                        'dataProvider' => $dataProvider,
-                        'connections' => $connections,
-                        'child_units' => $child_units,
-                        'parent_id' => $parent_id
-            ]);                
+                            'dataProvider' => $dataProvider,
+                            'connections' => $connections,
+                            'child_units' => $child_units,
+                            'parent_id' => $parent_id
+                ]);
             }
         }
         if (Yii::$app->request->getHeaders()->has('X-PJAX')) {
@@ -124,11 +123,11 @@ class TreeController extends Controller {
         }
 
         if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('create', [
+            return $this->renderAjax('add', [
                         'model' => $model,
             ]);
         } else {
-            return $this->render('create', [
+            return $this->render('add', [
                         'model' => $model,
             ]);
         }
@@ -168,45 +167,6 @@ class TreeController extends Controller {
             ]);
         } else {
             return $this->render('update', [
-                        'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Updates an existing Tree model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdateConnection($id) {
-        $model = $this->findModelConnection($id);
-        /*
-          if ($model->load(Yii::$app->request->post()) && $model->save()) {
-          return $this->redirect(['view', 'id' => $model->id]);
-          } else {
-          return $this->render('update', [
-          'model' => $model,
-          ]);
-          } */
-
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                if (Yii::$app->request->isAjax) {
-                    // JSON response is expected in case of successful save
-                    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-                    return ['success' => true];
-                }
-                return $this->redirect(['index']);
-            }
-        }
-
-        if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('update-connection', [
-                        'model' => $model,
-            ]);
-        } else {
-            return $this->render('update-connection', [
                         'model' => $model,
             ]);
         }

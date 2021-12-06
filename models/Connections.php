@@ -45,11 +45,11 @@ class Connections extends \yii\db\ActiveRecord {
     public function attributeLabels() {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'ipaddr' => 'Ipaddr',
-            'comment' => 'Comment',
-            'device_type_id' => 'Device Type ID',
-            'unit_id' => 'Unit ID',
+            'name' => 'Имя',
+            'ipaddr' => 'IP-адрес',
+            'comment' => 'Комментарий',
+            'device_type_id' => 'Тип устройства',
+            'unit_id' => 'Папка подключения',
         ];
     }
 
