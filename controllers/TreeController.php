@@ -49,8 +49,18 @@ class TreeController extends Controller {
         } else {
             $parent_id = null;
             $unit = Units::findOne(['parent_id' => null]);
-            $unit_id = $unit->id;
-            return $this->redirect(Url::to(['tree/index', 'unit_id' => $unit_id]));
+            if ($unit !== null) {
+                $unit_id = $unit->id;
+                return $this->redirect(Url::to(['tree/index', 'unit_id' => $unit_id]));            
+            }
+            else {
+                return $this->render('index', [
+                        'dataProvider' => $dataProvider,
+                        'connections' => $connections,
+                        'child_units' => $child_units,
+                        'parent_id' => $parent_id
+            ]);                
+            }
         }
         if (Yii::$app->request->getHeaders()->has('X-PJAX')) {
             return $this->renderAjax('index', [

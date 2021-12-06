@@ -78,25 +78,8 @@ use lo\widgets\modal\ModalAjax;
                                 <div class="module-footer">
                                     <ul class="utilities list-inline">
                                         <li>
-                                            <?=
-                                            ModalAjax::widget([
-                                                'id' => 'updateUnit' . $child_unit->id,
-                                                'header' => 'Изменить подразделение',
-                                                'toggleButton' => [
-                                                    'label' => '',
-                                                    'class' => 'fa fa-edit'
-                                                ],
-                                                'url' => '/tree/update?id=' . $child_unit->id, // Ajax view with form to load
-                                                'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
-                                                'size' => ModalAjax::SIZE_LARGE,
-                                                'options' => ['class' => 'header-primary'],
-                                                'autoClose' => true,
-                                                'pjaxContainer' => '#module-footer',
-                                                'events' => [
-                                                    ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
-                                                ]
-                                            ]);
-                                            ?>
+                                             <a href="#" onclick=<?= "$('#updateUnit" . $child_unit->id . "').modal();" ?> class=" fa fa-edit"></a>
+
 
                                         </li>
                                         <li>

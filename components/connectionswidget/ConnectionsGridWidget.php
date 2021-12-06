@@ -35,7 +35,7 @@ class ConnectionsGridWidget extends Widget {
     public function run() {
         $this->registerAssets(); //выносим регистрацию стилей в отдельный метод
         $view = $this->getView();
-        return $this->render('index-new', ['connections' => $this->connections,
+        return $this->render('index', ['connections' => $this->connections,
             'child_units' => $this->child_units,
             'parent_id' => $this->parent_id]);
     }
