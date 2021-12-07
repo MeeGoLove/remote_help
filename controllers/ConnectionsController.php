@@ -62,13 +62,29 @@ class ConnectionsController extends Controller {
      */
     public function actionCreate() {
         $model = new Connections();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $model->loadDefaultValues();
+        $unit_id = Yii::$app->request->get('unit_id');
+        $model->unit_id = $unit_id;
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                if (Yii::$app->request->isAjax) {
+                    // JSON response is expected in case of successful save
+                    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+                    return ['success' => true];
+                }
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
-        return $this->render('create', [
-                    'model' => $model,
-        ]);
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('create', [
+                        'model' => $model,
+            ]);
+        } else {
+            return $this->render('create', [
+                        'model' => $model,
+            ]);
+        }
     }
 
     /**

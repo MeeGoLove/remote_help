@@ -46,6 +46,7 @@ class TreeController extends Controller {
         $unit = Units::findOne(['id' => $unit_id]);
         if ($unit !== null) {
             $parent_id = $unit->parent_id;
+            $unit_name = $unit->name;
         } else {
             $parent_id = null;
             $unit = Units::findOne(['parent_id' => null]);
@@ -57,7 +58,9 @@ class TreeController extends Controller {
                             'dataProvider' => $dataProvider,
                             'connections' => $connections,
                             'child_units' => $child_units,
-                            'parent_id' => $parent_id
+                            'parent_id' => $parent_id,
+                            'unit_name' => $unit_name,
+                            'unit_id_' => $unit_id,
                 ]);
             }
         }
@@ -66,14 +69,18 @@ class TreeController extends Controller {
                         'dataProvider' => $dataProvider,
                         'connections' => $connections,
                         'child_units' => $child_units,
-                        'parent_id' => $parent_id
+                        'parent_id' => $parent_id,
+                        'unit_name' => $unit_name,
+                        'unit_id_' => $unit_id,
             ]);
         } else {
             return $this->render('index', [
                         'dataProvider' => $dataProvider,
                         'connections' => $connections,
                         'child_units' => $child_units,
-                        'parent_id' => $parent_id
+                        'parent_id' => $parent_id,
+                        'unit_name' => $unit_name,
+                        'unit_id_' => $unit_id,
             ]);
         }
     }

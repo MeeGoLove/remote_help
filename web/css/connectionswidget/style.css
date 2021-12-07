@@ -145,7 +145,36 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this t
 }
 
 
+.content-header-wrapper {
+    position: relative;
+    margin-bottom: 30px;
+}
 
+.content-header-wrapper .actions {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+
+.title {
+    margin-bottom: 15px;
+    margin-top: 0;
+    font-size: 18px;
+}
+
+
+.content-utilities {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+
+.content-utilities .page-nav {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
 /*
 
 #drop-label{

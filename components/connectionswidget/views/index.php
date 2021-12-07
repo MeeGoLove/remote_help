@@ -5,32 +5,105 @@ use yii\helpers\Url;
 use lo\widgets\modal\ModalAjax;
 ?>
 
-<div class="col-md-7"><form class="form-inline">
+<!--<div class="col-md-7"><form class="form-inline">
         <div class="form-group mx-sm-3 mb-2">
             <label for="searchInput" class="sr-only">Искать</label>
-            <input type="text" class="form-control" id="searchInput" placeholder="Password">
+            <input type="text" class="form-control" id="searchInput" 
+                   placeholder="Password">
         </div>
         <button type="submit" class="btn btn-primary mb-2">Найти</button>
     </form>
 </div>
-<div class="col-md-7"><hr></div>
+<div class="col-md-7"><hr></div>-->
+
+<div class="col-md-7">
+    <div class="content-header-wrapper">
+        <h2 class="title"><?php echo $unit_name; ?></h2>
+        <div class="actions">
+            <button class="btn btn-success" onclick=<?= "$('#createConnection" . $unit_id . "').modal();" ?>><i class="fa fa-plus"></i> Новое подключение </button>
+
+            <?php
+            echo
+            ModalAjax::widget([
+                'id' => 'createConnection' . ($unit_id),
+                'header' => 'Создать новое подключение',
+                'url' => '/connections/create?unit_id=' . $unit_id, // Ajax view with form to load
+                'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
+                'size' => ModalAjax::SIZE_LARGE,
+                'options' => ['class' => 'header-primary'],
+                'autoClose' => true,
+                'pjaxContainer' => '#grid-company-pjax',
+                'events' => [
+                    ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
+                ]
+            ]);
+
+            /* Html::a('', ['/connections/update', 'id' => $connection->id,], [
+              'class' => 'file-item-dropdown-menu glyphicon glyphicon-trash btn btn-danger'
+
+              ]) */
+            ?>
+
+
+
+        </div>
+    </div>
+    <div class="content-utilities">
+        <div class="page-nav">
+            <span class="indicator">Вид: </span>
+            <div class="btn-group" role="group">
+                <button class="active btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Таблица" title="Таблица" id="drive-grid-toggle"><i class="fa fa-th-large"></i></button>
+                <button class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Список" title="Список" id="drive-list-toggle"><i class="fa fa-list-ul"></i></button>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="btn-group">
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false">Все файлы... <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#"><i class="fa fa-file"></i> Документы </a></li>
+                    <li><a href="#"><i class="fa fa-file-image-o"></i> Картинки</a></li>
+                    <li><a href="#"><i class="fa fa-file-video-o"></i> Ля</a></li>
+                    <li><a href="#"><i class="fa fa-folder"></i> Папки</a></li>
+                </ul>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false"><i class="fa fa-filter"></i> Сортировка? <span class="caret"></span></button>
+                <ul class="dropdown-menu">
+                    <li><a href="#">И?</a></li>
+                    <li><a href="#">И?</a></li>
+                </ul>
+            </div>
+            <!--<div class="btn-group" role="group">
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></button>
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Archive"><i class="fa fa-archive"></i></button>
+
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Report spam"><i class="fa fa-exclamation-triangle"></i></button>
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
+            </div>-->
+        </div>
+    </div>
+</div>
+
+
+
+
+
 <div class="file-manager-container file-manager-col-view col-md-7">
+
+
+
+
+
 
 
     <?php
     if ($parent_id !== null) {
-
-        echo '<div class="file-item">
-
-    <a href= ' . Url::to(['tree/index', 'unit_id' => $parent_id]) . ' class="file-item-name" title="Вверх">            
-
-        <div class="file-item-icon file-item-level-up fas fa-level-up-alt text-secondary"></div>            
-
-                ..
-
-            </a>
-
-    </div>';
+        echo '<div class="file-item">'
+        . '<a href= ' . Url::to(['tree/index', 'unit_id' => $parent_id])
+        . ' class="file-item-name" title="Вверх">
+        <div class="file-item-icon file-item-level-up fas 
+        fa-level-up-alt text-secondary"></div>..</a>
+</div>';
     }
     ?>
 
@@ -157,7 +230,7 @@ use lo\widgets\modal\ModalAjax;
             $connection->deviceType->defaultConnectionType->name . '">'
             ?>
 
-    <?= $connection->name ?></a>
+            <?= $connection->name ?></a>
 
 
             <div class="file-item-actions btn-group">

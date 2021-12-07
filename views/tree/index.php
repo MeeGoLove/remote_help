@@ -15,9 +15,9 @@ use leandrogehlen\treegrid\TreeGrid;
 
 $this->title = 'Адресная книга';
 $this->params['breadcrumbs'][] = ['label' => 'Подключения', 'url' => ['']];
-$this->params['breadcrumbs'][] = 'Редактирование';
+$this->params['breadcrumbs'][] = 'Хлебные крошки ещё не готовы!!!';
 ?>
-<div class="tree-index ">
+<div class="tree-index">
 
     <?php //echo $this->render('_search', ['model' => $searchModel]);  ?>
 
@@ -76,8 +76,8 @@ $this->params['breadcrumbs'][] = 'Редактирование';
                         'buttons' => [
                             'add' => function ($url, $model, $key) {
                                 return ModalAjax::widget([
-                                    'id' => 'createUnit' . $key,
-                                    'header' => 'Создать подразделение',
+                                    'id' => 'addUnit' . $key,
+                                    'header' => 'Создать дочерний элемент',
                                     'toggleButton' => [
                                         'label' => '',
                                         'class' => 'glyphicon glyphicon-plus',
@@ -133,12 +133,14 @@ $this->params['breadcrumbs'][] = 'Редактирование';
         </div>
 
 
- 
 
-        <?= ConnectionsGridWidget::widget(['connections' => $connections, 'child_units' => $child_units, 'parent_id' => $parent_id,]); ?>                          
+        <?= ConnectionsGridWidget::widget(['connections' => $connections, 'child_units' => $child_units, 'parent_id' => $parent_id, 'unit_name' => $unit_name,
+            'unit_id' => $unit_id_]);
+        ?>
+
+
 <?php Pjax::end(); ?>   
 
-          
+
     </div>
-</div>
 </div>

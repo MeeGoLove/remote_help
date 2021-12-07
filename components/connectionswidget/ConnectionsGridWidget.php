@@ -23,7 +23,9 @@ class ConnectionsGridWidget extends Widget {
 
     public $connections;
     public $child_units;
-    public $parent_id;      
+    public $parent_id;
+    public $unit_name;
+    public $unit_id;
 
     public function init() {
         parent::init();
@@ -36,8 +38,10 @@ class ConnectionsGridWidget extends Widget {
         $this->registerAssets(); //выносим регистрацию стилей в отдельный метод
         $view = $this->getView();
         return $this->render('index', ['connections' => $this->connections,
-            'child_units' => $this->child_units,
-            'parent_id' => $this->parent_id]);
+                    'child_units' => $this->child_units,
+                    'parent_id' => $this->parent_id,
+                    'unit_name' => $this->unit_name,
+                    'unit_id' => $this->unit_id]);
     }
 
     /**
@@ -47,6 +51,5 @@ class ConnectionsGridWidget extends Widget {
         $view = $this->getView(); // получаем объект вида, в который рендерится виджет
         ConnectionsGridAsset::register($view); // регестрируем файл с классом наборов css, js.
     }
-    
-    
+
 }
