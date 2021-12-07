@@ -21,6 +21,10 @@ composer.phar
 # Mac DS_Store Files
 .DS_Store
 
+
+#config db
+/config/db.php
+
 # phpunit itself is not needed
 phpunit.phar
 # local phpunit config
@@ -31,6 +35,3 @@ tests/_support/_generated
 
 #vagrant folder
 /.vagrant
-
-#config db
-/config/db.php
