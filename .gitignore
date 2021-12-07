@@ -1,3 +1,6 @@
+#config db
+/config/db.php
+
 # phpstorm project files
 .idea
 
@@ -20,10 +23,6 @@ composer.phar
 
 # Mac DS_Store Files
 .DS_Store
-
-
-#config db
-/config/db.php
 
 # phpunit itself is not needed
 phpunit.phar
