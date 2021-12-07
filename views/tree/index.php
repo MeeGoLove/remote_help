@@ -67,12 +67,12 @@ $this->params['breadcrumbs'][] = 'Редактирование';
                         //'attribute' => 'name',
                         'label' => 'Иерархия',
                         'value' => function (\app\models\Units $data) {
-                            return Html::a(Html::encode($data->name), Url::to(['tree/index', 'unit_id' => $data->id]));
+                            return Html::a(Html::encode($data->name), Url::to(['tree/index', 'unit_id' => $data->id]), ['title' => 'Перейти в ' . $data->name]);
                         },
                         'format' => 'raw',
                     ],
                     ['class' => 'yii\grid\ActionColumn',
-                        'template' => '{update}{delete}{add}',
+                        'template' => '{update} {delete} {add}',
                         'buttons' => [
                             'add' => function ($url, $model, $key) {
                                 return ModalAjax::widget([
@@ -80,7 +80,8 @@ $this->params['breadcrumbs'][] = 'Редактирование';
                                     'header' => 'Создать подразделение',
                                     'toggleButton' => [
                                         'label' => '',
-                                        'class' => 'glyphicon glyphicon-plus'
+                                        'class' => 'glyphicon glyphicon-plus',
+                                        'title' => 'Создать дочерний элемент'
                                     ],
                                     'url' => '/tree/add?id=' . $key, // Ajax view with form to load
                                     'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
@@ -100,7 +101,8 @@ $this->params['breadcrumbs'][] = 'Редактирование';
                                     'header' => 'Изменить подразделение',
                                     'toggleButton' => [
                                         'label' => '',
-                                        'class' => 'glyphicon glyphicon-pencil'
+                                        'class' => 'glyphicon glyphicon-pencil',
+                                        'title' => 'Изменить подразделение'
                                     ],
                                     'url' => '/tree/update?id=' . $key, // Ajax view with form to load
                                     'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
@@ -116,6 +118,7 @@ $this->params['breadcrumbs'][] = 'Редактирование';
                             'delete' => function ($url, $model, $key) {
                                 return Html::a('<button class="glyphicon glyphicon-trash"></button>', ['delete', 'id' => $key], [
                                     'class' => 'file-item-dropdown-menu',
+                                    'title' => 'Удалить',
                                     'data' => [
                                         'confirm' => 'Вы действительно хотите удалить ' . $model->name . '?',
                                         'method' => 'post',
