@@ -239,11 +239,12 @@ use lo\widgets\modal\ModalAjax;
 
                 <div class="dropdown-menu dropdown-menu-right">
 
-                    <a href="#" onclick=<?= "$('#updateConnection" . $connection->id . "').modal();" ?> class = "file-item-dropdown-menu glyphicon glyphicon-pencil btn btn-info"></a>
+                    <a href="#" onclick=<?= "$('#updateConnection" . $connection->id . "').modal();" ?> class = "file-item-dropdown-menu glyphicon glyphicon-pencil btn btn-info" title="Изменить"></a>
 
                     <?=
                     Html::a('', ['/connections/delete', 'id' => $connection->id, 'from_tree' => 1, 'unit_id' => $connection->unit_id], [
                         'class' => 'file-item-dropdown-menu glyphicon glyphicon-trash btn btn-danger',
+                        'title' => 'Удалить',
                         'data' => [
                             'confirm' => 'Вы действительно хотите удалить ' . $connection->name . '?',
                             'method' => 'post',
