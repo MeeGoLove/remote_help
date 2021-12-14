@@ -136,6 +136,10 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
         </div>
         <!-- Верхний блок с фильтрами-->
         <div class="col-md-7">
+            <div class="content-header-wrapper">
+                <h2 class="title"><?php echo $unit_name; ?></h2>
+
+            </div>
             <div class="content-utilities">
                 <div class="page-nav">
                     <span class="indicator">Вид: </span>
@@ -170,44 +174,45 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
                         <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
                     </div>-->
                 </div>
-            </div>
-            <div class="content-header-wrapper">
-                <h2 class="title"><?php echo $unit_name; ?></h2>
-                <div class="actions">
-                    <button class="btn btn-success" onclick=<?= "$('#createConnection" . $unit_id_ . "').modal();" ?>><i class="fa fa-plus"></i> Новое подключение </button>
-                    <?php
-                    echo
-                    ModalAjax::widget([
-                        'id' => 'createConnection' . ($unit_id_),
-                        'header' => 'Создать новое подключение',
-                        'url' => '/connections/create?unit_id=' . $unit_id_, // Ajax view with form to load
-                        'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
-                        'size' => ModalAjax::SIZE_LARGE,
-                        'options' => ['class' => 'header-primary'],
-                        'autoClose' => true,
-                        'pjaxContainer' => '#grid-company-pjax',
-                        'events' => [
-                            ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
-                        ]
-                    ]);
-                    ?>
-                </div>
-            </div>
-            <div class="row">
+            </div>            
+            <div class="row content-header-wrapper">
                 <?php
                 $form = ActiveForm::begin([
                             'id' => 'search-form',
                 ]);
                 ?>
-                <div class="col-sm-5">
+                <div class="col-sm-4">
                     <?= $form->field($model_search, 'keyword')->textInput(['autofocus' => false])->label(false) ?> 
                 </div>                
                 <div class="form-group">
                     <div class="">
-                        <?= Html::submitButton('Искать', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                        <?= Html::submitButton('Поиск только по имени', ['class' => 'btn btn-primary', 'name' => 'search-button', 'value' => 'btn-name',]) ?>
+                        <?= Html::submitButton('Поиск по IP', ['class' => 'btn btn-info', 'name' => 'search-button', 'value' => 'btn-ip',]) ?>
                     </div>
                 </div>           
                 <?php ActiveForm::end(); ?>
+                <div class="actions">
+                    <button class="btn btn-success" 
+                            onclick=<?= "$('#createConnection" . $unit_id_ . "').modal();" ?> 
+                            title = "Создать новое подключение">
+                        <i class="fa fa-plus"></i> Подключение </button>
+                        <?php
+                        echo
+                        ModalAjax::widget([
+                            'id' => 'createConnection' . ($unit_id_),
+                            'header' => 'Создать новое подключение',
+                            'url' => '/connections/create?unit_id=' . $unit_id_, // Ajax view with form to load
+                            'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
+                            'size' => ModalAjax::SIZE_LARGE,
+                            'options' => ['class' => 'header-primary'],
+                            'autoClose' => true,
+                            'pjaxContainer' => '#grid-company-pjax',
+                            'events' => [
+                                ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
+                            ]
+                        ]);
+                        ?>
+                </div>
             </div>
         </div>
 

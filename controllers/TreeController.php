@@ -44,11 +44,18 @@ class TreeController extends Controller {
             ],
         ]);
 
-        if ($model_search->load(Yii::$app->request->post())&& $model_search->validate()) {
+        if ($model_search->load(Yii::$app->request->post()) && $model_search->validate()) {
             //return var_dump($model_search->keyword);
-            $connections = Connections::connectionsBySearch($model_search->keyword);            
-            $child_units = Units::unitsBySearch($model_search->keyword);            
-            $unit = Units::findOne(['id' => $unit_id]);            
+            if (Yii::$app->request->post()['search-button'] == "btn-name") {
+                $connections = Connections::connectionsBySearch($model_search->keyword, true);
+                $child_units = Units::unitsBySearch($model_search->keyword);
+            } else {
+                $connections = Connections::connectionsBySearch($model_search->keyword, false);
+                $child_units = Units::unitsBySearch($model_search->keyword);;
+            }
+            /* $connections = Connections::connectionsBySearch($model_search->keyword);
+              $child_units = Units::unitsBySearch($model_search->keyword); */
+            $unit = Units::findOne(['id' => $unit_id]);
             if ($unit !== null) {
                 $parent_id = $unit->parent_id;
                 $unit_name = $unit->name;
@@ -69,37 +76,37 @@ class TreeController extends Controller {
                                 'unit_id_' => null,
                     ]);
                 }
-            }     
-            
+            }
+
             return $this->render('index', [
                         'dataProvider' => $dataProvider,
                         'model_search' => $model_search,
                         'connections' => $connections,
                         'child_units' => $child_units,
                         'parent_id' => $parent_id,
-                        'unit_name' => 'Результаты поиска по строке: ' . $model_search->keyword ,
+                        'unit_name' => 'Результаты поиска по строке: ' . $model_search->keyword,
                         'unit_id_' => $unit_id,
             ]);
         }
-        
-        /*else {
-            return $this->render('index', [
-                        'dataProvider' => $dataProvider,
-                        'model_search' => $model_search,
-                        'connections' => null,
-                        'child_units' => $child_units,
-                        'parent_id' => $parent_id,
-                        'unit_name' => 'Результаты поиска по строке: ' . $model_search->keyword ,
-                        'unit_id_' => $unit_id,
-            ]);
-        }*/
+
+        /* else {
+          return $this->render('index', [
+          'dataProvider' => $dataProvider,
+          'model_search' => $model_search,
+          'connections' => null,
+          'child_units' => $child_units,
+          'parent_id' => $parent_id,
+          'unit_name' => 'Результаты поиска по строке: ' . $model_search->keyword ,
+          'unit_id_' => $unit_id,
+          ]);
+          } */
 
 
 
         $connections = Connections::connectionsByUnitId($unit_id);
         $child_units = Units::childUnitsByUnitId($unit_id);
         $unit = Units::findOne(['id' => $unit_id]);
-        
+
         if ($unit !== null) {
             $parent_id = $unit->parent_id;
             $unit_name = $unit->name;
@@ -111,16 +118,16 @@ class TreeController extends Controller {
                 return $this->redirect(Url::to(['tree/index', 'unit_id' => $unit_id]));
             } else {
                 return $this->render('index', [
-                                'dataProvider' => $dataProvider,
-                                'model_search' => $model_search,
-                                'connections' => $connections,
-                                'child_units' => $child_units,
-                                'parent_id' => $parent_id,
-                                'unit_name' => 'Корневой элемент не найден!',
-                                'unit_id_' => null,
-                    ]);
+                            'dataProvider' => $dataProvider,
+                            'model_search' => $model_search,
+                            'connections' => $connections,
+                            'child_units' => $child_units,
+                            'parent_id' => $parent_id,
+                            'unit_name' => 'Корневой элемент не найден!',
+                            'unit_id_' => null,
+                ]);
             }
-        }        
+        }
         if (Yii::$app->request->getHeaders()->has('X-PJAX')) {
             return $this->renderAjax('index', [
                         'dataProvider' => $dataProvider,

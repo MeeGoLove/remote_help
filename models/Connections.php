@@ -71,14 +71,19 @@ class Connections extends \yii\db\ActiveRecord {
         return $this->hasOne(Units::className(), ['id' => 'unit_id']);
     }
 
-    public static function connectionsByUnitId($unit_id) {        
-        $data = Connections::find()->where(['unit_id' => $unit_id])->orderBy(['name'=> 'SORT_ASC'])->all();
+    public static function connectionsByUnitId($unit_id) {
+        $data = Connections::find()->where(['unit_id' => $unit_id])->orderBy(['name' => 'SORT_ASC'])->all();
         return $data;
     }
-    
-    public static function connectionsBySearch($keyword) {        
-        $data = Connections::find()->where(['like', 'name', '%'. $keyword . '%', false])->orWhere(['like', 'ipaddr', '%'. $keyword . '%', false ])->orderBy(['name'=> 'SORT_ASC'])->all();
-        return $data;
+
+    public static function connectionsBySearch($keyword, $onlyName) {
+        if ($onlyName) {
+            $data = Connections::find()->where(['like', 'name', '%' . $keyword . '%', false])->orderBy(['name' => 'SORT_ASC'])->all();
+            return $data;
+        } else {
+            $data = Connections::find()->where(['like', 'name', '%' . $keyword . '%', false])->orWhere(['like', 'ipaddr', '%' . $keyword . '%', false])->orderBy(['name' => 'SORT_ASC'])->all();
+            return $data;
+        }
     }
 
 }
