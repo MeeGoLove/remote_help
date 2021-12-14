@@ -11,7 +11,7 @@ $this->title = 'Главная';
 
         <p class="lead">Всё работает!</p>
 
-        <p><a class="btn btn-lg btn-success" href="">Поехали</a></p>
+        <p><a class="btn btn-lg btn-success" href="/tree/index">Поехали</a></p>
     </div>
 
     <div class="body-content">
