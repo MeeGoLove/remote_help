@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Connections;
 use app\models\Units;
+use app\models\SearchForm; 
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -34,6 +35,7 @@ class TreeController extends Controller {
      * @return mixed
      */
     public function actionIndex($unit_id = 0) {
+        $model_search = new SearchForm();
         $query = Units::find()->orderBy(['name' => SORT_ASC]);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -56,6 +58,7 @@ class TreeController extends Controller {
             } else {
                 return $this->render('index', [
                             'dataProvider' => $dataProvider,
+                            'model_search' => $model_search,
                             'connections' => $connections,
                             'child_units' => $child_units,
                             'parent_id' => $parent_id,
@@ -67,6 +70,7 @@ class TreeController extends Controller {
         if (Yii::$app->request->getHeaders()->has('X-PJAX')) {
             return $this->renderAjax('index', [
                         'dataProvider' => $dataProvider,
+                        'model_search' => $model_search,
                         'connections' => $connections,
                         'child_units' => $child_units,
                         'parent_id' => $parent_id,
@@ -76,6 +80,7 @@ class TreeController extends Controller {
         } else {
             return $this->render('index', [
                         'dataProvider' => $dataProvider,
+                        'model_search' => $model_search,
                         'connections' => $connections,
                         'child_units' => $child_units,
                         'parent_id' => $parent_id,
