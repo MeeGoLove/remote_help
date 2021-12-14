@@ -5,7 +5,6 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\models\Units;
 use app\models\DeviceTypes;
-use kvelaro\TreeHelper\TreeHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Connections */

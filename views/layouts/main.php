@@ -47,6 +47,13 @@ AppAsset::register($this);
                 [['label' => 'Типы устройств', 'url' => ['/device-types']],
                 ['label' => 'Удаленные протоколы', 'url' => ['/connection-types']]
             ]],
+            ['label' => 'Импорт',  'items' =>
+                [['label' => 'Из Radmin', 'url' => ['/import/radmin']],
+                ['label' => 'Из LiteManager', 'url' => ['/import/lm']],
+                ['label' => 'Из MS RDP Gateway', 'url' => ['/import/msrdpgtw']],
+                ['label' => 'Из MS RDP Connection Manager', 'url' => ['/import/msrdpcm']],
+                    
+            ]],
 
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]

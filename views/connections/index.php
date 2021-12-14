@@ -38,13 +38,13 @@ $this->params['breadcrumbs'][] = $this->title;*/
                 },
                 'format' => 'raw',
             ],
-            [
+            /*[
                 'attribute' => 'unit_id',
                 'value' => function ($model, $key, $index, $widget) {
                     return $model->unit->name;
                 },
                 'format' => 'raw',
-            ],
+            ],*/
             ['class' => 'yii\grid\ActionColumn',
                 'template' => '{update}{delete}{add}',
                         'buttons' => [
