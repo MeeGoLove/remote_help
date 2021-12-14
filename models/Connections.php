@@ -75,5 +75,10 @@ class Connections extends \yii\db\ActiveRecord {
         $data = Connections::find()->where(['unit_id' => $unit_id])->orderBy(['name'=> 'SORT_ASC'])->all();
         return $data;
     }
+    
+    public static function connectionsBySearch($keyword) {        
+        $data = Connections::find()->where(['like', 'name', '%'. $keyword . '%', false])->orWhere(['like', 'ipaddr', '%'. $keyword . '%', false ])->orderBy(['name'=> 'SORT_ASC'])->all();
+        return $data;
+    }
 
 }

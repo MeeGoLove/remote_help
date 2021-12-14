@@ -99,5 +99,15 @@ class Units extends \yii\db\ActiveRecord {
             array_push($unit_res, Units::childsTree($unit['id'], $nesting_level));
         }
     }
+    
+    public static function childUnitsByUnitId($unit_id) {        
+        $data =  Units::find()->where(['parent_id' => $unit_id])->orderBy('name')->all();
+        return $data;
+    }
+    
+    public static function unitsBySearch($keyword) {        
+        $data = Units::find()->where(['like', 'name', '%'. $keyword . '%', false])->orderBy(['name'=> 'SORT_ASC'])->all();
+        return $data;
+    }
 
 }

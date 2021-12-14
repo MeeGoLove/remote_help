@@ -11,4 +11,15 @@ use yii\base\Model;
 
 class SearchForm extends Model {
     public $keyword;
+    /**
+     * @return array the validation rules.
+     */
+    public function rules()
+    {
+        return [
+            // username and password are both required
+              [['keyword'],'string', 'length' => [2]],
+           [['keyword'], 'required'],           
+        ];
+    }
 }
