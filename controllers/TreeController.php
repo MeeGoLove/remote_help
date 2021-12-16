@@ -35,6 +35,7 @@ class TreeController extends Controller {
      * @return mixed
      */
     public function actionIndex($unit_id = 0) {
+        
         $model_search = new SearchForm();
         $query = Units::find()->orderBy(['name' => SORT_ASC]);
         $dataProvider = new ActiveDataProvider([
@@ -51,7 +52,8 @@ class TreeController extends Controller {
                 $child_units = Units::unitsBySearch($model_search->keyword);
             } else {
                 $connections = Connections::connectionsBySearch($model_search->keyword, false);
-                $child_units = Units::unitsBySearch($model_search->keyword);;
+                $child_units = Units::unitsBySearch($model_search->keyword);
+                ;
             }
             /* $connections = Connections::connectionsBySearch($model_search->keyword);
               $child_units = Units::unitsBySearch($model_search->keyword); */

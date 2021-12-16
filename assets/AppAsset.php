@@ -21,6 +21,9 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
+        '/css/connectionswidget/style.css',
+        '/css/connectionswidget/ionicons.min.css',
+        '/css/connectionswidget/font-awesome.css',
     ];
     public $js = [
     ];

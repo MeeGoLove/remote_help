@@ -72,16 +72,16 @@ class Connections extends \yii\db\ActiveRecord {
     }
 
     public static function connectionsByUnitId($unit_id) {
-        $data = Connections::find()->where(['unit_id' => $unit_id])->orderBy(['name' => 'SORT_ASC'])->all();
+        $data = Connections::find()->where(['unit_id' => $unit_id])->orderBy(['name' => 'SORT_ASC']);
         return $data;
     }
 
     public static function connectionsBySearch($keyword, $onlyName) {
         if ($onlyName) {
-            $data = Connections::find()->where(['like', 'name', '%' . $keyword . '%', false])->orderBy(['name' => 'SORT_ASC'])->all();
+            $data = Connections::find()->where(['like', 'name', '%' . $keyword . '%', false])->orderBy(['name' => 'SORT_ASC']);
             return $data;
         } else {
-            $data = Connections::find()->where(['like', 'name', '%' . $keyword . '%', false])->orWhere(['like', 'ipaddr', '%' . $keyword . '%', false])->orderBy(['name' => 'SORT_ASC'])->all();
+            $data = Connections::find()->where(['like', 'name', '%' . $keyword . '%', false])->orWhere(['like', 'ipaddr', '%' . $keyword . '%', false])->orderBy(['name' => 'SORT_ASC']);
             return $data;
         }
     }

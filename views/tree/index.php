@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\bootstrap\ActiveForm;
 use yii\data\ActiveDataProvider;
+use yii\widgets\ListView;
 use yii\widgets\Pjax;
 use app\components\connectionswidget\ConnectionsGridWidget;
 use lo\widgets\modal\ModalAjax;
@@ -144,8 +145,8 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
                 <div class="page-nav">
                     <span class="indicator">Вид: </span>
                     <div class="btn-group" role="group">
-                        <button class="active btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Таблица" title="Таблица" id="drive-grid-toggle"><i class="fa fa-th-large"></i></button>
-                        <button class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Список" title="Список" id="drive-list-toggle"><i class="fa fa-list-ul"></i></button>
+                        <button class="btn btn-default" data-toggle="tooltip" data-placement="bottom"  data-original-title="Таблица" title="Таблица" id="drive-grid-toggle"><i class="fa fa-th-large"></i></button>
+                        <button class="btn btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Список" title="Список" id="drive-list-toggle"><i class="fa fa-list-ul"></i></button>
                     </div>
                 </div>
                 <div class="actions">
@@ -196,35 +197,91 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
                             onclick=<?= "$('#createConnection" . $unit_id_ . "').modal();" ?> 
                             title = "Создать новое подключение">
                         <i class="fa fa-plus"></i> Подключение </button>
-                        <?php
-                        echo
-                        ModalAjax::widget([
-                            'id' => 'createConnection' . ($unit_id_),
-                            'header' => 'Создать новое подключение',
-                            'url' => '/connections/create?unit_id=' . $unit_id_, // Ajax view with form to load
-                            'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
-                            'size' => ModalAjax::SIZE_LARGE,
-                            'options' => ['class' => 'header-primary'],
-                            'autoClose' => true,
-                            'pjaxContainer' => '#grid-company-pjax',
-                            'events' => [
-                                ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
-                            ]
-                        ]);
-                        ?>
+                    <?php
+                    echo
+                    ModalAjax::widget([
+                        'id' => 'createConnection' . ($unit_id_),
+                        'header' => 'Создать новое подключение',
+                        'url' => '/connections/create?unit_id=' . $unit_id_, // Ajax view with form to load
+                        'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
+                        'size' => ModalAjax::SIZE_LARGE,
+                        'options' => ['class' => 'header-primary'],
+                        'autoClose' => true,
+                        'pjaxContainer' => '#grid-company-pjax',
+                        'events' => [
+                            ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
+                        ]
+                    ]);
+                    ?>
                 </div>
             </div>
         </div>
 
 
-        <?=
-        ConnectionsGridWidget::widget(['connections' => $connections, 'child_units' => $child_units, 'parent_id' => $parent_id, 'unit_name' => $unit_name,
-            'unit_id' => $unit_id_]);
-        ?>
 
+
+        <div class="col-md-7 table-responsive drive-items-table-wrapper">
+            <style>
+
+
+
+                .table-responsive tbody tr {
+                    color: #5a5a5a; /* Цвет текста */
+                    /*background: #ffc; /* Цвет фона */
+                    padding: 10px; /* Поля вокруг текста */
+                    transition: 0.25s linear; /* Время изменения */
+                }
+                .table-responsive  tbody tr:hover {
+                    /*color: #fff; /* Цвет текста */
+                    background: lightblue; /* Цвет фона */
+                }
+
+
+
+            </style>
+
+            <?=
+            //ConnectionsGridWidget::widget(['connections' => $connections, 'child_units' => $child_units, 'parent_id' => $parent_id, 'unit_name' => $unit_name,
+            //'unit_id' => $unit_id_]);
+            ListView::widget(
+                    ['dataProvider' => new ActiveDataProvider([
+                            'query' => $connections,
+                            'pagination' => [
+                                'pageSize' => 0, // ALL results, no pagination
+                            ],
+                                ]),
+                        'itemView' => '_list',
+                        'layout' => "\n{items}",
+                        'options' => [
+                            'tag' => 'table',
+                            'class' => 'table'
+                        ],
+                        'itemOptions' => [// опции для списка
+                            'tag' => 'tr', // заключаем список в тег div                        
+                        ],                        
+                        'beforeItem' => function ($model, $key, $index, $widget){
+                            if ($index == 0)
+                            {
+                                return '<thead>
+                                    <tr>                                        
+                                        <th class="name truncate">Имя</th>
+                                        <th class="date">IP-адрес</th>
+                                        <th colspan=2 class="size">Подключиться по</th>
+                                    </tr>
+                                </thead>';
+                            }
+                        }
+                    ],
+            );
+            ?>
+        </div>
 
         <?php Pjax::end(); ?>   
 
 
     </div>
 </div>
+<script>
+    var topPos = document.getElementById('treegrid-' + <?= $unit_id_ ?>).offsetTop;
+    document.getElement('container').scrollTop = topPos - 10;
+</script>
