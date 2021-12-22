@@ -21,8 +21,10 @@ $this->title = 'Адресная книга';
 $this->params['breadcrumbs'][] = ['label' => 'Подключения', 'url' => ['']];
 $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не готовы!!!';
 ?>
+
 <div class="tree-index">
 
+    
     <?php //echo $this->render('_search', ['model' => $searchModel]);  ?>
 
     <p>
@@ -36,15 +38,18 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
 
 
     <div class="row">      
-        <?php Pjax::begin(); ?>  
 
+        <?php Pjax::begin(); ?>
         <div class="col-md-5 noscrollbar" 
-             style="overflow-y: scroll; height: 700px; scrollbar-width: none;">
+             style="overflow-y: scroll;
+             height: 700px;
+             /*scrollbar-width: none;*/
+             ">
             <!-- стиль, чтобы убрать полосу прокрутки-->
             <style>
-                .noscrollbar::-webkit-scrollbar {
+                /*.noscrollbar::-webkit-scrollbar {
                     width: 0px;
-                }
+                }*/
             </style>
 
             <!-- блок с tree -->
@@ -71,70 +76,75 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
                         //'attribute' => 'name',
                         'label' => 'Иерархия',
                         'value' => function (\app\models\Units $data) {
-                            return Html::a(Html::encode($data->name), Url::to(['tree/index', 'unit_id' => $data->id]), ['title' => 'Перейти в ' . $data->name]);
+                            return Html::a(Html::encode($data->name),
+                                    Url::to(['tree/index', 'unit_id' => $data->id]),
+                                    ['id' => 'tree-link' . $data->id, 'title' => 'Перейти в ' . $data->name,
+                                        'onclick' => 'return saveScroll(this);'
+                            ]);
                         },
                         'format' => 'raw',
                     ],
-                    ['class' => 'yii\grid\ActionColumn',
-                        'template' => '{update} {delete} {add}',
-                        'buttons' => [
-                            'add' => function ($url, $model, $key) {
-                                return ModalAjax::widget([
-                                    'id' => 'addUnit' . $key,
-                                    'header' => 'Создать дочерний элемент',
-                                    'toggleButton' => [
-                                        'label' => '',
-                                        'class' => 'glyphicon glyphicon-plus',
-                                        'title' => 'Создать дочерний элемент'
-                                    ],
-                                    'url' => '/tree/add?id=' . $key, // Ajax view with form to load
-                                    'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
-                                    'size' => ModalAjax::SIZE_LARGE,
-                                    'options' => ['class' => 'header-primary'],
-                                    'autoClose' => true,
-                                    'pjaxContainer' => '#grid-company-pjax',
-                                    'events' => [
-                                        ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
-                                    ]
-                                ]);
-                                // return Html::a('<span class="glyphicon glyphicon-plus"></span>', $url);
-                            },
-                            'update' => function ($url, $model, $key) {
-                                return ModalAjax::widget([
-                                    'id' => 'updateUnit' . $key,
-                                    'header' => 'Изменить подразделение',
-                                    'toggleButton' => [
-                                        'label' => '',
-                                        'class' => 'glyphicon glyphicon-pencil',
-                                        'title' => 'Изменить подразделение'
-                                    ],
-                                    'url' => '/tree/update?id=' . $key, // Ajax view with form to load
-                                    'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
-                                    'size' => ModalAjax::SIZE_LARGE,
-                                    'options' => ['class' => 'header-primary'],
-                                    'autoClose' => true,
-                                    'pjaxContainer' => '#grid-company-pjax',
-                                    'events' => [
-                                        ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
-                                    ]
-                                ]);
-                            },
-                            'delete' => function ($url, $model, $key) {
-                                return Html::a('<button class="glyphicon glyphicon-trash"></button>', ['delete', 'id' => $key], [
-                                    'class' => 'file-item-dropdown-menu',
-                                    'title' => 'Удалить',
-                                    'data' => [
-                                        'confirm' => 'Вы действительно хотите удалить ' . $model->name . '?',
-                                        'method' => 'post',
-                                    ],
-                                ]);
-                            },
-                        ]
-                    ]
+                /* ['class' => 'yii\grid\ActionColumn',
+                  'template' => '{update} {delete} {add}',
+                  'buttons' => [
+                  'add' => function ($url, $model, $key) {
+                  return ModalAjax::widget([
+                  'id' => 'addUnit' . $key,
+                  'header' => 'Создать дочерний элемент',
+                  'toggleButton' => [
+                  'label' => '',
+                  'class' => 'glyphicon glyphicon-plus',
+                  'title' => 'Создать дочерний элемент'
+                  ],
+                  'url' => '/tree/add?id=' . $key, // Ajax view with form to load
+                  'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
+                  'size' => ModalAjax::SIZE_LARGE,
+                  'options' => ['class' => 'header-primary'],
+                  'autoClose' => true,
+                  'pjaxContainer' => '#grid-company-pjax',
+                  'events' => [
+                  ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
+                  ]
+                  ]);
+                  // return Html::a('<span class="glyphicon glyphicon-plus"></span>', $url);
+                  },
+                  'update' => function ($url, $model, $key) {
+                  return ModalAjax::widget([
+                  'id' => 'updateUnit' . $key,
+                  'header' => 'Изменить подразделение',
+                  'toggleButton' => [
+                  'label' => '',
+                  'class' => 'glyphicon glyphicon-pencil',
+                  'title' => 'Изменить подразделение'
+                  ],
+                  'url' => '/tree/update?id=' . $key, // Ajax view with form to load
+                  'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
+                  'size' => ModalAjax::SIZE_LARGE,
+                  'options' => ['class' => 'header-primary'],
+                  'autoClose' => true,
+                  'pjaxContainer' => '#grid-company-pjax',
+                  'events' => [
+                  ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
+                  ]
+                  ]);
+                  },
+                  'delete' => function ($url, $model, $key) {
+                  return Html::a('<button class="glyphicon glyphicon-trash"></button>', ['delete', 'id' => $key], [
+                  'class' => 'file-item-dropdown-menu',
+                  'title' => 'Удалить',
+                  'data' => [
+                  'confirm' => 'Вы действительно хотите удалить ' . $model->name . '?',
+                  'method' => 'post',
+                  ],
+                  ]);
+                  },
+                  ]
+                  ] */
                 ]
             ]);
             ?>                       
         </div>
+
         <!-- Верхний блок с фильтрами-->
         <div class="col-md-7">
             <div class="content-header-wrapper">
@@ -258,10 +268,9 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
                         ],
                         'itemOptions' => [// опции для списка
                             'tag' => 'tr', // заключаем список в тег div                        
-                        ],                        
-                        'beforeItem' => function ($model, $key, $index, $widget){
-                            if ($index == 0)
-                            {
+                        ],
+                        'beforeItem' => function ($model, $key, $index, $widget) {
+                            if ($index == 0) {
                                 return '<thead>
                                     <tr>                                        
                                         <th class="name truncate">Имя</th>
@@ -281,7 +290,28 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
 
     </div>
 </div>
-<script>
-    var topPos = document.getElementById('treegrid-' + <?= $unit_id_ ?>).offsetTop;
-    document.getElement('container').scrollTop = topPos - 10;
-</script>
+
+
+<?php
+$script = <<< JS
+    function loadScroll() {
+        if (localStorage.getItem("treegrid-scroll") != null) {
+            $(".noscrollbar").scrollTop(localStorage.getItem("treegrid-scroll"));
+            //alert("scroll");
+        }
+    }; 
+        
+    function saveScroll()
+    {
+        localStorage.setItem("treegrid-scroll", $(".noscrollbar").scrollTop());
+    };
+    document.addEventListener('DOMContentLoaded', loadScroll);
+    $(document).on('pjax:complete', function (){        
+        if (localStorage.getItem("treegrid-scroll") != null) {
+            $(".noscrollbar").scrollTop(localStorage.getItem("treegrid-scroll"));            
+        }
+    })
+JS;
+
+$this->registerJs($script, yii\web\View::POS_END);
+?>
