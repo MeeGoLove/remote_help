@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
 
 <div class="tree-index">
 
-    
+
     <?php //echo $this->render('_search', ['model' => $searchModel]);  ?>
 
     <p>
