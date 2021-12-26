@@ -48,7 +48,7 @@ class TreeController extends Controller {
         if ($model_search->load(Yii::$app->request->post()) && $model_search->validate()) {
             //return var_dump($model_search->keyword);
             if (Yii::$app->request->post()['search-button'] == "btn-name") {
-                $connections = Connections::connectionsBySearch($model_search->keyword, true);
+                $connections = Connections::connectionsBySearch($model_search->keyword, true)->with('DeviceTypes');
                 $child_units = Units::unitsBySearch($model_search->keyword);
             } else {
                 $connections = Connections::connectionsBySearch($model_search->keyword, false);

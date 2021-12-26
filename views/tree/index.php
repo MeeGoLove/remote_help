@@ -155,8 +155,8 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
                 <div class="page-nav">
                     <span class="indicator">Вид: </span>
                     <div class="btn-group" role="group">
-                        <button class="btn btn-default" data-toggle="tooltip" data-placement="bottom"  data-original-title="Таблица" title="Таблица" id="drive-grid-toggle"><i class="fa fa-th-large"></i></button>
-                        <button class="btn btn-default" data-toggle="tooltip" data-placement="bottom" data-original-title="Список" title="Список" id="drive-list-toggle"><i class="fa fa-list-ul"></i></button>
+                        <button class="btn btn-default" data-pjax="1" data-toggle="tooltip" data-placement="bottom"  data-original-title="Таблица" title="Таблица" id="drive-grid-toggle"><i class="fa fa-th-large"></i></button>
+                        <button class="btn btn-default" data-pjax="1" data-placement="bottom" data-original-title="Список" title="Список" id="drive-list-toggle"><i class="fa fa-list-ul"></i></button>
                     </div>
                 </div>
                 <div class="actions">
@@ -253,34 +253,72 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
             <?=
             //ConnectionsGridWidget::widget(['connections' => $connections, 'child_units' => $child_units, 'parent_id' => $parent_id, 'unit_name' => $unit_name,
             //'unit_id' => $unit_id_]);
-            ListView::widget(
+            /* ListView::widget(
+              ['dataProvider' => new ActiveDataProvider([
+              'query' => $connections,
+              'pagination' => [
+              'pageSize' => 0, // ALL results, no pagination
+              ],
+              ]),
+              'itemView' => '_list',
+              'layout' => "\n{items}",
+              'options' => [
+              'tag' => 'table',
+              'class' => 'table'
+              ],
+              'itemOptions' => [// опции для списка
+              'tag' => 'tr', // заключаем список в тег div
+              ],
+              'beforeItem' => function ($model, $key, $index, $widget) {
+              if ($index == 0) {
+              return '<thead>
+              <tr>
+              <th class="name truncate">Имя</th>
+              <th class="date">IP-адрес</th>
+              <th colspan=2 class="size">Подключиться по</th>
+              </tr>
+              </thead>';
+              }
+              }
+              ],
+              ); */
+
+            GridView::widget(
                     ['dataProvider' => new ActiveDataProvider([
                             'query' => $connections,
                             'pagination' => [
                                 'pageSize' => 0, // ALL results, no pagination
                             ],
                                 ]),
-                        'itemView' => '_list',
                         'layout' => "\n{items}",
-                        'options' => [
-                            'tag' => 'table',
-                            'class' => 'table'
-                        ],
-                        'itemOptions' => [// опции для списка
-                            'tag' => 'tr', // заключаем список в тег div                        
-                        ],
-                        'beforeItem' => function ($model, $key, $index, $widget) {
-                            if ($index == 0) {
-                                return '<thead>
-                                    <tr>                                        
-                                        <th class="name truncate">Имя</th>
-                                        <th class="date">IP-адрес</th>
-                                        <th colspan=2 class="size">Подключиться по</th>
-                                    </tr>
-                                </thead>';
-                            }
-                        }
-                    ],
+                        'columns' =>
+                        [
+                            'name',
+                            'ipaddr',
+                            [
+                                'value' => function ($data) {
+                                    if ($data->deviceType->optionalConnectionType !== null)
+                                        return
+
+                                                Html::a($data->deviceType->defaultConnectionType->name, $data->deviceType->defaultConnectionType->protocol_link . $data->ipaddr) .
+                                                "&nbsp;&nbsp;&nbsp;" .
+                                                Html::a($data->deviceType->optionalConnectionType->name, $data->deviceType->optionalConnectionType->protocol_link . $data->ipaddr)
+                                        ;
+                                    else
+                                        return Html::a($data->deviceType->defaultConnectionType->name, $data->deviceType->defaultConnectionType->protocol_link . $data->ipaddr);
+                                },
+                                //'attribute' => '',
+                                'format' => 'raw',
+                                'label' => 'Подключиться по',
+                            ],
+                                        /*['class' => 'yii\grid\ActionColumn',
+                  'template' => '{update} {delete}',
+                  'buttons' => [                     
+                      
+                  ]
+                                            ]*/
+                        ]
+                    ]
             );
             ?>
         </div>
