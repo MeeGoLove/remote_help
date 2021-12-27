@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -10,16 +11,17 @@ use app\models\Units;
 ?>
 
 <div class="tree-form">
-    
-    <?php 
+
+    <?php
     $units = Units::unitsDropdownList();
     $items_units = ArrayHelper::map($units, 'id', 'name');
-    $form = ActiveForm::begin(); ?>
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'parent_id')->dropDownList($items_units) ?>
+    $form = ActiveForm::begin();
+    ?>
+        <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'parent_id')->dropDownList($items_units, ['encodeSpaces' => true]) ?>
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Изменить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+    <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Изменить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
-    <?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); ?>
 </div>

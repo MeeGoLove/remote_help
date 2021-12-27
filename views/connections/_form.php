@@ -28,7 +28,7 @@ use app\models\DeviceTypes;
 
     <?= $form->field($model, 'device_type_id')->dropDownList($items_devices); ?>
 
-    <?= $form->field($model, 'unit_id')->dropDownList($items_units); ?>
+    <?= $form->field($model, 'unit_id')->dropDownList($items_units,  ['encodeSpaces' => true]); ?>
 
 
 

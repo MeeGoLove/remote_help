@@ -91,9 +91,10 @@ class Units extends \yii\db\ActiveRecord {
         $nesting_level++;
         foreach ($units as $unit) {
             $name = $unit['name'];
+            //$name = '|__ ' . $name;
             for ($i = 1; $i < $nesting_level; $i++) {
-                $name = ' - ' . $name;
-            }
+                $name = '    ' . $name;
+            }            
             array_push($unit_res, ['id' => $unit['id'],
                 'name' => $name]);
             array_push($unit_res, Units::childsTree($unit['id'], $nesting_level));
