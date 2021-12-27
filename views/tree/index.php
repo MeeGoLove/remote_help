@@ -148,17 +148,10 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
         <!-- Верхний блок с фильтрами-->
         <div class="col-md-7">
             <div class="content-header-wrapper">
-                <h2 class="title"><?php echo $unit_name; ?></h2>
-
+                <h3 class="title"><?php echo $unit_name; ?></h3>                
             </div>
             <div class="content-utilities">
-                <div class="page-nav">
-                    <span class="indicator">Вид: </span>
-                    <div class="btn-group" role="group">
-                        <button class="btn btn-default" data-pjax="1" data-toggle="tooltip" data-placement="bottom"  data-original-title="Таблица" title="Таблица" id="drive-grid-toggle"><i class="fa fa-th-large"></i></button>
-                        <button class="btn btn-default" data-pjax="1" data-placement="bottom" data-original-title="Список" title="Список" id="drive-list-toggle"><i class="fa fa-list-ul"></i></button>
-                    </div>
-                </div>
+
                 <div class="actions">
                     <!--<div class="btn-group">
                         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false">Все файлы... <span class="caret"></span></button>
@@ -168,15 +161,7 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
                             <li><a href="#"><i class="fa fa-file-video-o"></i> Ля</a></li>
                             <li><a href="#"><i class="fa fa-folder"></i> Папки</a></li>
                         </ul>
-                    </div>-->
-                    <div class="btn-group">
-                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false"><i class="fa fa-filter"></i> Сортировка? <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Имя</a></li>
-                            <li><a href="#">IP-адрес</a></li>
-                            <li><a href="#">Тип техники</a></li>
-                        </ul>
-                    </div>
+                    </div>-->                    
                     <!--<div class="btn-group" role="group">
                         <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></button>
                         <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Archive"><i class="fa fa-archive"></i></button>
@@ -186,23 +171,37 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
                     </div>-->
                 </div>
             </div>            
-            <div class="row content-header-wrapper">
+            <div class="content-header-wrapper">
                 <?php
                 $form = ActiveForm::begin([
                             'id' => 'search-form',
+                                //'options' => ['class' => 'form-vertical'],
                 ]);
                 ?>
-                <div class="col-sm-4">
-                    <?= $form->field($model_search, 'keyword')->textInput(['autofocus' => false])->label(false) ?> 
-                </div>                
                 <div class="form-group">
-                    <div class="">
-                        <?= Html::submitButton('Поиск только по имени', ['class' => 'btn btn-primary', 'name' => 'search-button', 'value' => 'btn-name',]) ?>
-                        <?= Html::submitButton('Поиск по IP', ['class' => 'btn btn-info', 'name' => 'search-button', 'value' => 'btn-ip',]) ?>
+                    <div class="col-sm-5">
+                        <?= $form->field($model_search, 'keyword')->textInput(['autofocus' => false])->label(false) ?>                                
+
+
+                        <?=
+                                $form->field($model_search, 'byipsearch')
+                                ->checkbox(
+                        );
+                        ?> 
                     </div>
+
+
+                    <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary', 'name' => 'search-button', 'value' => 'btn-name',]) ?> 
                 </div>           
                 <?php ActiveForm::end(); ?>
                 <div class="actions">
+                    <div class="page-nav">
+                        <span class="indicator">Вид: </span>
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-default" data-pjax="1" data-toggle="tooltip" data-placement="bottom"  data-original-title="Таблица" title="Таблица" id="drive-grid-toggle"><i class="fa fa-th-large"></i></button>
+                            <button class="btn btn-default" data-pjax="1" data-placement="bottom" data-original-title="Список" title="Список" id="drive-list-toggle"><i class="fa fa-list-ul"></i></button>
+                        </div>
+                    </div>
                     <button class="btn btn-success" 
                             onclick=<?= "$('#createConnection" . $unit_id_ . "').modal();" ?> 
                             title = "Создать новое подключение">
@@ -223,8 +222,16 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
                         ]
                     ]);
                     ?>
-                </div>
+                    <!--<div class="page-nav">
+                    <span class="indicator">Вид: </span>
+                    <div class="btn-group" role="group">
+                        <button class="btn btn-default" data-pjax="1" data-toggle="tooltip" data-placement="bottom"  data-original-title="Таблица" title="Таблица" id="drive-grid-toggle"><i class="fa fa-th-large"></i></button>
+                        <button class="btn btn-default" data-pjax="1" data-placement="bottom" data-original-title="Список" title="Список" id="drive-list-toggle"><i class="fa fa-list-ul"></i></button>
+                    </div>
+                </div>-->
+                </div> 
             </div>
+
         </div>
 
 
@@ -311,12 +318,19 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
                                 'format' => 'raw',
                                 'label' => 'Подключиться по',
                             ],
-                                        /*['class' => 'yii\grid\ActionColumn',
-                  'template' => '{update} {delete}',
-                  'buttons' => [                     
-                      
-                  ]
-                                            ]*/
+                            [
+                                'attribute' => 'device_type_id',
+                                'value' => function ($model, $key, $index, $widget) {
+                                    return $model->deviceType->name;
+                                },
+                                'format' => 'raw',
+                            ],
+                        /* ['class' => 'yii\grid\ActionColumn',
+                          'template' => '{update} {delete}',
+                          'buttons' => [
+
+                          ]
+                          ] */
                         ]
                     ]
             );

@@ -147,7 +147,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this t
 
 .content-header-wrapper {
     position: relative;
-    margin-bottom: 30px;
+    margin-bottom: 0px;
 }
 
 .content-header-wrapper .actions {
@@ -160,20 +160,25 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this t
 .title {
     margin-bottom: 15px;
     margin-top: 0;
-    font-size: 18px;
+    /*font-size: 22px;*/
 }
 
 
 .content-utilities {
     position: relative;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
+.content-header-wrapper-margin-bottom
+{
+     position: relative;
+    padding-bottom: 50px;
+}
 
-.content-utilities .page-nav {
+.actions .page-nav {
     position: absolute;
     right: 0;
-    top: 0;
+    top: 40px;  
 }
 /*
 

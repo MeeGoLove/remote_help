@@ -10,16 +10,31 @@ namespace app\models;
 use yii\base\Model;
 
 class SearchForm extends Model {
+
     public $keyword;
+    public $byipsearch;
+
     /**
      * @return array the validation rules.
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             // username and password are both required
-              [['keyword'],'string', 'length' => [2]],
-           [['keyword'], 'required'],           
+            [['keyword'], 'string', 'length' => [2]],
+            [['keyword'], 'required'],
+            ['byipsearch', 'boolean'],
         ];
     }
+
+    /**
+     * 
+     * @return type
+     */
+    public function attributeLabels() {
+        return [
+            'keyword' => 'Ключевое слово',
+            'byipsearch' => 'Включая IP-адреса',
+        ];
+    }
+
 }
