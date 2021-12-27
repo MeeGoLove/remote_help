@@ -205,7 +205,7 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
                     <button class="btn btn-success" 
                             onclick=<?= "$('#createConnection" . $unit_id_ . "').modal();" ?> 
                             title = "Создать новое подключение">
-                        <i class="fa fa-plus"></i> Подключение </button>
+                        <i class="fa fa-plus"></i> Создать подключение </button>
                     <?php
                     echo
                     ModalAjax::widget([
@@ -256,7 +256,36 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
 
 
             </style>
-
+            <h4>Список дочерних папок / Список найденных папок при поиске</h4>
+                    <?=
+            GridView::widget(
+                    [
+                        'dataProvider' => new ActiveDataProvider([
+                            'query' => $child_units,
+                            'pagination' => [
+                                'pageSize' => 0, // ALL results, no pagination
+                            ],
+                                ]),
+                        'layout' => "\n{items}",
+                        'columns' =>
+                        [
+                            [
+                                'attribute' => 'name',
+                                'value' => function (\app\models\Units $data) {
+                                    return Html::a(Html::encode($data->name),
+                                            Url::to(['tree/index', 'unit_id' => $data->id]),
+                                            ['id' => 'tree-link' . $data->id, 'title' => 'Перейти в ' . $data->name,
+                                                'onclick' => 'return saveScroll(this);'
+                                    ]);
+                                },
+                                'format' => 'raw',
+                                 'label' => 'Дочерние папки'     
+                            ]
+                        ]
+                    ]
+            )
+            ?>
+            <h4>Список подключений / Список найденных подключений при поиске</h4>
             <?=
             //ConnectionsGridWidget::widget(['connections' => $connections, 'child_units' => $child_units, 'parent_id' => $parent_id, 'unit_name' => $unit_name,
             //'unit_id' => $unit_id_]);
@@ -297,10 +326,15 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
                                 'pageSize' => 0, // ALL results, no pagination
                             ],
                                 ]),
+                        'tableOptions' => [
+            'class' => 'table table-striped table-bordered' 
+        ],
                         'layout' => "\n{items}",
                         'columns' =>
                         [
-                            'name',
+                            ['attribute' => 'name',
+                                'label' => 'Имя подключения'  
+                                ],
                             'ipaddr',
                             [
                                 'value' => function ($data) {
@@ -334,10 +368,10 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
                         ]
                     ]
             );
-            ?>
+            ?>  
         </div>
 
-        <?php Pjax::end(); ?>   
+<?php Pjax::end(); ?>   
 
 
     </div>

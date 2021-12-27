@@ -102,12 +102,12 @@ class Units extends \yii\db\ActiveRecord {
     }
     
     public static function childUnitsByUnitId($unit_id) {        
-        $data =  Units::find()->where(['parent_id' => $unit_id])->orderBy('name')->all();
+        $data =  Units::find()->where(['parent_id' => $unit_id])->orderBy('name');
         return $data;
     }
     
     public static function unitsBySearch($keyword) {        
-        $data = Units::find()->where(['like', 'name', '%'. $keyword . '%', false])->orderBy(['name'=> 'SORT_ASC'])->all();
+        $data = Units::find()->where(['like', 'name', '%'. $keyword . '%', false])->orderBy(['name'=> 'SORT_ASC']);
         return $data;
     }
 
