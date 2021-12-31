@@ -146,60 +146,55 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
         </div>
 
         <!-- Верхний блок с фильтрами-->
-        <div class="col-md-7">
+        <div class="col-md-7 search-block">
             <div class="content-header-wrapper">
                 <h3 class="title"><?php echo $unit_name; ?></h3>                
-            </div>
-            <div class="content-utilities">
-
-                <div class="actions">
-                    <!--<div class="btn-group">
-                        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" type="button" aria-expanded="false">Все файлы... <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#"><i class="fa fa-file"></i> Документы </a></li>
-                            <li><a href="#"><i class="fa fa-file-image-o"></i> Картинки</a></li>
-                            <li><a href="#"><i class="fa fa-file-video-o"></i> Ля</a></li>
-                            <li><a href="#"><i class="fa fa-folder"></i> Папки</a></li>
-                        </ul>
-                    </div>-->                    
-                    <!--<div class="btn-group" role="group">
-                        <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Refresh"><i class="fa fa-refresh"></i></button>
-                        <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Archive"><i class="fa fa-archive"></i></button>
-        
-                        <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Report spam"><i class="fa fa-exclamation-triangle"></i></button>
-                        <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Delete"><i class="fa fa-trash-o"></i></button>
-                    </div>-->
-                </div>
-            </div>            
+            </div>        
             <div class="content-header-wrapper">
+
+                <!-- Форма поиска папок и подключений -->
                 <?php
                 $form = ActiveForm::begin([
                             'id' => 'search-form',
-                                //'options' => ['class' => 'form-vertical'],
                 ]);
-                ?>
+                ?>                
                 <div class="form-group">
                     <div class="col-sm-5">
                         <?= $form->field($model_search, 'keyword')->textInput(['autofocus' => false])->label(false) ?>                                
-
-
-                        <?=
-                                $form->field($model_search, 'byipsearch')
-                                ->checkbox(
-                        );
-                        ?> 
+                        <?= $form->field($model_search, 'byipsearch')->checkbox(); ?> 
                     </div>
-
-
                     <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary', 'name' => 'search-button', 'value' => 'btn-name',]) ?> 
                 </div>           
                 <?php ActiveForm::end(); ?>
+
+                <!-- Кнопки вида и создания нового подключения -->
                 <div class="actions">
                     <div class="page-nav">
                         <span class="indicator">Вид: </span>
-                        <div class="btn-group" role="group">
-                            <button class="btn btn-default" data-pjax="1" data-toggle="tooltip" data-placement="bottom"  data-original-title="Таблица" title="Таблица" id="drive-grid-toggle"><i class="fa fa-th-large"></i></button>
-                            <button class="btn btn-default" data-pjax="1" data-placement="bottom" data-original-title="Список" title="Список" id="drive-list-toggle"><i class="fa fa-list-ul"></i></button>
+                        <div class="btn-group" role="group"  data-toggle="buttons">
+                            <?php
+                            if ($view_type == "icons") {
+                                echo "
+                       <label class='btn btn-default active' onclick='window.location.href =\"index?unit_id=$unit_id_&view_type=icons&change_view=1\"' title='Иконками'>
+    <input type='radio' name='options' id='option1' autocomplete='off' checked
+    ><i class='fa fa-th-large'></i>
+  </label>
+  <label class='btn btn-default' onclick='window.location.href =\"index?unit_id=$unit_id_&view_type=grid&change_view=1\"' title='Списком'>
+    <input type='radio' name='options' id='option2' autocomplete='off'
+    ><i class='fa fa-list-ul'></i>
+  </label>";
+                            } else {
+                                echo "
+                       <label class='btn btn-default' onclick='window.location.href =\"index?unit_id=$unit_id_&view_type=icons&change_view=1\"' title='Иконками'>
+    <input type='radio' name='options' id='option1' autocomplete='off' 
+     ><i class='fa fa-th-large'></i>
+  </label>
+  <label class='btn btn-default active' onclick='window.location.href =\"index?unit_id=$unit_id_&view_type=grid&change_view=1\"' title='Списком'>
+    <input type='radio' name='options' id='option2' autocomplete='off' checked 
+    ><i class='fa fa-list-ul'></i>
+  </label>";
+                            }
+                            ?>
                         </div>
                     </div>
                     <button class="btn btn-success" 
@@ -221,27 +216,17 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
                             ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
                         ]
                     ]);
-                    ?>
-                    <!--<div class="page-nav">
-                    <span class="indicator">Вид: </span>
-                    <div class="btn-group" role="group">
-                        <button class="btn btn-default" data-pjax="1" data-toggle="tooltip" data-placement="bottom"  data-original-title="Таблица" title="Таблица" id="drive-grid-toggle"><i class="fa fa-th-large"></i></button>
-                        <button class="btn btn-default" data-pjax="1" data-placement="bottom" data-original-title="Список" title="Список" id="drive-list-toggle"><i class="fa fa-list-ul"></i></button>
-                    </div>
-                </div>-->
+                    ?>                    
                 </div> 
             </div>
-
         </div>
 
-
-
-
-        <div class="col-md-7 table-responsive drive-items-table-wrapper">
+        <!-- Блок с папками и блок  с подключениями в виде Gridview -->        
+        <div class="col-md-7 table-responsive drive-items-table-wrapper" style="overflow-y: scroll;
+             height: 575px;
+             /*scrollbar-width: none;*/
+             ">
             <style>
-
-
-
                 .table-responsive tbody tr {
                     color: #5a5a5a; /* Цвет текста */
                     /*background: #ffc; /* Цвет фона */
@@ -252,43 +237,46 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
                     /*color: #fff; /* Цвет текста */
                     background: lightblue; /* Цвет фона */
                 }
-
-
-
             </style>
+            <!-- Сначала папки, дабы не уезжало далеко, сделана пагинация на 5 папок -->
             <h4>Список дочерних папок / Список найденных папок при поиске</h4>
-                    <?=
+
+            <?=
             GridView::widget(
                     [
                         'dataProvider' => new ActiveDataProvider([
                             'query' => $child_units,
                             'pagination' => [
-                                'pageSize' => 0, // ALL results, no pagination
+                                'pageSize' => 5
                             ],
                                 ]),
-                        'layout' => "\n{items}",
+                        //'layout' => "\n{items}\n{summary}\n{pager}",
                         'columns' =>
                         [
                             [
                                 'attribute' => 'name',
-                                'value' => function (\app\models\Units $data) {
+                                'value' => function (\app\models\Units $data, $view_type) {
                                     return Html::a(Html::encode($data->name),
-                                            Url::to(['tree/index', 'unit_id' => $data->id]),
+                                            Url::to(['tree/index', 'unit_id' => $data->id, 'view_type' => $view_type]),
                                             ['id' => 'tree-link' . $data->id, 'title' => 'Перейти в ' . $data->name,
                                                 'onclick' => 'return saveScroll(this);'
                                     ]);
                                 },
                                 'format' => 'raw',
-                                 'label' => 'Дочерние папки'     
+                                'label' => 'Дочерние папки'
                             ]
                         ]
                     ]
             )
             ?>
+            <!-- Затем подключения -->
+            <p></p>
             <h4>Список подключений / Список найденных подключений при поиске</h4>
-            <?=
-            //ConnectionsGridWidget::widget(['connections' => $connections, 'child_units' => $child_units, 'parent_id' => $parent_id, 'unit_name' => $unit_name,
-            //'unit_id' => $unit_id_]);
+            <?php
+            if ($view_type == "icons") {
+                echo ConnectionsGridWidget::widget(['connections' => $connections->all(), 'child_units' => $child_units->all(), 'parent_id' => $parent_id, 'unit_name' => $unit_name,
+                    'unit_id' => $unit_id_]);
+            }
             /* ListView::widget(
               ['dataProvider' => new ActiveDataProvider([
               'query' => $connections,
@@ -317,67 +305,68 @@ $this->params['breadcrumbs'][] = 'Хлебные крошки ещё не гот
               }
               }
               ],
-              ); */
-
-            GridView::widget(
-                    ['dataProvider' => new ActiveDataProvider([
-                            'query' => $connections,
-                            'pagination' => [
-                                'pageSize' => 0, // ALL results, no pagination
-                            ],
-                                ]),
-                        'tableOptions' => [
-            'class' => 'table table-striped table-bordered' 
-        ],
-                        'layout' => "\n{items}",
-                        'columns' =>
-                        [
-                            ['attribute' => 'name',
-                                'label' => 'Имя подключения'  
+              ); */ else {
+                echo GridView::widget(
+                        ['dataProvider' => new ActiveDataProvider([
+                                'query' => $connections,
+                                'pagination' => [
+                                    'pageSize' => 0, // ALL results, no pagination
                                 ],
-                            'ipaddr',
-                            [
-                                'value' => function ($data) {
-                                    if ($data->deviceType->optionalConnectionType !== null)
-                                        return
-
-                                                Html::a($data->deviceType->defaultConnectionType->name, $data->deviceType->defaultConnectionType->protocol_link . $data->ipaddr) .
-                                                "&nbsp;&nbsp;&nbsp;" .
-                                                Html::a($data->deviceType->optionalConnectionType->name, $data->deviceType->optionalConnectionType->protocol_link . $data->ipaddr)
-                                        ;
-                                    else
-                                        return Html::a($data->deviceType->defaultConnectionType->name, $data->deviceType->defaultConnectionType->protocol_link . $data->ipaddr);
-                                },
-                                //'attribute' => '',
-                                'format' => 'raw',
-                                'label' => 'Подключиться по',
+                                    ]),
+                            'tableOptions' => [
+                                'class' => 'table table-striped table-bordered'
                             ],
+                            'layout' => "\n{items}",
+                            'columns' =>
                             [
-                                'attribute' => 'device_type_id',
-                                'value' => function ($model, $key, $index, $widget) {
-                                    return $model->deviceType->name;
-                                },
-                                'format' => 'raw',
-                            ],
-                        /* ['class' => 'yii\grid\ActionColumn',
-                          'template' => '{update} {delete}',
-                          'buttons' => [
+                                [
+                                    'attribute' => 'name',
+                                    'label' => 'Имя подключения'
+                                ],
+                                'ipaddr',
+                                [
+                                    'value' => function ($data) {
+                                        if ($data->deviceType->optionalConnectionType !== null)
+                                            return
 
-                          ]
-                          ] */
+                                                    Html::a($data->deviceType->defaultConnectionType->name, $data->deviceType->defaultConnectionType->protocol_link . $data->ipaddr) .
+                                                    "&nbsp;&nbsp;&nbsp;" .
+                                                    Html::a($data->deviceType->optionalConnectionType->name, $data->deviceType->optionalConnectionType->protocol_link . $data->ipaddr)
+                                            ;
+                                        else
+                                            return Html::a($data->deviceType->defaultConnectionType->name, $data->deviceType->defaultConnectionType->protocol_link . $data->ipaddr);
+                                    },
+                                    //'attribute' => '',
+                                    'format' => 'raw',
+                                    'label' => 'Подключиться по',
+                                ],
+                                [
+                                    'attribute' => 'device_type_id',
+                                    'value' => function ($model, $key, $index, $widget) {
+                                        return $model->deviceType->name;
+                                    },
+                                    'format' => 'raw',
+                                ],
+                            /* ['class' => 'yii\grid\ActionColumn',
+                              'template' => '{update} {delete}',
+                              'buttons' => [
+
+                              ]
+                              ] */
+                            ]
                         ]
-                    ]
-            );
+                );
+            }
             ?>  
         </div>
 
-<?php Pjax::end(); ?>   
+        <?php Pjax::end(); ?>   
 
 
     </div>
 </div>
 
-
+<!-- JS-скрипт для сохранения позиции скролла в дереве -->
 <?php
 $script = <<< JS
     function loadScroll() {

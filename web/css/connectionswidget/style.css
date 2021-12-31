@@ -171,20 +171,34 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this t
 
 .content-header-wrapper-margin-bottom
 {
-     position: relative;
+    position: relative;
     padding-bottom: 50px;
 }
 
 .actions .page-nav {
     position: absolute;
     right: 0;
-    top: 40px;  
+    top: 40px;
+}
+
+.search-block
+{
+    margin-bottom: 5px;
+    border: 1px;
+    border-color: darkgray darkgray; /* Цвет границы */
+    border-style: solid; /* Стиль границы */
+    border-radius: 4px;
+    background-color: lightgray;
+}
+.search-block h3
+{
+    padding-top: 10px;
 }
 /*
 
 #drop-label{
-	position: relative;
-	display: inline-block;
+        position: relative;
+        display: inline-block;
 }
 
 #drop-label:hover:after {
@@ -267,7 +281,7 @@ width: 100%;
     display: block;
 
     overflow: hidden;
-    
+
     padding: 5px;
 
 }

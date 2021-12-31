@@ -21,7 +21,7 @@ use lo\widgets\modal\ModalAjax;
 
 
 
-<div class="file-manager-container file-manager-col-view col-md-7">
+<div class="file-manager-container file-manager-col-view">
     <?php
     if ($parent_id !== null) {
         echo '<div class="file-item">'
