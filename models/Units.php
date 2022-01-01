@@ -110,5 +110,20 @@ class Units extends \yii\db\ActiveRecord {
         $data = Units::find()->where(['like', 'name', '%'. $keyword . '%', false])->orderBy(['name'=> 'SORT_ASC']);
         return $data;
     }
+    
+    
+    public static function unitsBreadCrumbs($unit_id) {
+        $unit = Units::findOne($unit_id);
+        
+
+        if ($unit !== null && $unit->parent_id !== null)        
+        {
+            return Units::unitsBreadCrumbs($unit->parent_id) . "<li><a href='/tree/index?unit_id=$unit->id'>$unit->name</a></li>";
+        }
+        else return "<li><a href='/tree/index?unit_id=$unit->id'>$unit->name</a></li>";       
+        
+    }
+    
+    
 
 }

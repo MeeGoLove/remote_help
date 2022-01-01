@@ -194,6 +194,23 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this t
 {
     padding-top: 10px;
 }
+
+.table-responsive tbody tr {
+    color: #5a5a5a; /* Цвет текста */
+    /*background: #ffc; /* Цвет фона */
+    padding: 10px; /* Поля вокруг текста */
+    transition: 0.25s linear; /* Время изменения */
+}
+.table-responsive  tbody tr:hover {
+    /*color: #fff; /* Цвет текста */
+    background: lightblue; /* Цвет фона */
+}
+
+.tregrid-col
+{
+    width: 250px;
+    display:inline-block
+}
 /*
 
 #drop-label{
@@ -292,7 +309,7 @@ width: 100%;
 
     padding: 1rem 0 1rem 0;
 
-    width: 12.75rem;
+    width: 12.25rem;
 
     text-align: center;
 
