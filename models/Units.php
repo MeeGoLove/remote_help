@@ -118,9 +118,9 @@ class Units extends \yii\db\ActiveRecord {
 
         if ($unit !== null && $unit->parent_id !== null)        
         {
-            return Units::unitsBreadCrumbs($unit->parent_id) . "<li><a href='/tree/index?unit_id=$unit->id'>$unit->name</a></li>";
+            return Units::unitsBreadCrumbs($unit->parent_id) . "<li><a href='/tree/index?unit_id=$unit->id'>$unit->name </a></li>";
         }
-        else return "<li><a href='/tree/index?unit_id=$unit->id'>$unit->name</a></li>";       
+        else return "<li><a href='/tree/index?unit_id=$unit->id'>$unit->name </a></li>";       
         
     }
     
