@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 
+$unit_res = [];
 /**
  * This is the model class for table "units".
  *
@@ -16,21 +17,22 @@ use Yii;
  * @property Units $parent
  * @property Units[] $units
  */
-$unit_res = [];
-
-class Units extends \yii\db\ActiveRecord {
+class Units extends \yii\db\ActiveRecord
+{
 
     /**
      * {@inheritdoc}
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'units';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['name'], 'required'],
             [['parent_id'], 'integer'],
@@ -42,7 +44,8 @@ class Units extends \yii\db\ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'name' => 'Имя',
@@ -56,7 +59,8 @@ class Units extends \yii\db\ActiveRecord {
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getConnections() {
+    public function getConnections()
+    {
         return $this->hasMany(Connections::className(), ['unit_id' => 'id']);
     }
 
@@ -65,7 +69,8 @@ class Units extends \yii\db\ActiveRecord {
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getParent() {
+    public function getParent()
+    {
         return $this->hasOne(Units::className(), ['id' => 'parent_id']);
     }
 
@@ -74,18 +79,21 @@ class Units extends \yii\db\ActiveRecord {
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUnits() {
+    public function getUnits()
+    {
         return $this->hasMany(Units::className(), ['parent_id' => 'id']);
     }
 
-    public static function unitsDropdownList() {
+    public static function unitsDropdownList()
+    {
         global $unit_res;
         $unit_res = [];
         Units::childsTree();
         return array_filter($unit_res);
     }
 
-    public static function childsTree($parent_id = null, $nesting_level = 0) {
+    public static function childsTree($parent_id = null, $nesting_level = 0)
+    {
         global $unit_res;
         $units = Units::find()->where(['parent_id' => $parent_id])->orderBy('name ASC')->asArray()->all();
         $nesting_level++;
@@ -94,36 +102,40 @@ class Units extends \yii\db\ActiveRecord {
             //$name = '|__ ' . $name;
             for ($i = 1; $i < $nesting_level; $i++) {
                 $name = '    ' . $name;
-            }            
-            array_push($unit_res, ['id' => $unit['id'],
-                'name' => $name]);
+            }
+            array_push($unit_res, [
+                'id' => $unit['id'],
+                'name' => $name
+            ]);
             array_push($unit_res, Units::childsTree($unit['id'], $nesting_level));
         }
     }
-    
-    public static function childUnitsByUnitId($unit_id) {        
+
+    public static function childUnitsByUnitId($unit_id)
+    {
         $data =  Units::find()->where(['parent_id' => $unit_id])->orderBy('name');
         return $data;
     }
-    
-    public static function unitsBySearch($keyword) {        
-        $data = Units::find()->where(['like', 'name', '%'. $keyword . '%', false])->orderBy(['name'=> 'SORT_ASC']);
+
+
+    public static function unitsBySearch($keyword)
+    {
+        $data = Units::find()->where(['like', 'name', '%' . $keyword . '%', false])->orderBy(['name' => 'SORT_ASC']);
         return $data;
     }
-    
-    
-    public static function unitsBreadCrumbs($unit_id) {
+
+    public static function unitsBreadCrumbs($unit_id)
+    {
         $unit = Units::findOne($unit_id);
-        
 
-        if ($unit !== null && $unit->parent_id !== null)        
-        {
-            return Units::unitsBreadCrumbs($unit->parent_id) . "<li><a href='/tree/index?unit_id=$unit->id'>$unit->name </a></li>";
+        if ($unit !== null) {
+            if ($unit->parent_id !== null) {
+                return Units::unitsBreadCrumbs($unit->parent_id) . "<li><a href='/tree/index?unit_id=$unit->id'>$unit->name </a></li>";
+            } else {
+                return "<li><a href='/tree/index?unit_id=$unit->id'>$unit->name </a></li>";
+            }
+        } else {
+            return "<li> Корневой элемент не найден!</li>";
         }
-        else return "<li><a href='/tree/index?unit_id=$unit->id'>$unit->name </a></li>";       
-        
     }
-    
-    
-
 }
