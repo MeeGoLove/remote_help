@@ -6,7 +6,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this t
 
 */
 
-/* 
+/*
 
     Created on : 2021 Nov 17, 01:58:47
 
@@ -195,21 +195,21 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this t
     padding-top: 10px;
 }
 
-.table-responsive tbody tr {
-    color: #5a5a5a; /* Цвет текста */
-    /*background: #ffc; /* Цвет фона */
-    padding: 10px; /* Поля вокруг текста */
-    transition: 0.25s linear; /* Время изменения */
-}
+
 .table-responsive  tbody tr:hover {
     /*color: #fff; /* Цвет текста */
     background: lightblue; /* Цвет фона */
 }
 
-.tregrid-col
+.tregrid-col-with-edit
 {
-    width: 250px;
-    display:inline-block
+    width: 235px;
+    display:inline-block;
+    white-space: nowrap; /* Запрещаем перенос строк */
+    overflow: hidden; /* Обрезаем все, что не помещается в область */
+    /*background: #fc0; /* Цвет фона */
+    /*padding: 5px; /* Поля вокруг текста */
+    text-overflow: ellipsis; /* Добавляем многоточие */
 }
 /*
 

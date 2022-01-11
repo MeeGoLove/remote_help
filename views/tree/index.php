@@ -36,16 +36,16 @@ if ($dataProvider->count == 0)
 
 
 
-    <div class="row">      
+    <div class="row">
 
-<?php Pjax::begin(); ?>    
+<?php Pjax::begin(); ?>
         <ul class="breadcrumb">
         <?= Units::unitsBreadCrumbs($unit_id_); ?>
         </ul>
 <?php
 
 ?>
-        <div class="col-md-5 noscrollbar table-responsive" 
+        <div class="col-md-5 noscrollbar table-responsive"
              style="overflow-y: scroll;
              height: 700px;
              /*scrollbar-width: none;*/
@@ -84,7 +84,7 @@ if ($dataProvider->count == 0)
                             return Html::a(Html::encode($data->name),
                                     Url::to(['tree/index', 'unit_id' => $data->id]),
                                     ['id' => 'tree-link' . $data->id, 'title' => 'Перейти в ' . $data->name,
-                                        'onclick' => 'return saveScroll(this);', 'class' => 'tregrid-col'
+                                        'onclick' => 'return saveScroll(this);', 'class' => 'tregrid-col-with-edit'
                             ]);
                         },
                         'format' => 'raw',
@@ -135,7 +135,7 @@ if ($dataProvider->count == 0)
                             },
                             'delete' => function ($url, $model, $key) {
                                 return Html::a('<button class="glyphicon glyphicon-trash"></button>', ['delete', 'id' => $key], [
-                                    'class' => 'file-item-dropdown-menu',
+                                    //'class' => 'file-item-dropdown-menu',
                                     'title' => 'Удалить',
                                     'data' => [
                                         'confirm' => 'Вы действительно хотите удалить ' . $model->name . '?',
@@ -147,14 +147,14 @@ if ($dataProvider->count == 0)
                     ]
                 ]
             ]);
-            ?>                       
+            ?>
         </div>
 
         <!-- Верхний блок с фильтрами-->
         <div class="col-md-7 search-block">
             <div class="content-header-wrapper">
-                <h3 class="title"><?php echo $unit_name; ?></h3>                
-            </div>        
+                <h3 class="title"><?php echo $unit_name; ?></h3>
+            </div>
             <div class="content-header-wrapper">
 
                 <!-- Форма поиска папок и подключений -->
@@ -162,14 +162,14 @@ if ($dataProvider->count == 0)
 $form = ActiveForm::begin([
             'id' => 'search-form',
         ]);
-?>                
+?>
                 <div class="form-group">
                     <div class="col-sm-5">
-                <?= $form->field($model_search, 'keyword')->textInput(['autofocus' => false])->label(false) ?>                                
-<?= $form->field($model_search, 'byipsearch')->checkbox(); ?> 
+                <?= $form->field($model_search, 'keyword')->textInput(['autofocus' => false])->label(false) ?>
+<?= $form->field($model_search, 'byipsearch')->checkbox(); ?>
                     </div>
-                        <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary', 'name' => 'search-button', 'value' => 'btn-name',]) ?> 
-                </div>           
+                        <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary', 'name' => 'search-button', 'value' => 'btn-name',]) ?>
+                </div>
                     <?php ActiveForm::end(); ?>
 
                 <!-- Кнопки вида и создания нового подключения -->
@@ -191,19 +191,19 @@ if ($view_type == "icons") {
 } else {
     echo "
                        <label class='btn btn-default' onclick='window.location.href =\"index?unit_id=$unit_id_&view_type=icons&change_view=1\"' title='Иконками'>
-    <input type='radio' name='options' id='option1' autocomplete='off' 
+    <input type='radio' name='options' id='option1' autocomplete='off'
      ><i class='fa fa-th-large'></i>
   </label>
   <label class='btn btn-default active' onclick='window.location.href =\"index?unit_id=$unit_id_&view_type=grid&change_view=1\"' title='Списком'>
-    <input type='radio' name='options' id='option2' autocomplete='off' checked 
+    <input type='radio' name='options' id='option2' autocomplete='off' checked
     ><i class='fa fa-list-ul'></i>
   </label>";
 }
 ?>
                         </div>
                     </div>
-                    <button class="btn btn-success" 
-                            onclick=<?= "$('#createConnection" . $unit_id_ . "').modal();" ?> 
+                    <button class="btn btn-success"
+                            onclick=<?= "$('#createConnection" . $unit_id_ . "').modal();" ?>
                             title = "Создать новое подключение">
                         <i class="fa fa-plus"></i> Создать подключение </button>
 <?php
@@ -221,16 +221,16 @@ ModalAjax::widget([
         ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
     ]
 ]);
-?>                    
-                </div> 
+?>
+                </div>
             </div>
         </div>
 
-        <!-- Блок с папками и блок  с подключениями в виде Gridview -->        
+        <!-- Блок с папками и блок  с подключениями в виде Gridview -->
         <div class="col-md-7 table-responsive drive-items-table-wrapper" style="overflow-y: scroll;
              height: 575px;
              /*scrollbar-width: none;*/
-             ">          
+             ">
 
 <?php
 if ($view_type == "icons") {
@@ -294,7 +294,7 @@ if ($view_type == "icons") {
                 ]
             ]
     );
-    //Затем подключения 
+    //Затем подключения
     echo '<p></p><h4>Список подключений / Список найденных подключений при поиске</h4>';
     echo GridView::widget(
             ['dataProvider' => new ActiveDataProvider([
@@ -347,10 +347,10 @@ if ($view_type == "icons") {
             ]
     );
 }
-?>  
+?>
         </div>
 
-            <?php Pjax::end(); ?>   
+            <?php Pjax::end(); ?>
 
 
     </div>
@@ -364,16 +364,16 @@ $script = <<< JS
             $(".noscrollbar").scrollTop(localStorage.getItem("treegrid-scroll"));
             //alert("scroll");
         }
-    }; 
-        
+    };
+
     function saveScroll()
     {
         localStorage.setItem("treegrid-scroll", $(".noscrollbar").scrollTop());
     };
     document.addEventListener('DOMContentLoaded', loadScroll);
-    $(document).on('pjax:complete', function (){        
+    $(document).on('pjax:complete', function (){
         if (localStorage.getItem("treegrid-scroll") != null) {
-            $(".noscrollbar").scrollTop(localStorage.getItem("treegrid-scroll"));            
+            $(".noscrollbar").scrollTop(localStorage.getItem("treegrid-scroll"));
         }
     })
 JS;
