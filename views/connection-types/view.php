@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model app\models\ConnectionTypes */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Connection Types', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Удаленные протоколы', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -16,11 +16,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Вы действительно хотите удалить этот удаленный протокол?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -32,7 +32,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'protocol_link',
-            'icon',
+            [
+                'attribute' => 'icon',
+                'value' => function ($model) {
+                    if (!empty($model->icon)) {
+                        return Html::img('/icons-remote/thumb/' . $model->icon, ['style' => 'height:25px;']);
+                    }
+                },
+                'format' => 'raw',
+
+            ],
         ],
     ]) ?>
 

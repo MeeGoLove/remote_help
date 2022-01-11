@@ -5,8 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\ConnectionTypes */
 
-$this->title = 'Create Connection Types';
-$this->params['breadcrumbs'][] = ['label' => 'Connection Types', 'url' => ['index']];
+$this->title = 'Создать новый удаленный протокол';
+$this->params['breadcrumbs'][] = ['label' => 'Удаленные протоколы', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="connection-types-create">

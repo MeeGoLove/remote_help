@@ -6,7 +6,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Connection Types';
+$this->title = 'Удаленные протоколы';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="connection-types-index">
@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Connection Types', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Создать новый удаленный протокол', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
 
@@ -26,7 +26,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'protocol_link',
-            'icon',
+            [
+                'attribute' => 'icon',
+                'value' => function ($model) {
+                    if (!empty($model->icon)) {
+                        return Html::img('/icons-remote/thumb/' . $model->icon, ['style' => 'height:25px;']);
+                    }
+                },
+                'format' => 'raw',
+
+            ],
+
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

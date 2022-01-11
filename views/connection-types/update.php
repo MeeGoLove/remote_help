@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\ConnectionTypes */
 
-$this->title = 'Update Connection Types: ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Connection Types', 'url' => ['index']];
+$this->title = 'Изменить удаленный протокол: ' . $model->name;
+$this->params['breadcrumbs'][] = ['label' => 'Удаленные протоколы', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Изменить';
 ?>
 <div class="connection-types-update">
 
