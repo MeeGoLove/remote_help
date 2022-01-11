@@ -22,7 +22,7 @@ AppAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
-    
+
 </head>
 <body>
 <?php $this->beginBody() ?>
@@ -40,7 +40,7 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => 'Главная', 'url' => ['/site/index']],
-            ['label' => 'Подключения - Адресная', 'url' => ['/tree']],
+            ['label' => 'Адресная книга', 'url' => ['/tree']],
             ['label' => 'Подразделения', 'url' => ['/units']],
             ['label' => 'Подключения', 'url' => ['/connections']],
             ['label' => 'Справочники',  'items' =>
@@ -52,7 +52,7 @@ AppAsset::register($this);
                 ['label' => 'Из LiteManager', 'url' => ['/import/lm']],
                 ['label' => 'Из MS RDP Gateway', 'url' => ['/import/msrdpgtw']],
                 ['label' => 'Из MS RDP Connection Manager', 'url' => ['/import/msrdpcm']],
-                    
+
             ]],
 
             Yii::$app->user->isGuest ? (

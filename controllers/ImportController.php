@@ -9,45 +9,52 @@ use app\models\Units;
 use app\models\UploadForm;
 use yii\web\UploadedFile;
 
-class ImportController extends Controller {
+class ImportController extends Controller
+{
 
-    public function actionLm() {
+    public function actionLm()
+    {
         return $this->render('lm');
     }
 
-    public function actionMsrdpcm() {
-        return $this->render('msrdpcm');
+    public function actionMsrdpcm()
+    {
+        $model = new UploadForm();
+        if (
+            Yii::$app->request->isPost && $model->load(Yii::$app->request->post())
+            //&& $model->validate()
+        ) {
+            $model->importFile = UploadedFile::getInstance($model, 'importFile');
+            if ($model->upload()) {
+                $message = UploadForm::importMsRdpCM($model->rootUnitId, $model->deviceTypeId);
+                Yii::$app->session->setFlash('success', $message);
+            } else {
+                Yii::$app->session->setFlash('error', 'Не удалось загрузить файл!');
+            }
+        }
+        return $this->render('msrdpcm', ['model' => $model]);
+
     }
 
-    public function actionMsrdpgtw() {
+    public function actionMsrdpgtw()
+    {
         return $this->render('msrdpgtw');
     }
 
-    public function actionRadmin() {
-
-
-
-
-        $model = new UploadForm();
-
-        if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post()) 
-                //&& $model->validate()
-                ) {
+    public function actionRadmin()
+    {   $model = new UploadForm();
+        if (
+            Yii::$app->request->isPost && $model->load(Yii::$app->request->post())
+            //&& $model->validate()
+        ) {
             $model->importFile = UploadedFile::getInstance($model, 'importFile');
-            Yii::$app->session->setFlash('success', 'Прошли валидацию!'); 
             if ($model->upload()) {
                 $message = UploadForm::importRadmin($model->rootUnitId, $model->deviceTypeId);
-                Yii::$app->session->setFlash('success', $message); 
+                Yii::$app->session->setFlash('success', $message);
+            } else {
+                Yii::$app->session->setFlash('error', 'Не удалось загрузить файл!');
             }
-            else 
-            {
-                Yii::$app->session->setFlash('error', 'Не удалось загрузить файл!'); 
-            }
-        }
-        else {
-            Yii::$app->session->setFlash('error', 'Не прошли валидацию!'); 
         }
         return $this->render('radmin', ['model' => $model]);
     }
-
 }
