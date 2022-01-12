@@ -68,6 +68,10 @@ class ImportController extends Controller
         ) {
             $model->importFile = UploadedFile::getInstance($model, 'importFile');
             if ($model->upload()) {
+                if ($model->clearDir) {
+                    Units::deleteAll(['parent_id' => $model->rootUnitId]);
+                    Connections::deleteAll(['unit_id' => $model->rootUnitId]);
+                }
                 $message = UploadForm::importRadmin($model->rootUnitId, $model->deviceTypeId);
                 Yii::$app->session->setFlash('success', $message);
             } else {

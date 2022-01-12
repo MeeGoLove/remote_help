@@ -22,6 +22,7 @@ $items_units = ArrayHelper::map($units, 'id', 'name');
 <?= $form->field($model, 'importFile')->fileInput() ?>
 <?= $form->field($model, 'deviceTypeId')->dropDownList($items_devices); ?>
 <?= $form->field($model, 'rootUnitId')->dropDownList($items_units,  ['encodeSpaces' => true]); ?>
+<?= $form->field($model, 'clearDir')->checkbox(); ?>
 <div class="form-group">
     <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
 </div>
