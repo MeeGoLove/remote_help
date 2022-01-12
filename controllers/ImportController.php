@@ -22,13 +22,11 @@ class ImportController extends Controller
         $model = new UploadForm();
         if (
             Yii::$app->request->isPost && $model->load(Yii::$app->request->post())
-            //&& $model->validate()
         ) {
             $model->importFile = UploadedFile::getInstance($model, 'importFile');
             if ($model->upload()) {
-                if ($model->clearDir)
-                {
-                    Units::deleteAll(['parent_id'=> $model->rootUnitId]);
+                if ($model->clearDir) {
+                    Units::deleteAll(['parent_id' => $model->rootUnitId]);
                     Connections::deleteAll(['unit_id' => $model->rootUnitId]);
                 }
                 $message = UploadForm::importMsRdpLSM($model->rootUnitId, $model->deviceTypeId);
@@ -38,19 +36,35 @@ class ImportController extends Controller
             }
         }
         return $this->render('msrdplsm', ['model' => $model]);
-
     }
 
     public function actionMsrdpgtw()
     {
-        return $this->render('msrdpgtw');
+        $model = new UploadForm();
+        if (
+            Yii::$app->request->isPost && $model->load(Yii::$app->request->post())
+
+        ) {
+            $model->importFile = UploadedFile::getInstance($model, 'importFile');
+            if ($model->upload()) {
+                if ($model->clearDir) {
+                    Units::deleteAll(['parent_id' => $model->rootUnitId]);
+                    Connections::deleteAll(['unit_id' => $model->rootUnitId]);
+                }
+                $message = UploadForm::importMsRdpGateway($model->rootUnitId, $model->deviceTypeId);
+                Yii::$app->session->setFlash('success', $message);
+            } else {
+                Yii::$app->session->setFlash('error', 'Не удалось загрузить файл!');
+            }
+        }
+        return $this->render('msrdpgtw', ['model' => $model]);
     }
 
     public function actionRadmin()
-    {   $model = new UploadForm();
+    {
+        $model = new UploadForm();
         if (
             Yii::$app->request->isPost && $model->load(Yii::$app->request->post())
-            //&& $model->validate()
         ) {
             $model->importFile = UploadedFile::getInstance($model, 'importFile');
             if ($model->upload()) {

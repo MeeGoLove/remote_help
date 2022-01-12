@@ -10,7 +10,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 ?>
 
-<div class="radmin-import-form">
+<div class="lsm-import-form">
     <?php
     $form = ActiveForm::begin();
     $device_types = DeviceTypes::find()->all();

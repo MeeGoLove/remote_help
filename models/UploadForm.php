@@ -153,7 +153,7 @@ class UploadForm extends Model
                 //Так же пропускаем события без IP
                 if (array_key_exists($name, $connections) == false and  $ipaddr !== "") {
                     $connections[$name] =
-                        (string) $event->UserData->EventXML->Address;
+                        $ipaddr;
                     //Отбрасывем учетки без IP
                     if ($ipaddr === '::%16777216') {
                         $notImported = $notImported . $name . ", ";
@@ -162,7 +162,7 @@ class UploadForm extends Model
                     $connection = new Connections();
                     $connection->device_type_id = $deviceTypeId;
                     $connection->name = $name;
-                    $connection->ipaddr = (string) $event->UserData->EventXML->Address;
+                    $connection->ipaddr = $ipaddr;
                     $connection->unit_id = $rootUnitId;
                     $connection->comment = "Импортировано из MS LocalSessionManager";
                     $connection->save();
@@ -173,5 +173,43 @@ class UploadForm extends Model
         $notImported = substr($notImported, 0, -1);
         return "При импорте из журнала TS LocalSessionManager создано "  . $connections_count . " подключений! Учетные записи "
             . $notImported . " не имеют IP-адреса, они не были импортированы!";
+    }
+
+    public function importMsRdpGateway ($rootUnitId, $deviceTypeId)
+    {
+        $connections_count = 0;
+        $connections = array();
+        $xml = simplexml_load_file('uploads/import.xml', "SimpleXMLElement", LIBXML_NOWARNING);
+
+        foreach ($xml->Event as $event) {
+            //В журнале Gateway ищем события с EventID 200
+            if ($event->System->EventID == 200) {
+                $name = (string) $event->UserData->EventInfo->Username;
+                //Имя пользователя содержит имя домена, удаляем
+                $pos = strpos($name, '\\');
+                $name = substr($name, $pos + 1);
+                $ipaddr = (string) $event->UserData->EventInfo->IpAddress;
+                //Найденные соединения ложим в массив $connections, если их там нет и создаем новое подключение в БД.
+                //В противном случае ничего не делаем.
+                //События в журнале идут от позднего до самого раннего, нет смысла сохранять более ранний IP, он мог поменяться
+                //Так же пропускаем события без IP
+                if (array_key_exists($name, $connections) == false and  $ipaddr !== "") {
+                    $connections[$name] =
+                        $ipaddr;
+                    $connection = new Connections();
+                    $connection->device_type_id = $deviceTypeId;
+                    $connection->name = $name;
+                    $connection->ipaddr = $ipaddr;
+                    $connection->unit_id = $rootUnitId;
+                    $connection->comment = "Импортировано из MS Gateway";
+                    $connection->save();
+                    $connections_count++;
+                }
+            }
+        }
+        return "При импорте из журнала TS Gateway создано "  . $connections_count . " подключений!"
+           ;
+
+
     }
 }

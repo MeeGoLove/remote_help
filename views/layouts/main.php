@@ -54,7 +54,7 @@ AppAsset::register($this);
                 [
                     ['label' => 'Из Radmin', 'url' => ['/import/radmin']],
                     ['label' => 'Из LiteManager', 'url' => ['/import/lm']],
-                    ['label' => 'Из MS RDP Gateway', 'url' => ['/import/msrdpgtw']],
+                    ['label' => 'Из TS Gateway', 'url' => ['/import/msrdpgtw']],
                     ['label' => 'Из TS LocalSessionManager', 'url' => ['/import/msrdplsm']],
 
                 ]],
