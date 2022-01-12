@@ -18,6 +18,7 @@ class UploadForm extends Model
     public $importFile;
     public $rootUnitId;
     public $deviceTypeId;
+    public $clearDir;
 
     public function rules()
     {
@@ -26,7 +27,8 @@ class UploadForm extends Model
                 ['importFile'], 'file', 'skipOnEmpty' => false,
                 //'extensions' => 'xml, csv, rpb'
             ],
-            [['rootUnitId', 'deviceTypeId'], 'required']
+            [['rootUnitId', 'deviceTypeId'], 'required'],
+            ['clearDir', 'safe']
         ];
     }
 
@@ -46,6 +48,7 @@ class UploadForm extends Model
             'importFile' => 'Файл CSV для импорта',
             'rootUnitId' => 'Корневая папка, куда будут импортированы подключения',
             'deviceTypeId' => 'Тип устройства для импортируемых подключений',
+            'clearDir' => 'Очистить выбранную папку от подпапок и подключений'
         ];
     }
 
@@ -129,26 +132,36 @@ class UploadForm extends Model
     }
 
 
-    public static function importMsRdpCM($rootUnitId, $deviceTypeId)
+    public static function importMsRdpLSM($rootUnitId, $deviceTypeId)
     {
-        $unit_count = 0;
+        $notImported = "";
         $connections_count = 0;
         $connections = array();
-
         $xml = simplexml_load_file('uploads/import.xml', "SimpleXMLElement", LIBXML_NOWARNING);
 
         foreach ($xml->Event as $event) {
-            //В журнале LocalSessionManager ищем события с EventID равным 24
+            //В журнале LocalSessionManager ищем события с EventID начинающимся с 2
             if ($event->System->EventID >= 20 and $event->System->EventID <= 29) {
+                $name = (string) $event->UserData->EventXML->User;
+                //Имя пользователя содержит имя домена, удаляем
+                $pos = strpos($name, '\\');
+                $name = substr($name, $pos + 1);
+                $ipaddr = (string) $event->UserData->EventXML->Address;
                 //Найденные соединения ложим в массив $connections, если их там нет и создаем новое подключение в БД.
                 //В противном случае ничего не делаем.
                 //События в журнале идут от позднего до самого раннего, нет смысла сохранять более ранний IP, он мог поменяться
-                if (array_key_exists((string) $event->UserData->EventXML->User, $connections) == false) {
-                    $connections[(string) $event->UserData->EventXML->User] =
+                //Так же пропускаем события без IP
+                if (array_key_exists($name, $connections) == false and  $ipaddr !== "") {
+                    $connections[$name] =
                         (string) $event->UserData->EventXML->Address;
+                    //Отбрасывем учетки без IP
+                    if ($ipaddr === '::%16777216') {
+                        $notImported = $notImported . $name . ", ";
+                        continue;
+                    }
                     $connection = new Connections();
                     $connection->device_type_id = $deviceTypeId;
-                    $connection->name = (string) $event->UserData->EventXML->User;
+                    $connection->name = $name;
                     $connection->ipaddr = (string) $event->UserData->EventXML->Address;
                     $connection->unit_id = $rootUnitId;
                     $connection->comment = "Импортировано из MS LocalSessionManager";
@@ -157,6 +170,8 @@ class UploadForm extends Model
                 }
             }
         }
-        return "При импорте из MS  LocalSessionManager создано "  . $connections_count . " подключений!";
+        $notImported = substr($notImported, 0, -1);
+        return "При импорте из журнала TS LocalSessionManager создано "  . $connections_count . " подключений! Учетные записи "
+            . $notImported . " не имеют IP-адреса, они не были импортированы!";
     }
 }

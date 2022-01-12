@@ -17,7 +17,7 @@ class ImportController extends Controller
         return $this->render('lm');
     }
 
-    public function actionMsrdpcm()
+    public function actionMsrdplsm()
     {
         $model = new UploadForm();
         if (
@@ -26,13 +26,18 @@ class ImportController extends Controller
         ) {
             $model->importFile = UploadedFile::getInstance($model, 'importFile');
             if ($model->upload()) {
-                $message = UploadForm::importMsRdpCM($model->rootUnitId, $model->deviceTypeId);
+                if ($model->clearDir)
+                {
+                    Units::deleteAll(['parent_id'=> $model->rootUnitId]);
+                    Connections::deleteAll(['unit_id' => $model->rootUnitId]);
+                }
+                $message = UploadForm::importMsRdpLSM($model->rootUnitId, $model->deviceTypeId);
                 Yii::$app->session->setFlash('success', $message);
             } else {
                 Yii::$app->session->setFlash('error', 'Не удалось загрузить файл!');
             }
         }
-        return $this->render('msrdpcm', ['model' => $model]);
+        return $this->render('msrdplsm', ['model' => $model]);
 
     }
 
