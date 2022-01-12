@@ -175,7 +175,7 @@ class UploadForm extends Model
             . $notImported . " не имеют IP-адреса, они не были импортированы!";
     }
 
-    public function importMsRdpGateway ($rootUnitId, $deviceTypeId)
+    public static function importMsRdpGateway ($rootUnitId, $deviceTypeId)
     {
         $connections_count = 0;
         $connections = array();
