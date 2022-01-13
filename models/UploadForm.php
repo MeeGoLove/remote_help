@@ -9,6 +9,7 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\web\UploadedFile;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class UploadForm extends Model
 {
@@ -175,7 +176,7 @@ class UploadForm extends Model
             . $notImported . " не имеют IP-адреса, они не были импортированы!";
     }
 
-    public static function importMsRdpGateway ($rootUnitId, $deviceTypeId)
+    public static function importMsRdpGateway($rootUnitId, $deviceTypeId)
     {
         $connections_count = 0;
         $connections = array();
@@ -207,9 +208,44 @@ class UploadForm extends Model
                 }
             }
         }
-        return "При импорте из журнала TS Gateway создано "  . $connections_count . " подключений!"
-           ;
+        return "При импорте из журнала TS Gateway создано "  . $connections_count . " подключений!";
+    }
 
 
+    public static function importExcel($rootUnitId, $deviceTypeId)
+    {
+        $updatedCount = 0;
+        $sFile = 'uploads/import.xlsx';
+        $oSpreadsheet = IOFactory::load($sFile);
+        $oCells = $oSpreadsheet->getActiveSheet()->getCellCollection();
+        $username = "";
+        $row = 2;
+        while ($username != "Обозначения") {
+            $userCell = $oCells->get('A' . $row);
+            if ($userCell) {
+                $username = $userCell->getValue();
+            }
+            $name1Cell = $oCells->get('B' . $row);
+            if ($name1Cell) {
+                $name1 = $name1Cell->getValue();
+            }
+            else {
+                $name1 = "";
+            }
+            $name2Cell = $oCells->get('C' . $row);
+            if ($name2Cell) {
+                $name2 = $name2Cell->getValue();
+            } else {
+                $name2 = "";
+            }
+            $connection = Connections::findOne(['name' => $username, 'unit_id' => $rootUnitId]);
+            if ($connection) {
+                $connection->name = $name1 . " / " . $name2 . " ". $connection->name;
+                $connection->save();
+                $updatedCount++;
+            }
+            $row++;
+        }
+        return "При импорте из выданных терминалок обновлено "  . $updatedCount . " подключений!";
     }
 }

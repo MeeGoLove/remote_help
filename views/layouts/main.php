@@ -56,6 +56,7 @@ AppAsset::register($this);
                     ['label' => 'Из LiteManager', 'url' => ['/import/lm']],
                     ['label' => 'Из TS Gateway', 'url' => ['/import/msrdpgtw']],
                     ['label' => 'Из TS LocalSessionManager', 'url' => ['/import/msrdplsm']],
+                    ['label' => 'Из выданных терминалок', 'url' => ['/import/excel']],
 
                 ]],
 

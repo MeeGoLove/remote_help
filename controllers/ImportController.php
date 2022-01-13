@@ -12,6 +12,24 @@ use yii\web\UploadedFile;
 class ImportController extends Controller
 {
 
+
+    public function actionExcel()
+        {
+            $model = new UploadForm();
+        if (
+            Yii::$app->request->isPost && $model->load(Yii::$app->request->post())
+        ) {
+            $model->importFile = UploadedFile::getInstance($model, 'importFile');
+            if ($model->upload()) {
+                $message = UploadForm::importExcel($model->rootUnitId, $model->deviceTypeId);
+                Yii::$app->session->setFlash('success', $message);
+            } else {
+                Yii::$app->session->setFlash('error', 'Не удалось загрузить файл!');
+            }
+        }
+        return $this->render('excel', ['model' => $model]);
+        }
+
     public function actionLm()
     {
         return $this->render('lm');
