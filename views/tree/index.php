@@ -72,7 +72,7 @@ $this->title = 'Адресная книга'; ?>
                         ],
                         [
                             'class' => 'yii\grid\ActionColumn',
-                            'contentOptions' => ['style' => 'min-width: 105px'],
+                            'contentOptions' => ['style' => 'min-width: 115px'],
                             'template' => '{update} {delete} {add}',
                             'buttons' => [
                                 'add' => function ($url, $model, $key) {
@@ -293,7 +293,7 @@ $this->title = 'Адресная книга'; ?>
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
-                                'contentOptions' => ['style' => 'min-width: 75px'],
+                                'contentOptions' => ['style' => 'min-width: 85px'],
                                 'template' => '{update}{delete}',
                                 'buttons' => [
                                     'update' => function ($url, $model, $key) {

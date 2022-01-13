@@ -43,6 +43,7 @@ AppAsset::register($this);
             'items' => [
                 ['label' => 'Главная', 'url' => ['/site/index']],
                 ['label' => 'Адресная книга', 'url' => ['/tree']],
+                ['label' => 'Тест', 'url' => ['/tree/check']],
                 ['label' => 'Подразделения', 'url' => ['/units']],
                 ['label' => 'Подключения', 'url' => ['/connections']],
                 ['label' => 'Справочники',  'items' =>
