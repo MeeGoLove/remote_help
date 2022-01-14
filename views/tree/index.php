@@ -138,6 +138,7 @@ $this->title = 'Адресная книга'; ?>
             <div class="content-header-wrapper">
                 <h3 class="title"><?php echo $unit_name; ?></h3>
             </div>
+
             <div class="content-header-wrapper">
 
                 <!-- Форма поиска папок и подключений -->
@@ -149,16 +150,28 @@ $this->title = 'Адресная книга'; ?>
                 <div class="form-group">
                     <div class="col-sm-5">
                         <?= $form->field($model_search, 'keyword')->textInput(['autofocus' => false])->label(false) ?>
-                        <?= $form->field($model_search, 'byipsearch')->checkbox(); ?>
+                        <div class="form-inline ">
+                            <?= $form->field($model_search, 'byipsearch')->checkbox(['style' => 'mardin-left:10px;margin-top:-10px ;margin-bottom:10px']); ?>
+                            <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary', 'name' => 'search-button', 'value' => 'btn-name', 'style' => 'margin-left:30px;margin-top:-10px ;margin-bottom:10px']) ?>
+                        </div>
                     </div>
-                    <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary', 'name' => 'search-button', 'value' => 'btn-name',]) ?>
+
+
                 </div>
                 <?php ActiveForm::end(); ?>
 
                 <!-- Кнопки вида и создания нового подключения -->
                 <div class="actions">
                     <div class="page-nav">
-                        <span class="indicator">Вид: </span>
+
+                        <label>Редактирование: </label>
+                        <div class="btn-group btn-toggle">
+
+                            <button class="btn btn-sm btn-default" title="Просмотр папок и подключений с возможностью их редактировать">ВКЛ</button>
+                            <button class="btn btn-sm btn-primary active" title="Только просмотр папок и подключений">ВЫКЛ</button>
+                        </div>
+
+                        &nbsp; &nbsp; <label class="indicator">Вид: </label>
                         <div class="btn-group" role="group" data-toggle="buttons">
                             <?php
                             if ($view_type == "icons") {
