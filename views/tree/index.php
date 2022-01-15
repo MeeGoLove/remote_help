@@ -36,7 +36,7 @@ $this->title = 'Адресная книга'; ?>
             <?= Units::unitsBreadCrumbs($unit_id_); ?>
         </ul>
 
-        <div class="col-md-5 noscrollbar table-responsive" style="overflow-y: scroll;
+        <div class="col-md-5 col-sm-12 col-12 noscrollbar table-responsive" style="overflow-y: scroll;
              height: 700px;">
             <!-- Левый блок с иерархией -->
             <?php
@@ -72,6 +72,7 @@ $this->title = 'Адресная книга'; ?>
                         ],
                         [
                             'class' => 'yii\grid\ActionColumn',
+                            'visible' => $editing,
                             'contentOptions' => ['style' => 'min-width: 115px'],
                             'template' => '{update} {delete} {add}',
                             'buttons' => [
@@ -134,7 +135,7 @@ $this->title = 'Адресная книга'; ?>
         </div>
 
         <!-- Верхний блок с фильтрами-->
-        <div class="col-md-7 search-block">
+        <div class="col-md-7 col-sm-12  col-12 search-block">
             <div class="content-header-wrapper">
                 <h3 class="title"><?php echo $unit_name; ?></h3>
             </div>
@@ -142,33 +143,52 @@ $this->title = 'Адресная книга'; ?>
             <div class="content-header-wrapper">
 
                 <!-- Форма поиска папок и подключений -->
-                <?php
-                $form = ActiveForm::begin([
-                    'id' => 'search-form',
-                ]);
-                ?>
-                <div class="form-group">
-                    <div class="col-sm-5">
-                        <?= $form->field($model_search, 'keyword')->textInput(['autofocus' => false])->label(false) ?>
-                        <div class="form-inline ">
-                            <?= $form->field($model_search, 'byipsearch')->checkbox(['style' => 'mardin-left:10px;margin-top:-10px ;margin-bottom:10px']); ?>
-                            <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary', 'name' => 'search-button', 'value' => 'btn-name', 'style' => 'margin-left:30px;margin-top:-10px ;margin-bottom:10px']) ?>
-                        </div>
+                <div class="form-group col-sm-5 ">
+
+                    <?php
+
+                    $form = ActiveForm::begin([
+                        'id' => 'search-form',
+                        //'class' => 'form-group col-sm-5 col-5'
+                    ]);
+                    ?>
+
+
+                    <?= $form->field($model_search, 'keyword')->textInput(['autofocus' => false])->label(false) ?>
+                    <div class="form-inline ">
+                        <?= $form->field($model_search, 'byipsearch')->checkbox(['style' => 'mardin-left:10px;margin-top:-10px ;margin-bottom:10px']); ?>
+                        <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary', 'name' => 'search-button', 'value' => 'btn-name', 'style' => 'margin-left:30px;margin-top:-10px ;margin-bottom:10px']) ?>
                     </div>
 
 
-                </div>
-                <?php ActiveForm::end(); ?>
 
+
+                    <?php ActiveForm::end(); ?>
+                </div>
                 <!-- Кнопки вида и создания нового подключения -->
                 <div class="actions">
                     <div class="page-nav">
 
                         <label>Редактирование: </label>
                         <div class="btn-group btn-toggle">
+                            <?php
+                            if ($editing) {
+                                echo "<button class='btn btn-sm btn-primary active'
+                                        onclick='window.location.href=\"index?unit_id=$unit_id_&editing=1&changeEditing=1\"'
+                                        title='Просмотр папок и подключений с возможностью их редактировать'>ВКЛ</button>
+                                      <button class='btn btn-sm btn-default'
+                                        onclick='window.location.href =\"index?unit_id=$unit_id_&editing=0&changeEditing=1\"'
+                                        title='Только просмотр папок и подключений'>ВЫКЛ</button>";
+                            } else {
+                                echo "<button class='btn btn-sm btn-default'
+                                        onclick='window.location.href=\"index?unit_id=$unit_id_&editing=1&changeEditing=1\"'
+                                        title='Просмотр папок и подключений с возможностью их редактировать'>ВКЛ</button>
+                                      <button class='btn btn-sm btn-primary active'
+                                        onclick='window.location.href=\"index?unit_id=$unit_id_&editing=0&changeEditing=1\"'
+                                        title='Только просмотр папок и подключений'>ВЫКЛ</button>";
+                            }
 
-                            <button class="btn btn-sm btn-default" title="Просмотр папок и подключений с возможностью их редактировать">ВКЛ</button>
-                            <button class="btn btn-sm btn-primary active" title="Только просмотр папок и подключений">ВЫКЛ</button>
+                            ?>
                         </div>
 
                         &nbsp; &nbsp; <label class="indicator">Вид: </label>
@@ -194,23 +214,27 @@ $this->title = 'Адресная книга'; ?>
                             ?>
                         </div>
                     </div>
-                    <button class="btn btn-success" onclick=<?= "$('#createConnection" . $unit_id_ . "').modal();" ?> title="Создать новое подключение">
-                        <i class="fa fa-plus"></i> Создать подключение </button>
+
+
                     <?php
-                    echo
-                    ModalAjax::widget([
-                        'id' => 'createConnection' . ($unit_id_),
-                        'header' => 'Создать новое подключение',
-                        'url' => '/connections/create?unit_id=' . $unit_id_, // Ajax view with form to load
-                        'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
-                        'size' => ModalAjax::SIZE_LARGE,
-                        'options' => ['class' => 'header-primary'],
-                        'autoClose' => true,
-                        'pjaxContainer' => '#grid-company-pjax',
-                        'events' => [
-                            ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
-                        ]
-                    ]);
+                    if ($editing) {
+                        echo
+                        '<button class="btn btn-success" onclick="$(\'#createConnection' . $unit_id_ . '\').modal();"  title="Создать новое подключение">
+                        <i class="fa fa-plus"></i> Создать подключение </button>' .
+                        ModalAjax::widget([
+                            'id' => 'createConnection' . ($unit_id_),
+                            'header' => 'Создать новое подключение',
+                            'url' => '/connections/create?unit_id=' . $unit_id_, // Ajax view with form to load
+                            'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
+                            'size' => ModalAjax::SIZE_LARGE,
+                            'options' => ['class' => 'header-primary'],
+                            'autoClose' => true,
+                            'pjaxContainer' => '#grid-company-pjax',
+                            'events' => [
+                                ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
+                            ]
+                        ]);
+                    }
                     ?>
                 </div>
             </div>
@@ -225,8 +249,12 @@ $this->title = 'Адресная книга'; ?>
             <?php
             if ($view_type == "icons") {
                 echo ConnectionsGridWidget::widget([
-                    'connections' => $connections->all(), 'child_units' => $child_units->all(), 'parent_id' => $parent_id, 'unit_name' => $unit_name,
-                    'unit_id' => $unit_id_
+                    'connections' => $connections->all(),
+                    'child_units' => $child_units->all(),
+                    'parent_id' => $parent_id,
+                    'unit_name' => $unit_name,
+                    'unit_id' => $unit_id_,
+                    'editing' => $editing
                 ]);
             } else {
                 //Сначала папки, дабы не уезжало далеко, сделана пагинация на 5 папок
@@ -306,6 +334,7 @@ $this->title = 'Адресная книга'; ?>
                             ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
+                                'visible' => $editing,
                                 'contentOptions' => ['style' => 'min-width: 85px'],
                                 'template' => '{update}{delete}',
                                 'buttons' => [

@@ -36,8 +36,13 @@ class TreeController extends Controller
      * Lists all Tree models.
      * @return mixed
      */
-    public function actionIndex($unit_id = 0, $view_type = "grid", $change_view = false)
-    {
+    public function actionIndex(
+        $unit_id = 0,
+        $view_type = "grid",
+        $change_view = false,
+        $editing = false,
+        $changeEditing = false
+    ) {
         //Через куки проверяем в каком виде будет отражаться папки и подключения
         //В виде списка или иконок
         //Получаем куки
@@ -62,6 +67,36 @@ class TreeController extends Controller
                 $view_type = $cookies->get('view_type');
             }
         }
+
+        //Аналогично с кнопкой редактирвоание
+        if (!$cookies->has('editing')) {
+            Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                'name' => 'editing',
+                'value' => $editing
+            ]));
+        } else {
+            //Если нажимали переключатель, то сохраним в куке вид
+            if ($changeEditing) {
+                Yii::$app->response->cookies->remove('editing');
+                Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                    'name' => 'editing',
+                    'value' => $editing
+                ]));
+            }
+            //в любом другом случае, просто прочтем из куки предпочтительный вид
+            else {
+                $editing = $cookies->get('editing');
+            }
+        }
+        //VSCode при автоформатировании превращает (boolean)$editing в (bool)$editing, поэтому такой костыль
+        if ($editing == "1") {
+            $editing = true;
+        } else {
+            $editing = false;
+        }
+
+
+
         $model_search = new SearchForm();
         $query = Units::find()->orderBy(['name' => SORT_ASC]);
         $dataProvider = new ActiveDataProvider([
@@ -101,7 +136,8 @@ class TreeController extends Controller
                         'parent_id' => $parent_id,
                         'unit_name' => 'Корневой элемент не найден!',
                         'unit_id_' => null,
-                        'view_type' => $view_type
+                        'view_type' => $view_type,
+                        'editing' => $editing
                     ]);
                 }
             }
@@ -114,7 +150,8 @@ class TreeController extends Controller
                 'parent_id' => $parent_id,
                 'unit_name' => 'Результаты поиска по строке: ' . $model_search->keyword,
                 'unit_id_' => $unit_id,
-                'view_type' => $view_type
+                'view_type' => $view_type,
+                'editing' => $editing
             ]);
         }
 
@@ -154,7 +191,8 @@ class TreeController extends Controller
                     'parent_id' => $parent_id,
                     'unit_name' => 'Корневой элемент не найден!',
                     'unit_id_' => null,
-                    'view_type' => $view_type
+                    'view_type' => $view_type,
+                    'editing' => $editing
                 ]);
             }
         }
@@ -167,7 +205,8 @@ class TreeController extends Controller
                 'parent_id' => $parent_id,
                 'unit_name' => $unit_name,
                 'unit_id_' => $unit_id,
-                'view_type' => $view_type
+                'view_type' => $view_type,
+                'editing' => $editing
             ]);
         } else {
             return $this->render('index', [
@@ -178,7 +217,8 @@ class TreeController extends Controller
                 'parent_id' => $parent_id,
                 'unit_name' => $unit_name,
                 'unit_id_' => $unit_id,
-                'view_type' => $view_type
+                'view_type' => $view_type,
+                'editing' => $editing
             ]);
         }
     }

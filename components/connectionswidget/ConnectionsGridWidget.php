@@ -19,37 +19,44 @@ use yii\web\View;
  *
  * @author Сергей
  */
-class ConnectionsGridWidget extends Widget {
+class ConnectionsGridWidget extends Widget
+{
 
     public $connections;
     public $child_units;
     public $parent_id;
     public $unit_name;
     public $unit_id;
+    public $editing;
 
-    public function init() {
+    public function init()
+    {
         parent::init();
         if ($this->connections === null or $this->child_units === null) {
             throw new InvalidConfigException('The "connections" property must be set.');
         }
     }
 
-    public function run() {
+    public function run()
+    {
         $this->registerAssets(); //выносим регистрацию стилей в отдельный метод
         $view = $this->getView();
-        return $this->render('index', ['connections' => $this->connections,
-                    'child_units' => $this->child_units,
-                    'parent_id' => $this->parent_id,
-                    'unit_name' => $this->unit_name,
-                    'unit_id' => $this->unit_id]);
+        return $this->render('index', [
+            'connections' => $this->connections,
+            'child_units' => $this->child_units,
+            'parent_id' => $this->parent_id,
+            'unit_name' => $this->unit_name,
+            'unit_id' => $this->unit_id,
+            'editing' => $this->editing
+        ]);
     }
 
     /**
      * Register assets.
      */
-    protected function registerAssets() {
+    protected function registerAssets()
+    {
         $view = $this->getView(); // получаем объект вида, в который рендерится виджет
         ConnectionsGridAsset::register($view); // регестрируем файл с классом наборов css, js.
     }
-
 }
