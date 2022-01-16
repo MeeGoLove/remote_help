@@ -125,9 +125,10 @@ use lo\widgets\modal\ModalAjax;
                     $connection->ipaddr . '" title="Подключиться по ' .
                     $connection->deviceType->defaultConnectionType->name . '">
 
-<div class="file-item-img" style="background-image: url(' . '/icons-remote/no.jpg);"></div>
-
+<!--<div class="file-item-img" style="background-image: url(' . '/icons-remote/no.jpg);"></div>-->
+<div class="file-item-img-no"></div>
 <div class="file-item-img" style="background-image: url(' . '/icons-remote/thumb/' . $connection->deviceType->defaultConnectionType->icon . ');"></div>
+<div class="file-item-img-no"></div>
 
 			</a>';
 
