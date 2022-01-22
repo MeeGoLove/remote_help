@@ -3,16 +3,16 @@
 use yii\db\Migration;
 
 /**
- * Class m211110_185408_change_connections_types_table
+ * Class m220122_184057_change_connection_types_table
  */
-class m211110_185408_change_connections_types_table extends Migration
+class m220122_184057_change_connection_types_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->addColumn('connection_types', 'icon', $this->string(255)->after('protocol_link'));
+        $this->addColumn('connection_types', 'port', $this->string(255)->after('icon'));
     }
 
     /**
@@ -20,7 +20,7 @@ class m211110_185408_change_connections_types_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropColumn('connection_types', 'icon');
+        $this->dropColumn('connection_types', 'port');
     }
 
     /*
@@ -32,7 +32,7 @@ class m211110_185408_change_connections_types_table extends Migration
 
     public function down()
     {
-        echo "m211110_185408_change_connections_types_table cannot be reverted.\n";
+        echo "m220122_184057_change_connection_types_table cannot be reverted.\n";
 
         return false;
     }

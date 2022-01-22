@@ -13,10 +13,12 @@ use yii\imagine\Image;
  * @property string $name
  * @property string $protocol_link
  * @property string|null $icon
+ * @property string|null $port
  *
  * @property DeviceTypes[] $deviceTypes
  */
-class ConnectionTypes extends ActiveRecord {
+class ConnectionTypes extends ActiveRecord
+{
 
     /**
      * Вспомогательный атрибут для загрузки изображения
@@ -26,17 +28,19 @@ class ConnectionTypes extends ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'connection_types';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['name', 'protocol_link'], 'required'],
-            [['name', 'protocol_link', 'icon'], 'string', 'max' => 255],
+            [['name', 'protocol_link', 'icon', 'port'], 'string', 'max' => 255],
             // атрибут icon проверяем с помощью валидатора image
             ['icon', 'image', 'extensions' => 'png, jpg, gif'],
         ];
@@ -45,12 +49,14 @@ class ConnectionTypes extends ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'name' => 'Имя',
             'protocol_link' => 'Ссылка протокола',
             'icon' => 'Иконка',
+            'port' => 'Порт(ы) подключения, если несколько, то через запятую',
         ];
     }
 
@@ -59,14 +65,16 @@ class ConnectionTypes extends ActiveRecord {
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getDeviceTypes() {
+    public function getDeviceTypes()
+    {
         return $this->hasMany(DeviceTypes::className(), ['default_connection_type_id' => 'id']);
     }
-    
+
     /**
      * Загружает файл изображения категории
      */
-    public function uploadIcon() {
+    public function uploadIcon()
+    {
         if ($this->upload) { // только если был выбран файл для загрузки
             $name = md5(uniqid(rand(), true)) . '.' . $this->upload->extension;
             // сохраняем исходное изображение в директории source
@@ -84,7 +92,8 @@ class ConnectionTypes extends ActiveRecord {
     /**
      * Удаляет старое изображение при загрузке нового
      */
-    public static function removeIcon($name) {
+    public static function removeIcon($name)
+    {
         if (!empty($name)) {
             $source = Yii::getAlias('@webroot/icons-remote/source/' . $name);
             if (is_file($source)) {
@@ -100,9 +109,9 @@ class ConnectionTypes extends ActiveRecord {
     /**
      * Удаляет изображение при удалении категории
      */
-    public function afterDelete() {
+    public function afterDelete()
+    {
         parent::afterDelete();
         self::removeIcon($this->image);
     }
-
 }

@@ -118,8 +118,11 @@ $this->title = 'Адресная книга'; ?>
                                     ]);
                                 },
                                 'delete' => function ($url, $model, $key) {
-                                    return Html::a('<button class="glyphicon glyphicon-trash"></button>', ['delete', 'id' => $key], [
+                                    $request = Yii::$app->request;
+                                    $unit_id = $request->get('unit_id');
+                                    return Html::a('<button class="glyphicon glyphicon-trash"></button>', ['delete', 'id' => $key, 'from_tree' => 1, 'unit_id' => $unit_id], [
                                         //'class' => 'file-item-dropdown-menu',
+                                        'onclick' => 'return saveScroll(this);',
                                         'title' => 'Удалить',
                                         'data' => [
                                             'confirm' => 'Вы действительно хотите удалить ' . $model->name . '?',
@@ -221,19 +224,19 @@ $this->title = 'Адресная книга'; ?>
                         echo
                         '<button class="btn btn-success" onclick="$(\'#createConnection' . $unit_id_ . '\').modal();"  title="Создать новое подключение">
                         <i class="fa fa-plus"></i> Создать подключение </button>' .
-                        ModalAjax::widget([
-                            'id' => 'createConnection' . ($unit_id_),
-                            'header' => 'Создать новое подключение',
-                            'url' => '/connections/create?unit_id=' . $unit_id_, // Ajax view with form to load
-                            'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
-                            'size' => ModalAjax::SIZE_LARGE,
-                            'options' => ['class' => 'header-primary'],
-                            'autoClose' => true,
-                            'pjaxContainer' => '#grid-company-pjax',
-                            'events' => [
-                                ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
-                            ]
-                        ]);
+                            ModalAjax::widget([
+                                'id' => 'createConnection' . ($unit_id_),
+                                'header' => 'Создать новое подключение',
+                                'url' => '/connections/create?unit_id=' . $unit_id_, // Ajax view with form to load
+                                'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
+                                'size' => ModalAjax::SIZE_LARGE,
+                                'options' => ['class' => 'header-primary'],
+                                'autoClose' => true,
+                                'pjaxContainer' => '#grid-company-pjax',
+                                'events' => [
+                                    ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
+                                ]
+                            ]);
                     }
                     ?>
                 </div>
@@ -290,6 +293,11 @@ $this->title = 'Адресная книга'; ?>
                 );
                 //Затем подключения
                 echo '<p></p><h4>Список подключений / Список найденных подключений при поиске</h4>';
+            ?>
+
+                <p><button class="btn btn-success" onclick="checkOnline()" title="[медленно! не жми в больших папках, займёт > 3 минут], работает только в виде список">
+                        <img class="button" src="/images/reload.png" height=20px"> Проверить online у всех [медленно! не жми в больших папках, займёт > 3 минут]</button></p>
+            <?php
                 echo GridView::widget(
                     [
                         'dataProvider' => new ActiveDataProvider([
@@ -309,17 +317,28 @@ $this->title = 'Адресная книга'; ?>
                                 'label' => 'Имя подключения',
                                 'contentOptions' => ['style' => 'max-width: 180px; word-wrap: break-word'],
                             ],
-                            'ipaddr',
+                            [
+                                'attribute' => 'ipaddr',
+                                //'contentOptions' => ['id' => 'ipaddr-remote']
+                            ],
                             [
                                 'value' => function ($data) {
-                                    if ($data->deviceType->optionalConnectionType !== null)
+                                    $name = $data->deviceType->defaultConnectionType->name;
+                                    $defaultLink = $data->deviceType->defaultConnectionType->protocol_link . $data->ipaddr;
+                                    if ($data->deviceType->optionalConnectionType !== null) {
+                                        $optionalLink = $data->deviceType->optionalConnectionType->protocol_link . $data->ipaddr;
+                                        $nameOptional = $data->deviceType->optionalConnectionType->name;
                                         return
-
-                                            Html::a($data->deviceType->defaultConnectionType->name, $data->deviceType->defaultConnectionType->protocol_link . $data->ipaddr) .
+                                            Html::a($name, $defaultLink, ['id' => 'ipaddr-remote']) .
                                             "&nbsp;&nbsp;&nbsp;" .
-                                            Html::a($data->deviceType->optionalConnectionType->name, $data->deviceType->optionalConnectionType->protocol_link . $data->ipaddr);
-                                    else
-                                        return Html::a($data->deviceType->defaultConnectionType->name, $data->deviceType->defaultConnectionType->protocol_link . $data->ipaddr);
+                                            Html::a($nameOptional, $optionalLink, ['id' => 'ipaddr-remote']) .
+                                            '&nbsp;&nbsp;<button class="" onclick="checkOnlineRow(\'' . $data->id . '\', \'' . $defaultLink . '\', \'' . $optionalLink . '\')">' .
+                                            '<img class="button link' . $data->id . '" src="/images/reload.png" height=15px"></button></div>';
+                                    } else
+                                        return
+                                            Html::a($name, $defaultLink, ['id' => 'ipaddr-remote']) .
+                                            '&nbsp;&nbsp;<button class="" onclick="checkOnlineRow(\'' . $data->id . '\', \'' . $defaultLink . '\')">' .
+                                            '<img class="button link' . $data->id . '" src="/images/reload.png" height=15px"></button></div>';
                                 },
                                 //'attribute' => '',
                                 'format' => 'raw',
@@ -407,4 +426,141 @@ $script = <<< JS
 JS;
 
 $this->registerJs($script, yii\web\View::POS_END);
+?>
+
+
+<?php
+$updateScript = <<< JS
+
+function checkOnline()
+{
+    //jQuery('.button').addClass('loading');
+    //var links = [];
+    // перебрать элементы div на странице
+	$('a#ipaddr-remote').each(function (index, element)
+	{
+        $('.button').attr('class', 'button loading');
+        //links.push($(this).attr('href'));
+		// index (число) - текущий индекс итерации (цикла)
+		// данное значение является числом
+		// начинается отсчёт с 0 и заканчивается количеству элементов в текущем наборе минус 1
+		// element - содержит DOM-ссылку на текущий элемент
+		var link = $(this).attr('href');
+		//console.log(link);
+		$.post('check', {link: link}, function(data)
+		{   $('.button.loading').attr('class', 'button');
+			if (data.checkResult == true)
+				{
+					$(element).attr('class', 'ip-addr-ready');
+				} else {
+                        $(element).attr('class', 'ip-addr-noready');
+                }
+		});
+
+	});
+
+    /*$.ajax({
+			url: 'check',
+			method: 'post',
+			dataType: 'json',
+			data: {links: links},
+            async:true,
+			success: function(data)
+				{
+                    $('.button.loading').attr('class', 'button');
+					if (data.checkResult == true)
+						{
+
+							//$(element).attr('class', 'ip-addr-ready');
+						};
+				}
+			});*/
+
+
+    //jQuery('.button').removeClass('loading');
+};
+
+
+function checkOnlineRow(linkId ,firstLink,  secondLink = "" )
+{
+
+        jQuery('.button.link' + linkId).addClass('loading');
+        $.post('check', {link: firstLink}, function(data){
+            if (data.checkResult == true)
+				{
+                    $('a#ipaddr-remote').each(function (index, element){
+                        var link = $(this).attr('href');
+                        if (link == firstLink)
+                        {
+                            $(element).attr('class', 'ip-addr-ready');
+                        }
+                    })
+
+				}
+                else {
+                    $('a#ipaddr-remote').each(function (index, element){
+                        var link = $(this).attr('href');
+                        if (link == firstLink)
+                        {
+                            $(element).attr('class', 'ip-addr-noready');
+                        }
+                    })
+                }
+        });
+        if (secondLink !== "")
+        {
+            $.post('check', {link: secondLink}, function(data){
+            if (data.checkResult == true)
+				{
+                    $('a#ipaddr-remote').each(function (index, element){
+                        var link = $(this).attr('href');
+                        if (link == secondLink)
+                        {
+                            $(element).attr('class', 'ip-addr-ready');
+                        }
+                    })
+
+				}
+                else {
+                    $('a#ipaddr-remote').each(function (index, element){
+                        var link = $(this).attr('href');
+                        if (link == secondLink)
+                        {
+                            $(element).attr('class', 'ip-addr-noready');
+                        }
+                    })
+                }
+        });
+        }
+        setTimeout(function() {
+            jQuery('.button.link' + linkId).removeClass('loading');
+}       , 1500);
+
+    //var links = [];
+    // перебрать элементы div на странице
+
+
+	/*
+        $('.button').attr('class', 'button loading');
+        //links.push($(this).attr('href'));
+		// index (число) - текущий индекс итерации (цикла)
+		// данное значение является числом
+		// начинается отсчёт с 0 и заканчивается количеству элементов в текущем наборе минус 1
+		// element - содержит DOM-ссылку на текущий элемент
+		var link = $(this).attr('href');
+		//console.log(link);
+		$.post('check', {link: link}, function(data)
+		{   $('.button.loading').attr('class', 'button');
+			if (data.checkResult == true)
+				{
+					$(element).attr('class', 'ip-addr-ready');
+				};
+		});
+
+	});  */
+};
+
+JS;
+
+$this->registerJs($updateScript, yii\web\View::POS_END);
 ?>

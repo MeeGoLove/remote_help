@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Connections;
+use app\models\ConnectionTypes;
 use app\models\Units;
 use app\models\SearchForm;
 use yii\helpers\Url;
@@ -283,10 +284,33 @@ class TreeController extends Controller
 
     public function actionCheck()
     {
-        $targetIP = '172.30.108.181';
-        $portNumber = 3389;
-        $test_con = TreeController::checkPort($targetIP, $portNumber);
-        return $this->render('check', ['result' => $test_con]);
+        $request = Yii::$app->request;
+        if ($request->isAjax) { /* текущий запрос является AJAX запросом */
+            set_time_limit(0);
+            $link = $request->post('link');
+            $response = [];
+            /*foreach ($links as $link)
+            {*/
+            list($proto, $ip) = explode("://", $link);
+            $connectionType = ConnectionTypes::findOne(['protocol_link' => $proto . '://']);
+            if (!empty($connectionType)) {
+                $ports = explode(',', $connectionType->port);
+                $test_con = false;
+                foreach ($ports as $port)
+                    $test_con = $test_con || TreeController::checkPort($ip, $port);
+            } else {
+                $test_con = false;
+            }
+            //array_push($response, ['link' => $link, 'checkResult' => $test_con]);
+            /*}*/
+            //return var_dump($links);
+
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return ['checkResult' => $test_con];
+            //return $test_con;
+            //return $response;
+        }
+        return $this->render('check', ['result' => 'ok']);
     }
 
     /**
@@ -337,6 +361,9 @@ class TreeController extends Controller
      */
     public function actionDelete($id, $from_tree = 0, $unit_id = 0)
     {
+        if ($id == $unit_id) {
+            $unit_id = Units::findOne($unit_id)->parent_id;
+        }
         $this->findModel($id)->delete();
         if ($from_tree == 1)
             return $this->redirect(['/tree/index?unit_id=' . $unit_id]);
@@ -385,8 +412,8 @@ class TreeController extends Controller
 
     public static function checkPort($targetIP, $portNumber)
     {
-
-        if (!$socket = @fsockopen($targetIP, $portNumber, $errno, $errstr, 3)) {
+        //stream_set_timeout(1);
+        if (!$socket = @fsockopen($targetIP, $portNumber, $errno, $errstr, 1)) {
             return false;
         } else {
             fclose($socket);

@@ -240,8 +240,28 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this t
 
 }
 
+.ip-addr-ready {
+    background: rgb(151, 235, 151);
+
+}
+
+.ip-addr-noready {
+    background: rgb(224, 186, 184);
+}
+
+.ip-addr-noready a {
+    color: black;
+}
 
 
+
+.button.loading {
+    animation: .6s linear 0s normal none infinite running rotate-animation;
+}
+@keyframes rotate-animation {
+    0% { transform: rotate(0deg);  }
+    100% { transform: rotate(360deg); }
+}
 
 /*
 
