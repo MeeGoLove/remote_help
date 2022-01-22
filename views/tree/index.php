@@ -332,12 +332,12 @@ $this->title = 'Адресная книга'; ?>
                                             Html::a($name, $defaultLink, ['id' => 'ipaddr-remote']) .
                                             "&nbsp;&nbsp;&nbsp;" .
                                             Html::a($nameOptional, $optionalLink, ['id' => 'ipaddr-remote']) .
-                                            '&nbsp;&nbsp;<button class="" style="width:26px;" onclick="checkOnlineRow(\'' . $data->id . '\', \'' . $defaultLink . '\', \'' . $optionalLink . '\')">' .
+                                            '&nbsp;&nbsp;<button class="" onclick="checkOnlineRow(\'' . $data->id . '\', \'' . $defaultLink . '\', \'' . $optionalLink . '\')">' .
                                             '<img class="button link' . $data->id . '" src="/images/reload.png" height=15px"></button></div>';
                                     } else
                                         return
                                             Html::a($name, $defaultLink, ['id' => 'ipaddr-remote']) .
-                                            '&nbsp;&nbsp;<button class="" style="width:26px;" onclick="checkOnlineRow(\'' . $data->id . '\', \'' . $defaultLink . '\')">' .
+                                            '&nbsp;&nbsp;<button class="" onclick="checkOnlineRow(\'' . $data->id . '\', \'' . $defaultLink . '\')">' .
                                             '<img class="button link' . $data->id . '" src="/images/reload.png" height=15px"></button></div>';
                                 },
                                 //'attribute' => '',
