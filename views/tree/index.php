@@ -296,7 +296,7 @@ $this->title = 'Адресная книга'; ?>
             ?>
 
                 <p><button class="btn btn-success" onclick="checkOnline()" title="[медленно! не жми в больших папках, займёт > 3 минут], работает только в виде список">
-                        <img class="button" src="/images/reload.png" height=20px"> Проверить online у всех [медленно! не жми в больших папках, займёт > 3 минут]</button></p>
+                        <img class="buttonAllCheck" src="/images/reload.png" height=20px"> Проверить online у всех [медленно! не жми в больших папках, займёт > 3 минут]</button></p>
             <?php
                 echo GridView::widget(
                     [
@@ -439,7 +439,7 @@ function checkOnline()
     // перебрать элементы div на странице
 	$('a#ipaddr-remote').each(function (index, element)
 	{
-        $('.button').attr('class', 'button loading');
+        $('.buttonAllCheck').attr('class', 'buttonAllCheck loading');
         //links.push($(this).attr('href'));
 		// index (число) - текущий индекс итерации (цикла)
 		// данное значение является числом
@@ -448,7 +448,7 @@ function checkOnline()
 		var link = $(this).attr('href');
 		//console.log(link);
 		$.post('check', {link: link}, function(data)
-		{   $('.button.loading').attr('class', 'button');
+		{   $('.buttonAllCheck.loading').attr('class', 'buttonAllCheck');
 			if (data.checkResult == true)
 				{
 					$(element).attr('class', 'ip-addr-ready');
