@@ -138,4 +138,19 @@ class Units extends \yii\db\ActiveRecord
             return "<li> Корневой элемент не найден!</li>";
         }
     }
+
+    /**
+     * Override fields function for working REST API
+     */
+    public function fields()
+    {
+        return [
+            'id',
+            'label'=>'name',
+            'parentId' => 'parent_id',
+            'items' => function (){
+                return null;
+            }
+        ];
+    }
 }

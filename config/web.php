@@ -17,6 +17,9 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'Hhtbsz4FQUYg-B7Crmod3JRrwtyCaUmw',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -49,6 +52,8 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'api\unit'],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'api\connection'],
             ],
         ],
         'i18n' => [
@@ -74,15 +79,15 @@ if (YII_ENV_DEV) {
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
-            // uncomment the following to add your IP if you are not connecting from localhost.
-            'allowedIPs' => ['172.30.108.181', '127.0.0.1'],
+        // uncomment the following to add your IP if you are not connecting from localhost.
+        'allowedIPs' => ['172.30.108.181', '127.0.0.1'],
     ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
-            // uncomment the following to add your IP if you are not connecting from localhost.
-            'allowedIPs' => ['172.30.108.181', '127.0.0.1'],
+        // uncomment the following to add your IP if you are not connecting from localhost.
+        'allowedIPs' => ['172.30.108.181', '127.0.0.1'],
     ];
 }
 
