@@ -1,5 +1,7 @@
 <?php
 /* @var $this yii\web\View */
+
+$this->title = "Импорт из LiteManager"
 ?>
 <h1>import/lm</h1>
 

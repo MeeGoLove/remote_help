@@ -8,6 +8,8 @@ use app\models\Units;
 use app\models\DeviceTypes;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+
+$this->title = "Импорт из выданных терминальных сессий"
 ?>
 
 <div class="excel-import-form">
@@ -21,7 +23,7 @@ use yii\helpers\Html;
 
     <?= $form->field($model, 'importFile')->fileInput() ?>
     <?= $form->field($model, 'deviceTypeId')->dropDownList($items_devices); ?>
-    <?= $form->field($model, 'rootUnitId')->dropDownList($items_units,  ['encodeSpaces' => true]); ?>
+    <?= $form->field($model, 'rootUnitId')->dropDownList($items_units, ['encodeSpaces' => true]); ?>
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
     </div>
