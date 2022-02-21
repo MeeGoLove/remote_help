@@ -32,6 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'protocol_link',
+            'protocol_link_readonly',
             'port',
             [
                 'attribute' => 'icon',

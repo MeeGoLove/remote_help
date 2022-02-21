@@ -16,6 +16,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'protocol_link')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'protocol_link_readonly')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'port')->textInput(['maxlength' => true]) ?>
 
 

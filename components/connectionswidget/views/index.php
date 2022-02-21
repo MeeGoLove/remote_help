@@ -84,7 +84,7 @@ use lo\widgets\modal\ModalAjax;
     }
     ?>
 
-    <?php
+    <?php    
     foreach ($connections as $connection) {
     ?>
         <?php
@@ -108,7 +108,7 @@ use lo\widgets\modal\ModalAjax;
         /* Html::a('', ['/connections/update', 'id' => $connection->id,], [
           'class' => 'file-item-dropdown-menu glyphicon glyphicon-trash btn btn-danger'
 
-          ]) */
+          ]) */        
         ?>
 
         <div class="file-item">

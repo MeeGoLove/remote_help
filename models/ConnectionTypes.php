@@ -13,6 +13,7 @@ use yii\imagine\Image;
  * @property string $name
  * @property string $protocol_link
  * @property string|null $icon
+ * @property string|null $protocol_link_readonly
  * @property string|null $port
  *
  * @property DeviceTypes[] $deviceTypes
@@ -40,7 +41,7 @@ class ConnectionTypes extends ActiveRecord
     {
         return [
             [['name', 'protocol_link'], 'required'],
-            [['name', 'protocol_link', 'icon', 'port'], 'string', 'max' => 255],
+            [['name', 'protocol_link', 'protocol_link_readonly', 'icon', 'port'], 'string', 'max' => 255],
             // атрибут icon проверяем с помощью валидатора image
             ['icon', 'image', 'extensions' => 'png, jpg, gif'],
         ];
@@ -55,6 +56,7 @@ class ConnectionTypes extends ActiveRecord
             'id' => 'ID',
             'name' => 'Имя',
             'protocol_link' => 'Ссылка протокола',
+            'protocol_link_readonly' => 'Ссылка протокола для просмотра',
             'icon' => 'Иконка',
             'port' => 'Порт(ы) подключения, если несколько, то через запятую',
         ];
