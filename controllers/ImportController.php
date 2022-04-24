@@ -8,14 +8,32 @@ use app\models\Connections;
 use app\models\Units;
 use app\models\UploadForm;
 use yii\web\UploadedFile;
+use yii\filters\AccessControl;
 
 class ImportController extends Controller
 {
 
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+        ];
+    }
 
     public function actionExcel()
-        {
-            $model = new UploadForm();
+    {
+        $model = new UploadForm();
         if (
             Yii::$app->request->isPost && $model->load(Yii::$app->request->post())
         ) {
@@ -28,7 +46,7 @@ class ImportController extends Controller
             }
         }
         return $this->render('excel', ['model' => $model]);
-        }
+    }
 
     public function actionLm()
     {
