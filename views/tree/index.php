@@ -22,13 +22,6 @@ $this->title = 'Адресная книга';
 
 
 <div class="tree-index">
-    <!-- Если нет корневого элемента, то отражаем кнопку Создать корневой элемент -->
-    <?php
-    if ($dataProvider->count == 0)
-        echo "<p>" . Html::a('Создать корневой элемент', ['add'], ['class' => 'btn btn-success']) . "</p>";
-    ?>
-
-
     <div class="row">
 
         <?php Pjax::begin(); ?>
@@ -39,6 +32,11 @@ $this->title = 'Адресная книга';
 
         <div class="col-md-5 col-sm-12 col-12 noscrollbar table-responsive" style="overflow-y: scroll;
              height: 700px;">
+             <!-- Если нет корневого элемента, то отражаем кнопку Создать корневой элемент -->
+    <?php
+    if ($dataProvider->count == 0)
+        echo "<p>" . Html::a('Создать корневой элемент', ['add'], ['class' => 'btn btn-success']) . "</p>";
+    ?>
             <!-- Левый блок с иерархией -->
             <?php
             ?><?=
