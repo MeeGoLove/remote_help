@@ -55,7 +55,7 @@ class ExportRadminForm extends Model
         fputcsv($fp, $startLine, ';');
         $maxId = 0;
         foreach ($allUnits as $unit) {
-            $unitLine = array('', '', '', '', '', '', '', '', '', '', '', $unit->name, '', '', '', '', '', $unit->id, '', '', '1');
+            $unitLine = array('', '', '', '', '', '', '', '', '', '', '', $unit->name, '', '', '', '', '', $unit->id, '', $unit->parent_id, '1');
             fputcsv($fp, $unitLine, ';');
             if ($maxId <= $unit->id) {
                 $maxId = $unit->id;
@@ -63,7 +63,7 @@ class ExportRadminForm extends Model
         }
         $maxId = $maxId + 100;
         foreach ($connections as $connection) {
-            $deviceLine = array('100', '2', '1', '1', '1', '5', 'User', '', 'User', '', $connection->ipaddr, $connection->name, '4899', '', '', '', '', 'id', '', $connection->unit_id, '0');
+            $deviceLine = array('100', '2', '1', '1', '1', '5', 'User', '', 'User', '', $connection->ipaddr, $connection->name, '4899', '', '', '', '', $maxId, '', $connection->unit_id, '0');
             fputcsv($fp, $deviceLine, ';');
             $maxId++;
         }
