@@ -228,8 +228,7 @@ class UploadForm extends Model
             $name1Cell = $oCells->get('B' . $row);
             if ($name1Cell) {
                 $name1 = $name1Cell->getValue();
-            }
-            else {
+            } else {
                 $name1 = "";
             }
             $name2Cell = $oCells->get('C' . $row);
@@ -240,7 +239,7 @@ class UploadForm extends Model
             }
             $connection = Connections::findOne(['name' => $username, 'unit_id' => $rootUnitId]);
             if ($connection) {
-                $connection->name = $name1 . " / " . $name2 . " ". $connection->name;
+                $connection->name = $name1 . " / " . $name2 . " " . $connection->name;
                 $connection->save();
                 $updatedCount++;
             }

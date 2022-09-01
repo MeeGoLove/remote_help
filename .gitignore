@@ -37,3 +37,5 @@ tests/_support/_generated
 
 composer.lock
 composer.lock
+web/file-export.csv
+web/file.csv
