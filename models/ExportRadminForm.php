@@ -40,7 +40,7 @@ class ExportRadminForm extends Model
     {
         $allUnits = Units::find()->all();
         //$units = Units::find([$allUnits-Connections->DeviceTypes->id =>$deviceTypeId]);
-        $connections = Connections::find(['device_type_id' => $deviceTypeId])->all();
+        $connections = Connections::find()->where(['device_type_id' => $deviceTypeId])->all();
         $startLine = array(
             'Частота', 'ВидЭкрана', 'ГлубинаЦвета', 'СпецСочетания', 'Курсор',
             'КачествоЗвука', 'ГолосовойЧатИмя', 'ГолосовойЧатИнфо', 'ТекстовыйЧатИмя', 'ТекстовыйЧатИнфо',
