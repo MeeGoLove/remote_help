@@ -18,8 +18,7 @@
         "yiisoft/yii2": "~2.0.14",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",        
-        "leandrogehlen/yii2-treegrid": "*",
-        "kartik-v/yii2-context-menu": "dev-master",               
+        "leandrogehlen/yii2-treegrid": "*",                      
         "yiisoft/yii2-imagine": "~2.2.0",
         "loveorigami/yii2-modal-ajax": "@dev",
         "phpoffice/phpspreadsheet": "^1.21"

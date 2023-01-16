@@ -170,7 +170,7 @@ $this->title = 'Адресная книга';
                 <div class="actions">
                     <div class="page-nav">
 
-                        <label>Редактирование: </label>
+                        <label>Редактор: </label>
                         <div class="btn-group btn-toggle">
                             <?php
                             if ($editing) {
@@ -191,25 +191,33 @@ $this->title = 'Адресная книга';
                             ?>
                         </div>
 
-                        &nbsp; &nbsp; <label class="indicator">Вид: </label>
+                        &nbsp;&nbsp;<label class="indicator">Вид: </label>
                         <div class="btn-group" role="group" data-toggle="buttons">
                             <?php
                             if ($view_type == "icons") {
-                                echo "
-                                        <label class='btn btn-default' onclick='window.location.href =\"index?unit_id=$unit_id_&view_type=grid&change_view=1\"' title='Списком'>
+                                echo "                                           
+                                        <label class='btn btn-default' onclick='window.location.href =\"index?unit_id=$unit_id_&view_type=grid&change_view=1&admin=0&changeAdmin=1\"' title='Списком'>
                                             <input type='radio' name='options' id='option2' autocomplete='off'><i class='fa fa-list-ul'></i>
                                         </label>
-                                        <label class='btn btn-default active' onclick='window.location.href =\"index?unit_id=$unit_id_&view_type=icons&change_view=1\"' title='Иконками'>
+                                        <label class='btn btn-default active' onclick='window.location.href =\"index?unit_id=$unit_id_&view_type=icons&change_view=1&admin=0&changeAdmin=1\"' title='Иконками'>
                                             <input type='radio' name='options' id='option1' autocomplete='off' checked><i class='fa fa-th-large'></i>
-                                        </label>";
+                                        </label>
+                                        <label class='btn btn-default' onclick='window.location.href =\"index?unit_id=$unit_id_&admin=1&changeAdmin=1&view_type=grid&change_view=1\"' title='Админ режим'>
+                                            <input type='radio' name='options' id='option2' autocomplete='off'><i class='fa fa-terminal'></i>
+                                        </label>
+                                        ";
                             } else {
-                                echo "
-                                        <label class='btn btn-default active' onclick='window.location.href =\"index?unit_id=$unit_id_&view_type=grid&change_view=1\"' title='Списком'>
+                                echo "                               
+                                        <label class='btn btn-default active' onclick='window.location.href =\"index?unit_id=$unit_id_&view_type=grid&change_view=1&admin=0&changeAdmin=1\"' title='Списком'>
                                             <input type='radio' name='options' id='option2' autocomplete='off' checked><i class='fa fa-list-ul'></i>
                                         </label>
-                                        <label class='btn btn-default' onclick='window.location.href =\"index?unit_id=$unit_id_&view_type=icons&change_view=1\"' title='Иконками'>
+                                        <label class='btn btn-default' onclick='window.location.href =\"index?unit_id=$unit_id_&view_type=icons&change_view=1&admin=0&changeAdmin=1\"' title='Иконками'>
                                             <input type='radio' name='options' id='option1' autocomplete='off'><i class='fa fa-th-large'></i>
-                                        </label>";
+                                        </label>
+                                        <label class='btn btn-default' onclick='window.location.href =\"index?unit_id=$unit_id_&admin=1&changeAdmin=1&view_type=grid&change_view=1\"' title='Админ режим'>
+                                             <input type='radio' name='options' id='option2' autocomplete='off'><i class='fa fa-terminal'></i>
+                                        </label>
+                                        ";
                             }
                             ?>
                         </div>

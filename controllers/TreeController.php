@@ -22,7 +22,8 @@ use yii\data\ActiveDataProvider;
 class TreeController extends Controller
 {
 
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -51,7 +52,9 @@ class TreeController extends Controller
         $view_type = "grid",
         $change_view = false,
         $editing = false,
-        $changeEditing = false
+        $changeEditing = false,
+        $admin = false,
+        $changeAdmin = false
     ) {
         //Через куки проверяем в каком виде будет отражаться папки и подключения
         //В виде списка или иконок
@@ -98,6 +101,46 @@ class TreeController extends Controller
                 $editing = $cookies->get('editing');
             }
         }
+
+
+        //Аналогично с режимом администратора
+        if (!$cookies->has('admin')) {
+            Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                'name' => 'admin',
+                'value' => $admin
+            ]));
+        } else {
+            //Если нажимали переключатель, то сохраним в куке вид
+            if ($changeAdmin) {
+                Yii::$app->response->cookies->remove('admin');
+                Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                    'name' => 'admin',
+                    'value' => $admin
+                ]));
+            }
+            //в любом другом случае, просто прочтем из куки предпочтительный вид
+            else {
+                $admin = $cookies->get('admin');
+            }
+        }
+
+        if ($admin == "1") {
+            $admin = true;
+        } else {
+            $admin = false;
+        }
+
+
+        $defaultView = 'index';
+
+        if ($admin) {
+            $defaultView = 'index-admin';
+        }
+
+
+
+
+
         //VSCode при автоформатировании превращает (boolean)$editing в (bool)$editing, поэтому такой костыль
         if ($editing == "1") {
             $editing = true;
@@ -138,7 +181,7 @@ class TreeController extends Controller
                     $unit_id = $unit->id;
                     return $this->redirect(Url::to(['tree/index', 'unit_id' => $unit_id]));
                 } else {
-                    return $this->render('index', [
+                    return $this->render($defaultView, [
                         'dataProvider' => $dataProvider,
                         'model_search' => $model_search,
                         'connections' => $connections,
@@ -152,7 +195,7 @@ class TreeController extends Controller
                 }
             }
 
-            return $this->render('index', [
+            return $this->render($defaultView, [
                 'dataProvider' => $dataProvider,
                 'model_search' => $model_search,
                 'connections' => $connections,
@@ -193,7 +236,7 @@ class TreeController extends Controller
                 $unit_id = $unit->id;
                 return $this->redirect(Url::to(['tree/index', 'unit_id' => $unit_id]));
             } else {
-                return $this->render('index', [
+                return $this->render($defaultView, [
                     'dataProvider' => $dataProvider,
                     'model_search' => $model_search,
                     'connections' => $connections,
@@ -207,7 +250,7 @@ class TreeController extends Controller
             }
         }
         if (Yii::$app->request->getHeaders()->has('X-PJAX')) {
-            return $this->renderAjax('index', [
+            return $this->renderAjax($defaultView, [
                 'dataProvider' => $dataProvider,
                 'model_search' => $model_search,
                 'connections' => $connections,
@@ -219,7 +262,7 @@ class TreeController extends Controller
                 'editing' => $editing
             ]);
         } else {
-            return $this->render('index', [
+            return $this->render($defaultView, [
                 'dataProvider' => $dataProvider,
                 'model_search' => $model_search,
                 'connections' => $connections,

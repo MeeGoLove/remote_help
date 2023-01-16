@@ -9,9 +9,9 @@ use lo\widgets\modal\ModalAjax;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-/*
+
 $this->title = 'Подключения';
-$this->params['breadcrumbs'][] = $this->title;*/
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="connections-index">

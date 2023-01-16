@@ -23,7 +23,7 @@ class AppAsset extends AssetBundle
         '/css/site.css',
         #'/css/test.css',
         '/css/connectionswidget/style.css',
-        '/css/connectionswidget/ionicons.min.css',
+        #'/css/connectionswidget/ionicons.min.css',
         '/css/connectionswidget/font-awesome.css',
     ];
     public $js = [

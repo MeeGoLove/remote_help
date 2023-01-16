@@ -33,6 +33,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'protocol_link',
             'protocol_link_readonly',
+            'protocol_link_telnet',
+            'protocol_link_file_transfer',
+            'protocol_link_power',
             'port',
             [
                 'attribute' => 'icon',

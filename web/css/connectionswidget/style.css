@@ -205,6 +205,21 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this t
 }
 
 
+.search-block-admin {
+    margin-bottom: 5px;
+    border: 1px;
+    border-color: darkgray darkgray;
+    /* Цвет границы */
+    border-style: solid;
+    /* Стиль границы */
+    border-radius: 4px;
+    background-color:lightblue;
+}
+
+.search-block-admin  h3 {
+    padding-top: 10px;
+}
+
 .table-responsive tbody tr:hover {
     /*color: #fff; /* Цвет текста */
     background: lightblue;

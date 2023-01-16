@@ -43,15 +43,15 @@ AppAsset::register($this);
             'items' => [
                 ['label' => 'Главная', 'url' => ['/site/index']],
                 ['label' => 'Адресная книга', 'url' => ['/tree']],
-                //['label' => 'Тест', 'url' => ['/tree/check']],
-                ['label' => 'Подразделения', 'url' => ['/units']],
-                ['label' => 'Подключения', 'url' => ['/connections']],
+                //['label' => 'Тест', 'url' => ['/tree/check']],               
                 ['label' => 'Справочники',  'items' =>
                 [
-                    ['label' => 'Типы устройств', 'url' => ['/device-types']],
-                    ['label' => 'Удаленные протоколы', 'url' => ['/connection-types']]
+                    ['label' => 'Удаленные протоколы', 'url' => ['/connection-types']],
+                    ['label' => 'Типы устройств', 'url' => ['/device-types']],  
+                    ['label' => 'Подключения', 'url' => ['/connections']],
+                    ['label' => 'Подразделения', 'url' => ['/units']],
                 ]],
-                
+                ['label' => 'Генератор helppack', 'url' => ['/site/index']],
                 ['label' => 'Импорт',  'items' =>
                 [
                     ['label' => 'Из Radmin', 'url' => ['/import/radmin']],
@@ -84,7 +84,7 @@ AppAsset::register($this);
         NavBar::end();
         ?>
 
-        <div class="container">
+        <div class="container-fluid">
             <?= Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
             ]) ?>

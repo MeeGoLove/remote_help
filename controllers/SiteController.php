@@ -9,6 +9,10 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\Connections;
+use app\models\DeviceTypes;
+use app\models\Units;
+use app\models\ConnectionsTypes;
 
 class SiteController extends Controller
 {
@@ -61,7 +65,23 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $connectios = new Connections();
+        $connectionsCount = $connectios::find()->distinct('ipaddr')->count();
+        $units = new Units();
+        $unitsCount = $units::find()->count();
+        $deviceTypes = new DeviceTypes();
+        $deviceTypesCount = $deviceTypes::find()->count();
+        $units = new Units();
+        $units_count = $units::find()->count();
+        $connectionsTypes = new \app\models\ConnectionTypes();
+        $connectionsTypesCount = $connectionsTypes::find()->count();        
+        return $this->render('index', ['connectionsCount' => $connectionsCount, 
+        'unitsCount' => $unitsCount,
+        'deviceTypesCount' => $deviceTypesCount,
+        'connectionsTypesCount' => $connectionsTypesCount,
+
+    
+    ]);
     }
 
     /**

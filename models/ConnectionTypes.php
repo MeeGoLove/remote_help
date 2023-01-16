@@ -14,6 +14,9 @@ use yii\imagine\Image;
  * @property string $protocol_link
  * @property string|null $icon
  * @property string|null $protocol_link_readonly
+ * @property string|null $protocol_link_telnet
+ * @property string|null $protocol_link_file_transfer
+ * @property string|null $protocol_link_power
  * @property string|null $port
  *
  * @property DeviceTypes[] $deviceTypes
@@ -41,7 +44,7 @@ class ConnectionTypes extends ActiveRecord
     {
         return [
             [['name', 'protocol_link'], 'required'],
-            [['name', 'protocol_link', 'protocol_link_readonly', 'icon', 'port'], 'string', 'max' => 255],
+            [['name', 'protocol_link', 'protocol_link_readonly', 'protocol_link_telnet', 'protocol_link_file_transfer', 'protocol_link_power', 'icon', 'port'], 'string', 'max' => 255],
             // атрибут icon проверяем с помощью валидатора image
             ['icon', 'image', 'extensions' => 'png, jpg, gif'],
         ];
@@ -55,8 +58,11 @@ class ConnectionTypes extends ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Имя',
-            'protocol_link' => 'Ссылка протокола',
-            'protocol_link_readonly' => 'Ссылка протокола для просмотра',
+            'protocol_link' => 'Ссылка для управление',
+            'protocol_link_readonly' => 'Ссылка для просмотра',
+            'protocol_link_telnet' => 'Ссылка для TELNET',
+            'protocol_link_file_transfer' => 'Ссылка для передачи файлов',
+            'protocol_link_power' => 'Ссылка для управления питанием',
             'icon' => 'Иконка',
             'port' => 'Порт(ы) подключения, если несколько, то через запятую',
         ];

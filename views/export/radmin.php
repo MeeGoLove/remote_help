@@ -8,7 +8,7 @@ use app\models\DeviceTypes;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
-$this->title = "Импорт из Radmin"
+$this->title = "Экспорт в Radmin"
 ?>
 
 <div class="radmin-export-form">

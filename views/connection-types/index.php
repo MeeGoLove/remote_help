@@ -19,14 +19,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
     <?= GridView::widget([
-        'dataProvider' => $dataProvider,
+        'dataProvider' => $dataProvider,        
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
             'name',
             'protocol_link',
             'protocol_link_readonly',
+            'protocol_link_telnet',
+            'protocol_link_file_transfer',
+            'protocol_link_power',
             'port',
             [
                 'attribute' => 'icon',
