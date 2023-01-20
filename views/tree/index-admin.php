@@ -99,7 +99,7 @@ $this->title = 'Адресная книга';
                                 'update' => function ($url, $model, $key) {
                                     return ModalAjax::widget([
                                         'id' => 'updateUnit' . $key,
-                                        'header' => 'Изменить подразделение',
+                                        'header' => 'Изменить подразделение <u>' . $model->name . '</u>',
                                         'toggleButton' => [
                                             'label' => '',
                                             'class' => 'glyphicon glyphicon-pencil',
@@ -329,43 +329,61 @@ $this->title = 'Адресная книга';
                                     $name = $data->deviceType->defaultConnectionType->name;
                                     $defaultLink = $data->deviceType->defaultConnectionType->protocol_link . $data->ipaddr;
                                     $defaultLinkViewOnly = (!empty($data->deviceType->defaultConnectionType->protocol_link_readonly)) ?
-                                        Html::a($name . ":просмотр", $data->deviceType->defaultConnectionType->protocol_link_readonly
-                                            . $data->ipaddr) . "<br>" : "";
+                                        Html::a("<i class='fa fa-eye' aria-hidden='true'  title='только просмотр'></i>", $data->deviceType->defaultConnectionType->protocol_link_readonly
+                                            . $data->ipaddr) . "&nbsp;&nbsp;" : "";
                                     $defaultLinkTelnet = (!empty($data->deviceType->defaultConnectionType->protocol_link_telnet)) ?
-                                        Html::a($name . ":Telnet", $data->deviceType->defaultConnectionType->protocol_link_telnet
-                                            . $data->ipaddr) . "<br>" : "";
+                                        Html::a("<i class='fa fa-terminal' aria-hidden='true'  title='подключение в режиме telnet'></i>", $data->deviceType->defaultConnectionType->protocol_link_telnet
+                                            . $data->ipaddr) . "&nbsp;&nbsp;" : "";
                                     $defaultLinkFile = (!empty($data->deviceType->defaultConnectionType->protocol_link_file_transfer)) ?
-                                        Html::a($name . ":файлы", $data->deviceType->defaultConnectionType->protocol_link_file_transfer
-                                            . $data->ipaddr) . "<br>" : "";
+                                        Html::a("<i class='fa fa-file' aria-hidden='true'  title='передача файлов'></i>", $data->deviceType->defaultConnectionType->protocol_link_file_transfer
+                                            . $data->ipaddr) . "&nbsp;&nbsp;" : "";
                                     $defaultLinkPower = (!empty($data->deviceType->defaultConnectionType->protocol_link_power)) ?
-                                        Html::a($name . ":питание", $data->deviceType->defaultConnectionType->protocol_link_power
-                                            . $data->ipaddr) . "<br>" : "";
+                                        Html::a("<i class='fa fa-power-off' aria-hidden='true' title='управление питанием'></i>", $data->deviceType->defaultConnectionType->protocol_link_power
+                                            . $data->ipaddr) . "&nbsp;&nbsp;" : "";
 
 
-                                    /*if ($data->deviceType->optionalConnectionType !== null) {
-                                                    $optionalLink = $data->deviceType->optionalConnectionType->protocol_link . $data->ipaddr;
-                                                    $nameOptional = $data->deviceType->optionalConnectionType->name;
-                                                    $optionalLinkViewOnly = (!empty($data->deviceType->optionalConnectionType->protocol_link_readonly)) ?
-                                                            "<br>" . Html::a($nameOptional . ":просмотр", $data->deviceType->optionalConnectionType->protocol_link_readonly
-                                                                    . $data->ipaddr) : "";
-                                                    return
-                                                            Html::a($name, $defaultLink, ['id' => 'ipaddr-remote']) .
-                                                            "<br>" .
-                                                            $defaultLinkViewOnly .
-                                                            Html::a($nameOptional, $optionalLink, ['id' => 'ipaddr-remote']) .
-                                                            $optionalLinkViewOnly .
-                                                            '&nbsp;&nbsp;<button class="" onclick="checkOnlineRow(\'' . $data->id . '\', \'' . $defaultLink . '\', \'' . $optionalLink . '\')">' .
-                                                            '<img class="button link' . $data->id . '" src="/images/reload.png" height=15px"></button></div>';
-                                                } else*/
-                                    return
-                                        Html::a($name, $defaultLink, ['id' => 'ipaddr-remote']) .
-                                        "<br>" .
-                                        $defaultLinkViewOnly . 
-                                        $defaultLinkTelnet . 
-                                        $defaultLinkFile . 
-                                        $defaultLinkPower . 
-                                        '&nbsp;&nbsp;<button class="" onclick="checkOnlineRow(\'' . $data->id . '\', \'' . $defaultLink . '\')">' .
-                                        '<img class="button link' . $data->id . '" src="/images/reload.png" height=15px"></button></div>';
+                                    if ($data->deviceType->optionalConnectionType !== null) {
+                                        $optionalLink = $data->deviceType->optionalConnectionType->protocol_link . $data->ipaddr;
+                                        $nameOptional = $data->deviceType->optionalConnectionType->name;
+                                        $optionalLinkViewOnly = (!empty($data->deviceType->optionalConnectionType->protocol_link_readonly)) ?
+                                        Html::a("<i class='fa fa-eye' aria-hidden='true'  title='только просмотр'></i>", $data->deviceType->optionalConnectionType->protocol_link_readonly
+                                            . $data->ipaddr) . "&nbsp;&nbsp;" : "";
+                                        $optionalLinkTelnet = (!empty($data->deviceType->optionalConnectionType->protocol_link_telnet)) ?
+                                            Html::a("<i class='fa fa-terminal' aria-hidden='true'  title='подключение в режиме telnet'></i>", $data->deviceType->optionalConnectionType->protocol_link_telnet
+                                                . $data->ipaddr) . "&nbsp;&nbsp;" : "";
+                                        $optionalLinkFile = (!empty($data->deviceType->optionalConnectionType->protocol_link_file_transfer)) ?
+                                            Html::a("<i class='fa fa-file' aria-hidden='true'  title='передача файлов'></i>", $data->deviceType->optionalConnectionType->protocol_link_file_transfer
+                                                . $data->ipaddr) . "&nbsp;&nbsp;" : "";
+                                        $optionalLinkPower = (!empty($data->deviceType->optionalConnectionType->protocol_link_power)) ?
+                                            Html::a("<i class='fa fa-power-off' aria-hidden='true' title='управление питанием'></i>", $data->deviceType->optionalConnectionType->protocol_link_power
+                                                . $data->ipaddr) . "&nbsp;&nbsp;" : "";
+                                        return
+                                            Html::a($name, $defaultLink, ['id' => 'ipaddr-remote', 'title' => 'Подключиться в режиме управления'])
+                                            . "&nbsp;"                                            
+                                            . $defaultLinkViewOnly
+                                            . $defaultLinkTelnet
+                                            . $defaultLinkFile
+                                            . $defaultLinkPower
+                                            . "<br>"
+                                            . Html::a($nameOptional, $optionalLink, ['id' => 'ipaddr-remote', 'title' => 'Подключиться в режиме управления'])
+                                            . "&nbsp;" 
+                                            . $optionalLinkViewOnly
+                                            . $optionalLinkTelnet
+                                            . $optionalLinkFile
+                                            . $optionalLinkPower
+                                            . '<button class="" onclick="checkOnlineRow(\'' . $data->id . '\', \'' . $defaultLink . '\', \'' . $optionalLink . '\')">' .
+                                            '<img class="button link' . $data->id . '" src="/images/reload.png" height=15px"></button></div>';
+                                    } else
+                                        return
+                                            Html::a($name, $defaultLink, ['id' => 'ipaddr-remote', 'title' => 'Подключиться в режиме управления'])
+                                            . "&nbsp;"
+                                            . $defaultLinkViewOnly
+                                            . $defaultLinkTelnet
+                                            . $defaultLinkFile
+                                            . $defaultLinkPower
+                                            .
+                                            '<button class="" onclick="checkOnlineRow(\'' . $data->id . '\', \'' . $defaultLink . '\')">' .
+                                            '<img class="button link' . $data->id . '" src="/images/reload.png" height=15px"></button></div>';
                                 },
                                 //'attribute' => '',
                                 'format' => 'raw',
@@ -373,7 +391,7 @@ $this->title = 'Адресная книга';
                             ],
                             [
                                 'attribute' => 'ipaddr',
-                                'contentOptions' => ['style' => 'max-width: 125px;']
+                                'contentOptions' => ['style' => 'max-width: 80px;']
                             ],
                             [
                                 'attribute' => 'device_type_id',
@@ -385,13 +403,13 @@ $this->title = 'Адресная книга';
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'visible' => $editing,
-                                'contentOptions' => ['style' => 'min-width: 85px'],
-                                'template' => '{update}{delete}',
+                                'contentOptions' => ['style' => 'min-width: 45px; max-width: 65px'],
+                                'template' => '{update}{delete} {copy}',
                                 'buttons' => [
                                     'update' => function ($url, $model, $key) {
                                         return ModalAjax::widget([
                                             'id' => 'updateConnection' . ($model->id),
-                                            'header' => 'Изменить подключение <b>' . $model->name . '</b>',
+                                            'header' => 'Изменить подключение <u>' . $model->name . '</u>',
                                             'url' => '/connections/update?id=' . $model->id, // Ajax view with form to load
                                             'toggleButton' => [
                                                 'label' => '',
@@ -410,13 +428,35 @@ $this->title = 'Адресная книга';
                                     },
                                     'delete' => function ($url, $model, $key) {
                                         return Html::a('<button class="glyphicon glyphicon-trash"></button>', ['/connections/delete', 'id' => $model->id, 'from_tree' => 1, 'unit_id' => $model->unit_id], [
-                                            'title' => 'Удалить',
+                                            'title' => 'Удалить подключение',
                                             'data' => [
                                                 'confirm' => 'Вы действительно хотите удалить ' . $model->name . '?',
                                                 'method' => 'post',
                                             ],
                                         ]);
-                                    }
+                                    },
+
+                                    'copy' => function ($url, $model, $key) {
+                                        return ModalAjax::widget([                                            
+                                            'id' => 'copyConnection' . ($model->id),
+                                            'header' => 'Копировать подключение',
+                                            'url' => '/connections/copy?id=' . $model->id, // Ajax view with form to load
+                                            'toggleButton' => [
+                                                'label' => '',
+                                                'class' => 'glyphicon glyphicon-plus',
+                                                'title' => 'Копировать подключение'
+                                            ],
+                                            'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
+                                            'size' => ModalAjax::SIZE_LARGE,
+                                            'options' => ['class' => 'header-primary'],
+                                            'autoClose' => true,
+                                            'pjaxContainer' => '#grid-company-pjax',
+                                            'events' => [
+                                                ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
+                                            ]
+                                        ]);
+                                    },
+
                                 ]
                             ]
                         ]

@@ -30,12 +30,7 @@ use app\models\DeviceTypes;
 
     <?= $form->field($model, 'unit_id')->dropDownList($items_units,  ['encodeSpaces' => true]); ?>
 
-
-
-
-    <div class="form-group">
-        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
-    </div>
+    <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Изменить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
 
     <?php ActiveForm::end(); ?>
 

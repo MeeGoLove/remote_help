@@ -42,16 +42,16 @@ AppAsset::register($this);
             'options' => ['class' => 'navbar-nav navbar-right'],
             'items' => [
                 ['label' => 'Главная', 'url' => ['/site/index']],
-                ['label' => 'Адресная книга', 'url' => ['/tree']],
+                ['label' => 'Адресная книга', 'url' => ['/tree/index']],
                 //['label' => 'Тест', 'url' => ['/tree/check']],               
                 ['label' => 'Справочники',  'items' =>
                 [
-                    ['label' => 'Удаленные протоколы', 'url' => ['/connection-types']],
-                    ['label' => 'Типы устройств', 'url' => ['/device-types']],  
-                    ['label' => 'Подключения', 'url' => ['/connections']],
-                    ['label' => 'Подразделения', 'url' => ['/units']],
+                    ['label' => 'Удаленные протоколы', 'url' => ['/connection-types/index']],
+                    ['label' => 'Типы устройств', 'url' => ['/device-types/index']],  
+                    ['label' => 'Подключения', 'url' => ['/connections/index']],
+                    ['label' => 'Подразделения', 'url' => ['/units/index']],
                 ]],
-                ['label' => 'Генератор helppack', 'url' => ['/site/index']],
+                ['label' => 'Генератор helppack', 'url' => ['/help-pack/index']],
                 ['label' => 'Импорт',  'items' =>
                 [
                     ['label' => 'Из Radmin', 'url' => ['/import/radmin']],

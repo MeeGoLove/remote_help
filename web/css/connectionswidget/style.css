@@ -778,3 +778,27 @@ width: 100%;
     }
 
 }
+
+
+
+.sub-menu 
+{ 
+   display: none; 
+} 
+.main-item:focus ~ .sub-menu, 
+.main-item:active ~ .sub-menu, 
+.sub-menu:hover 
+{ 
+   display: block; 
+} 
+
+
+
+.sub-menu li {
+    list-style-type: none; /* Убираем маркеры */
+   }
+   .sub-menu ul {
+    margin-left: 0; /* Отступ слева в браузере IE и Opera */
+    padding-left: 0; /* Отступ слева в браузере Firefox, Safari, Chrome */
+   }
+  
