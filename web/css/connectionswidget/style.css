@@ -781,16 +781,16 @@ width: 100%;
 
 
 
-.sub-menu 
-{ 
-   display: none; 
-} 
-.main-item:focus ~ .sub-menu, 
-.main-item:active ~ .sub-menu, 
-.sub-menu:hover 
-{ 
-   display: block; 
-} 
+.sub-menu
+{
+   display: none;
+}
+.main-item:focus ~ .sub-menu,
+.main-item:active ~ .sub-menu,
+.sub-menu:hover
+{
+   display: block;
+}
 
 
 
@@ -801,4 +801,3 @@ width: 100%;
     margin-left: 0; /* Отступ слева в браузере IE и Opera */
     padding-left: 0; /* Отступ слева в браузере Firefox, Safari, Chrome */
    }
-  
