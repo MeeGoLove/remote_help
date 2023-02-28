@@ -21,7 +21,8 @@
         "leandrogehlen/yii2-treegrid": "*",                      
         "yiisoft/yii2-imagine": "~2.2.0",
         "loveorigami/yii2-modal-ajax": "@dev",
-        "phpoffice/phpspreadsheet": "^1.21"
+        "phpoffice/phpspreadsheet": "^1.21",
+        "ellera/yii2-backup": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

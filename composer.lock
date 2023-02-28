@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "59d0b3e5e60c48a7ade233151c05f89f",
+    "content-hash": "b6d2b2d91a7403e98f8535dbf9e19644",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -393,6 +393,53 @@
                 }
             ],
             "time": "2023-01-02T17:26:14+00:00"
+        },
+        {
+            "name": "ellera/yii2-backup",
+            "version": "v2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elleracompany/yii2-backup.git",
+                "reference": "82791eb2524a82b2e3522c8c4330b6267d4d1fd0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elleracompany/yii2-backup/zipball/82791eb2524a82b2e3522c8c4330b6267d4d1fd0",
+                "reference": "82791eb2524a82b2e3522c8c4330b6267d4d1fd0",
+                "shasum": ""
+            },
+            "require": {
+                "ext-zip": "*",
+                "php": ">=7.1.0",
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "ellera\\backup\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jørgen Ellingsen",
+                    "email": "jorgen@ellera.no"
+                }
+            ],
+            "description": "Console backup for yii2 applications ",
+            "keywords": [
+                "backup",
+                "console",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/elleracompany/yii2-backup/issues",
+                "source": "https://github.com/elleracompany/yii2-backup"
+            },
+            "time": "2019-01-17T07:52:17+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
