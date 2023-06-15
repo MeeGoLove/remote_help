@@ -405,14 +405,16 @@ $this->title = 'Адресная книга';
                                                 Html::a("<i class='fa fa-power-off' aria-hidden='true' title='управление питанием'></i>", $data->deviceType->optionalConnectionType->protocol_link_power
                                                     . $data->ipaddr) . "&nbsp;&nbsp;" : "";
                                             return
-                                                Html::a($name, $defaultLink, ['id' => 'ipaddr-remote', 'title' => 'Подключиться в режиме управления'])
+                                                Html::a($name, $defaultLink, ['id' => 'ipaddr-remote', 'title' => 'Подключиться в режиме управления',
+                                                    'onclick' =>"sendStats('" . $data->id . "')"])
                                                 . "&nbsp;"
                                                 . $defaultLinkViewOnly
                                                 . $defaultLinkTelnet
                                                 . $defaultLinkFile
                                                 . $defaultLinkPower
                                                 . "<br>"
-                                                . Html::a($nameOptional, $optionalLink, ['id' => 'ipaddr-remote', 'title' => 'Подключиться в режиме управления'])
+                                                . Html::a($nameOptional, $optionalLink, ['id' => 'ipaddr-remote', 'title' => 'Подключиться в режиме управления',
+                                                    'onclick' =>"sendStats('" . $data->id . "')"])
                                                 . "&nbsp;"
                                                 . $optionalLinkViewOnly
                                                 . $optionalLinkTelnet
@@ -422,7 +424,8 @@ $this->title = 'Адресная книга';
                                                 '<img class="button link' . $data->id . '" src="/images/reload.png" height=15px"></button></div>';
                                         } else
                                             return
-                                                Html::a($name, $defaultLink, ['id' => 'ipaddr-remote', 'title' => 'Подключиться в режиме управления'])
+                                                Html::a($name, $defaultLink, ['id' => 'ipaddr-remote', 'title' => 'Подключиться в режиме управления',
+                                                    'onclick' =>"sendStats('" . $data->id . "')"])
                                                 . "&nbsp;"
                                                 . $defaultLinkViewOnly
                                                 . $defaultLinkTelnet
@@ -695,6 +698,15 @@ function quickConnect(protocolLink)
             window.open(protocolLink + ipaddress ,"_self");
         }
 
+}
+
+function sendStats(connectionId)
+{
+    //alert(connectionId);
+    //$.post('stats', {connectionId: connectionId});
+    $.post('stats', {connectionId: connectionId}, function(data){
+    alert (data.checkResult);
+});
 }
 JS;
 

@@ -30,6 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'ipaddr',
             'comment',
+            'count_connect',
             //'unit_id',
             [
                 'attribute' => 'device_type_id',

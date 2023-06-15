@@ -2,17 +2,18 @@
 
 namespace app\controllers;
 
+use app\models\Connections;
+use app\models\ConnectionStats;
+use app\models\ConnectionTypes;
+use app\models\ContactForm;
+use app\models\DeviceTypes;
+use app\models\LoginForm;
+use app\models\Units;
 use Yii;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\Response;
-use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
-use app\models\Connections;
-use app\models\DeviceTypes;
-use app\models\Units;
-use app\models\ConnectionsTypes;
 
 class SiteController extends Controller
 {
@@ -65,23 +66,48 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $connectios = new Connections();
-        $connectionsCount = $connectios::find()->distinct('ipaddr')->count();
-        $units = new Units();
-        $unitsCount = $units::find()->count();
-        $deviceTypes = new DeviceTypes();
-        $deviceTypesCount = $deviceTypes::find()->count();
-        $units = new Units();
-        $units_count = $units::find()->count();
-        $connectionsTypes = new \app\models\ConnectionTypes();
-        $connectionsTypesCount = $connectionsTypes::find()->count();        
-        return $this->render('index', ['connectionsCount' => $connectionsCount, 
-        'unitsCount' => $unitsCount,
-        'deviceTypesCount' => $deviceTypesCount,
-        'connectionsTypesCount' => $connectionsTypesCount,
+        $connectionsCount = Connections::find()->count();
+        $IpAddressCount = Connections::find()->select('ipaddr')->distinct()->count();
+        $unitsCount = Units::find()->count();
+        $deviceTypesCount = DeviceTypes::find()->count();
+        $connectionsTypesCount = ConnectionTypes::find()->count();
+        $countAllTime = Connections::find()->sum('count_connect');
 
-    
-    ]);
+
+        //Подсчет необходимого времени в Unix-формате, для отражения сттистики по дням
+        $beginToday=mktime(0,0,0,date('m'),date('d'),date('Y'));
+        $beginYesterday=mktime(0,0,0,date('m'),date('d')-1,date('Y'));
+        $Last7Days=mktime(0,0,0,date('m'),date('d')-7,date('Y'));
+        $Last30Days=mktime(0,0,0,date('m'),date('d')-30,date('Y'));
+
+
+        $countToday = ConnectionStats::find()->where('connection_date' . '>='.$beginToday)->count();
+        $countYesterDay = ConnectionStats::find()->where(['and',
+            'connection_date' . '<='.$beginToday,
+            'connection_date' . '>='.$beginYesterday,
+        ])->count();
+        $countWeek = ConnectionStats::find()->where('connection_date' . '>='.$Last7Days)->count();
+        $countMonth = ConnectionStats::find()->where('connection_date' . '>='.$Last30Days)->count();
+
+        /*
+        $top30DaysConnction = ConnectionStats::find()->where(['and',
+            'connection_date' . '<='.$beginToday,
+            'connection_date' . '>='.$beginYesterday,
+        ])->limit(5)
+            ->groupBy('co')
+        ->orderBy('');*/
+
+        return $this->render('index', ['connectionsCount' => $connectionsCount,
+            'IpAddressCount' => $IpAddressCount,
+            'unitsCount' => $unitsCount,
+            'deviceTypesCount' => $deviceTypesCount,
+            'connectionsTypesCount' => $connectionsTypesCount,
+            'countAllTime' => $countAllTime,
+            'countToday' => $countToday,
+            'countYesterDay' => $countYesterDay,
+            'countWeek' => $countWeek,
+            'countMonth' => $countMonth,
+        ]);
     }
 
     /**

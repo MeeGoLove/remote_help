@@ -13,6 +13,7 @@ use Yii;
  * @property string|null $comment
  * @property int $device_type_id
  * @property int|null $unit_id
+ * @property int|null $count_connect
  *
  * @property DeviceTypes $deviceType
  * @property Units $unit
@@ -32,7 +33,7 @@ class Connections extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['name', 'ipaddr', 'device_type_id'], 'required'],
-            [['device_type_id', 'unit_id'], 'integer'],
+            [['device_type_id', 'unit_id', 'count_connect'], 'integer'],
             [['name', 'ipaddr', 'comment'], 'string', 'max' => 255],
             [['device_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => DeviceTypes::className(), 'targetAttribute' => ['device_type_id' => 'id']],
             [['unit_id'], 'exist', 'skipOnError' => true, 'targetClass' => Units::className(), 'targetAttribute' => ['unit_id' => 'id']],
@@ -50,6 +51,7 @@ class Connections extends \yii\db\ActiveRecord {
             'comment' => 'Комментарий',
             'device_type_id' => 'Тип устройства',
             'unit_id' => 'Папка подключения',
+            'count_connect' => 'Было подключений',
         ];
     }
 

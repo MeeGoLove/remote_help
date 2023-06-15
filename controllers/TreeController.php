@@ -2,19 +2,20 @@
 
 namespace app\controllers;
 
-use Yii;
 use app\models\Connections;
+use app\models\ConnectionStats;
 use app\models\ConnectionTypes;
-use app\models\Units;
 use app\models\SearchForm;
+use app\models\Units;
+use Yii;
+use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 
 /* * *ext** */
-use yii\data\ActiveDataProvider;
 
 /**
  * TreeController implements the CRUD actions for Tree model.
@@ -55,7 +56,8 @@ class TreeController extends Controller
         $changeEditing = false,
         $admin = false,
         $changeAdmin = false
-    ) {
+    )
+    {
         //Через куки проверяем в каком виде будет отражаться папки и подключения
         //В виде списка или иконок
         //Получаем куки
@@ -74,8 +76,7 @@ class TreeController extends Controller
                     'name' => 'view_type',
                     'value' => $view_type
                 ]));
-            }
-            //в любом другом случае, просто прочтем из куки предпочтительный вид
+            } //в любом другом случае, просто прочтем из куки предпочтительный вид
             else {
                 $view_type = $cookies->get('view_type');
             }
@@ -95,8 +96,7 @@ class TreeController extends Controller
                     'name' => 'editing',
                     'value' => $editing
                 ]));
-            }
-            //в любом другом случае, просто прочтем из куки предпочтительный вид
+            } //в любом другом случае, просто прочтем из куки предпочтительный вид
             else {
                 $editing = $cookies->get('editing');
             }
@@ -117,8 +117,7 @@ class TreeController extends Controller
                     'name' => 'admin',
                     'value' => $admin
                 ]));
-            }
-            //в любом другом случае, просто прочтем из куки предпочтительный вид
+            } //в любом другом случае, просто прочтем из куки предпочтительный вид
             else {
                 $admin = $cookies->get('admin');
             }
@@ -138,16 +137,12 @@ class TreeController extends Controller
         }
 
 
-
-
-
         //VSCode при автоформатировании превращает (boolean)$editing в (bool)$editing, поэтому такой костыль
         if ($editing == "1") {
             $editing = true;
         } else {
             $editing = false;
         }
-
 
 
         $model_search = new SearchForm();
@@ -219,7 +214,6 @@ class TreeController extends Controller
           'unit_id_' => $unit_id,
           ]);
           } */
-
 
 
         $connections = Connections::connectionsByUnitId($unit_id);
@@ -365,6 +359,27 @@ class TreeController extends Controller
         return $this->render('check', ['result' => 'ok']);
     }
 
+
+    public function actionStats()
+    {
+        $request = Yii::$app->request;
+        if ($request->isAjax) { /* текущий запрос является AJAX запросом */
+            $connectionId = $request->post('connectionId');
+            $connection = Connections::findOne($connectionId);
+            $connection->count_connect++;
+            //$connection->count_connect++;
+            $connection->save();
+            $connectionStats = new ConnectionStats();
+            $connectionStats->connection_id = $connectionId;
+            $connectionStats->connection_date = time();
+            $connectionStats->operator_ip = $request->remoteIP;
+            $connectionStats->save();
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return ['checkResult' => 'ok'];
+        }
+
+    }
+
     /**
      * Updates an existing Tree model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -453,13 +468,6 @@ class TreeController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-
-
-
-
-
-
-
 
 
     public static function checkPort($targetIP, $portNumber)

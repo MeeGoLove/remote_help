@@ -21,7 +21,7 @@ use yii\imagine\Image;
  *
  * @property DeviceTypes[] $deviceTypes
  */
-class ConnectionTypes extends ActiveRecord
+class ConnectionTypes extends \yii\db\ActiveRecord
 {
 
     /**
