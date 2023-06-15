@@ -1,9 +1,14 @@
 <?php
 namespace app\models;
 
-use Yii;
+/**
+ * @property Connections[] $connections
+ */
+
 class ConnectionStats extends \yii\db\ActiveRecord
 {
+    public $counters;
+
     /**
      * {@inheritdoc}
      */
@@ -36,6 +41,14 @@ class ConnectionStats extends \yii\db\ActiveRecord
             'connection_date' => 'Connection Date',
         ];
     }
+    /**
+     * Gets query for [[Connections]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getConnections()
+    {
+        return $this->hasOne(Connections::className(), ['id' => 'connection_id']);
+    }
 }
-
 ?>

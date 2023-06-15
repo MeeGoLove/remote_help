@@ -75,27 +75,36 @@ class SiteController extends Controller
 
 
         //Подсчет необходимого времени в Unix-формате, для отражения сттистики по дням
-        $beginToday=mktime(0,0,0,date('m'),date('d'),date('Y'));
-        $beginYesterday=mktime(0,0,0,date('m'),date('d')-1,date('Y'));
-        $Last7Days=mktime(0,0,0,date('m'),date('d')-7,date('Y'));
-        $Last30Days=mktime(0,0,0,date('m'),date('d')-30,date('Y'));
+        $beginToday = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+        $beginYesterday = mktime(0, 0, 0, date('m'), date('d') - 1, date('Y'));
+        $Last7Days = mktime(0, 0, 0, date('m'), date('d') - 7, date('Y'));
+        $Last30Days = mktime(0, 0, 0, date('m'), date('d') - 30, date('Y'));
 
 
-        $countToday = ConnectionStats::find()->where('connection_date' . '>='.$beginToday)->count();
+        $countToday = ConnectionStats::find()->where('connection_date' . '>=' . $beginToday)->count();
         $countYesterDay = ConnectionStats::find()->where(['and',
-            'connection_date' . '<='.$beginToday,
-            'connection_date' . '>='.$beginYesterday,
+            'connection_date' . '<=' . $beginToday,
+            'connection_date' . '>=' . $beginYesterday,
         ])->count();
-        $countWeek = ConnectionStats::find()->where('connection_date' . '>='.$Last7Days)->count();
-        $countMonth = ConnectionStats::find()->where('connection_date' . '>='.$Last30Days)->count();
+        $countWeek = ConnectionStats::find()->where('connection_date' . '>=' . $Last7Days)->count();
+        $countMonth = ConnectionStats::find()->where('connection_date' . '>=' . $Last30Days)->count();
 
-        /*
-        $top30DaysConnction = ConnectionStats::find()->where(['and',
-            'connection_date' . '<='.$beginToday,
-            'connection_date' . '>='.$beginYesterday,
-        ])->limit(5)
-            ->groupBy('co')
-        ->orderBy('');*/
+        $top7DaysConnections = ConnectionStats::find()->
+        select(['connection_id, count(*) as counters'])->where('connection_date' . '>=' . $Last7Days)->groupBy('connection_id')
+            ->orderBy('counters DESC')
+            ->limit(5)
+            ->all();
+
+        $top30DaysConnections = ConnectionStats::find()->
+        select(['connection_id, count(*) as counters'])->where('connection_date' . '>=' . $Last30Days)->groupBy('connection_id')
+            ->orderBy('counters DESC')
+            ->limit(5)
+            ->all();
+        $topAllTimeConnections = ConnectionStats::find()->
+        select(['connection_id, count(*) as counters'])->groupBy('connection_id')
+            ->orderBy('counters DESC')
+            ->limit(5)
+            ->all();
 
         return $this->render('index', ['connectionsCount' => $connectionsCount,
             'IpAddressCount' => $IpAddressCount,
@@ -107,6 +116,9 @@ class SiteController extends Controller
             'countYesterDay' => $countYesterDay,
             'countWeek' => $countWeek,
             'countMonth' => $countMonth,
+            'top7DaysConnections' => $top7DaysConnections,
+            'top30DaysConnections' => $top30DaysConnections,
+            'topAllTimeConnections' => $topAllTimeConnections,
         ]);
     }
 

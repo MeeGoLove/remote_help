@@ -18,6 +18,14 @@ class m230614_190638_add_connection_stats_table extends Migration
                 'operator_ip' => $this->string()->notNull(),
                 'connection_date' => $this->integer()]
         );
+        $this->addForeignKey(
+            'fk_default_connection_id',  // это "условное имя" ключа
+            'connection_stats', // это название текущей таблицы
+            'connection_id', // это имя поля в текущей таблице, которое будет ключом
+            'connections', // это имя таблицы, с которой хотим связаться
+            'id', // это поле таблицы, с которым хотим связаться
+            'CASCADE'
+        );
 
     }
 
@@ -27,6 +35,10 @@ class m230614_190638_add_connection_stats_table extends Migration
     public function safeDown()
     {
         $this->dropTable('{{%connection_stats}}');
+        $this->dropForeignKey(
+            'fk_default_connection_id',
+            'connection_stats'
+        );
     }
 
     /*
