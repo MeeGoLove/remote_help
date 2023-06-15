@@ -675,8 +675,7 @@ function sendStats(connectionId)
 {
     //alert(connectionId);
     //$.post('stats', {connectionId: connectionId});
-    $.post('stats', {connectionId: connectionId}, function(data){
-        alert (data.checkResult);
+    $.post('stats', {connectionId: connectionId}, function(data){        
     });
 }
 JS;
