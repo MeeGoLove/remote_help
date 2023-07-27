@@ -82,44 +82,46 @@ class SiteController extends Controller
 
 
         $countToday = ConnectionStats::find()->where('connection_date' . '>=' . $beginToday)->count();
-        $countYesterDay = ConnectionStats::find()->where(['and',
+        $countYesterDay = ConnectionStats::find()->where([
+            'and',
             'connection_date' . '<=' . $beginToday,
             'connection_date' . '>=' . $beginYesterday,
         ])->count();
         $countWeek = ConnectionStats::find()->where('connection_date' . '>=' . $Last7Days)->count();
         $countMonth = ConnectionStats::find()->where('connection_date' . '>=' . $Last30Days)->count();
 
-        $top7DaysConnections = ConnectionStats::find()->
-        select(['connection_id, count(*) as counters'])->where('connection_date' . '>=' . $Last7Days)->groupBy('connection_id')
+        $top7DaysConnections = ConnectionStats::find()->select(['connection_id, count(*) as counters'])->where('connection_date' . '>=' . $Last7Days)->groupBy('connection_id')
             ->orderBy('counters DESC')
             ->limit(5)
             ->all();
 
-        $top30DaysConnections = ConnectionStats::find()->
-        select(['connection_id, count(*) as counters'])->where('connection_date' . '>=' . $Last30Days)->groupBy('connection_id')
+        $top30DaysConnections = ConnectionStats::find()->select(['connection_id, count(*) as counters'])->where('connection_date' . '>=' . $Last30Days)->groupBy('connection_id')
             ->orderBy('counters DESC')
             ->limit(5)
             ->all();
-        $topAllTimeConnections = ConnectionStats::find()->
-        select(['connection_id, count(*) as counters'])->groupBy('connection_id')
+        $topAllTimeConnections = ConnectionStats::find()->select(['connection_id, count(*) as counters'])->groupBy('connection_id')
             ->orderBy('counters DESC')
             ->limit(5)
             ->all();
-
-        return $this->render('index', ['connectionsCount' => $connectionsCount,
-            'IpAddressCount' => $IpAddressCount,
-            'unitsCount' => $unitsCount,
-            'deviceTypesCount' => $deviceTypesCount,
-            'connectionsTypesCount' => $connectionsTypesCount,
-            'countAllTime' => $countAllTime,
-            'countToday' => $countToday,
-            'countYesterDay' => $countYesterDay,
-            'countWeek' => $countWeek,
-            'countMonth' => $countMonth,
-            'top7DaysConnections' => $top7DaysConnections,
-            'top30DaysConnections' => $top30DaysConnections,
-            'topAllTimeConnections' => $topAllTimeConnections,
-        ]);
+        if (Yii::$app->user->isGuest) {
+            return $this->render('index');
+        } else {
+            return $this->render('index-admin', [
+                'connectionsCount' => $connectionsCount,
+                'IpAddressCount' => $IpAddressCount,
+                'unitsCount' => $unitsCount,
+                'deviceTypesCount' => $deviceTypesCount,
+                'connectionsTypesCount' => $connectionsTypesCount,
+                'countAllTime' => $countAllTime,
+                'countToday' => $countToday,
+                'countYesterDay' => $countYesterDay,
+                'countWeek' => $countWeek,
+                'countMonth' => $countMonth,
+                'top7DaysConnections' => $top7DaysConnections,
+                'top30DaysConnections' => $top30DaysConnections,
+                'topAllTimeConnections' => $topAllTimeConnections,
+            ]);
+        }
     }
 
     /**

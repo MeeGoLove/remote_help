@@ -5,10 +5,7 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use app\models\Units;
 use app\models\DeviceTypes;
-
-/* @var $this yii\web\View */
-/* @var $model app\models\Connections */
-/* @var $form yii\widgets\ActiveForm */
+use froala\froalaeditor\FroalaEditorWidget;
 ?>
 
 <div class="connections-form">
@@ -20,7 +17,26 @@ use app\models\DeviceTypes;
     $units = Units::unitsDropdownList();
     $items_units = ArrayHelper::map($units, 'id', 'name');
     ?>
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'name')->widget(FroalaEditorWidget::class, [
+        'name' => 'content',
+        'options' => [
+            // html attributes
+            'id' => 'content'
+        ],
+        'clientOptions' => [
+            'toolbarInline' => false,
+            'key' => 'trial',
+            'theme' => 'royal', //optional: dark, red, gray, royal
+            'language' => 'ru', // optional: ar, bs, cs, da, de, en_ca, en_gb, en_us ...
+            'key' => "1C%kZV[IX)_SL}UJHAEFZMUJOYGYQE[\\ZJ]RAe(+%$==",
+            'attribution' => false,
+            'toolbarButtons'   => ['bold', 'italic', 'underline', 
+            'strikeThrough', 'subscript', 'superscript', 
+            'fontFamily', 'fontSize', 'color', 'inlineStyle', 'paragraphStyle', 
+            'paragraphFormat', 'align', 'clearFormatting', 'html'],
+        ]
+    ])
+    ?>
 
     <?= $form->field($model, 'ipaddr')->textInput(['maxlength' => true]) ?>
 

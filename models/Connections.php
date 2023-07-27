@@ -15,22 +15,26 @@ use Yii;
  * @property int|null $unit_id
  * @property int|null $count_connect
  *
+ * @property ConnectionStats[] $connectionStats 
  * @property DeviceTypes $deviceType
  * @property Units $unit
  */
-class Connections extends \yii\db\ActiveRecord {
+class Connections extends \yii\db\ActiveRecord
+{
 
     /**
      * {@inheritdoc}
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return 'connections';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules() {
+    public function rules()
+    {
         return [
             [['name', 'ipaddr', 'device_type_id'], 'required'],
             [['device_type_id', 'unit_id', 'count_connect'], 'integer'],
@@ -43,7 +47,8 @@ class Connections extends \yii\db\ActiveRecord {
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => 'ID',
             'name' => 'Имя',
@@ -55,12 +60,23 @@ class Connections extends \yii\db\ActiveRecord {
         ];
     }
 
+    /** 
+     * Gets query for [[ConnectionStats]]. 
+     * 
+     * @return \yii\db\ActiveQuery 
+     */
+    public function getConnectionStats()
+    {
+        return $this->hasMany(ConnectionStats::className(), ['connection_id' => 'id']);
+    }
+
     /**
      * Gets query for [[DeviceType]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getDeviceType() {
+    public function getDeviceType()
+    {
         return $this->hasOne(DeviceTypes::className(), ['id' => 'device_type_id']);
     }
 
@@ -69,16 +85,19 @@ class Connections extends \yii\db\ActiveRecord {
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUnit() {
+    public function getUnit()
+    {
         return $this->hasOne(Units::className(), ['id' => 'unit_id']);
     }
 
-    public static function connectionsByUnitId($unit_id) {
+    public static function connectionsByUnitId($unit_id)
+    {
         $data = Connections::find()->where(['unit_id' => $unit_id])->orderBy(['name' => 'SORT_ASC']);
         return $data;
     }
 
-    public static function connectionsBySearch($keyword, $onlyName) {
+    public static function connectionsBySearch($keyword, $onlyName)
+    {
         if ($onlyName) {
             $data = Connections::find()->where(['like', 'name', '%' . $keyword . '%', false])->orderBy(['name' => 'SORT_ASC']);
             return $data;
@@ -87,5 +106,4 @@ class Connections extends \yii\db\ActiveRecord {
             return $data;
         }
     }
-
 }

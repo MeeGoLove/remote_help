@@ -366,9 +366,28 @@ $this->title = 'Адресная книга';
                         'columns' =>
                             [
                                 [
-                                    'attribute' => 'name',
+                                    //'attribute' => 'name',
                                     'label' => 'Имя',
                                     'contentOptions' => ['style' => 'max-width: 180px; mix-width: 180px;'],
+                                    'value' =>
+                                    function ($data) {
+    
+                                        if (str_contains(Yii::$app->request->url, 'unit_id=' . $data->unit_id)) {
+                                            return $data->name;
+                                        } else {
+                                            return $data->name .'<div align="right">'. Html::a(
+                                                '<button class="glyphicon glyphicon-folder-open"></button>',
+                                                Url::to(['tree/index', 'unit_id' => $data->unit_id]),
+                                                [
+                                                    'id' => 'tree-link' . $data->unit_id, 'title' => 'Перейти в папку',
+                                                    'onclick' => 'return saveScroll(this);'
+                                                ]
+                                            ) . '</div>'
+                                           // "&nbsp;&nbsp;&nbsp;" . $data->name
+                                            ;
+                                        }
+                                    },
+                                    'format' => 'raw',
                                 ],
                                 [
                                     'contentOptions' => ['style' => 'max-width: 125px; word-wrap: break-word;'],
@@ -477,10 +496,11 @@ $this->title = 'Адресная книга';
                                             ]);
                                         },
                                         'delete' => function ($url, $model, $key) {
+                                            $name = strip_tags($model->name);
                                             return Html::a('<button class="glyphicon glyphicon-trash"></button>', ['/connections/delete', 'id' => $model->id, 'from_tree' => 1, 'unit_id' => $model->unit_id], [
                                                 'title' => 'Удалить подключение',
                                                 'data' => [
-                                                    'confirm' => 'Вы действительно хотите удалить ' . $model->name . '?',
+                                                    'confirm' => 'Вы действительно хотите удалить ' . $name . '?',
                                                     'method' => 'post',
                                                 ],
                                             ]);
