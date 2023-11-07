@@ -119,8 +119,10 @@ class Units extends \yii\db\ActiveRecord
 
 
     public static function unitsBySearch($keyword)
-    {
-        $data = Units::find()->where(['like', 'name', '%' . $keyword . '%', false])->orderBy(['name' => 'SORT_ASC']);
+    {       
+        $layout = Connections::switcher($keyword, 1);
+        $layout1 = Connections::switcher($keyword, 2);
+        $data = Units::find()->where(['like', 'name', '%' . $keyword . '%', false])->orWhere(['like', 'name', '%' . $layout . '%', false])->orWhere(['like', 'name', '%' . $layout1 . '%', false])->orderBy(['name' => 'SORT_ASC']);
         return $data;
     }
 
@@ -146,9 +148,9 @@ class Units extends \yii\db\ActiveRecord
     {
         return [
             'id',
-            'label'=>'name',
+            'label' => 'name',
             'parentId' => 'parent_id',
-            'items' => function (){
+            'items' => function () {
                 return null;
             }
         ];

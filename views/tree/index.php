@@ -373,18 +373,22 @@ $this->title = 'Адресная книга';
                                     if (str_contains(Yii::$app->request->url, 'unit_id=' . $data->unit_id)) {
                                         return $data->name;
                                     } else {
-                                        return $data->name . '<div align="right">' . Html::a(
-                                            '<button class="glyphicon glyphicon-folder-open"></button>',
+                                        return $data->name . '<div align="right">' .
+                                        Html::a(
+                                            //'<button class="glyphicon glyphicon-folder-open"></button>                                                
+                                            ' <button type="button" class="btn btn-sm btn-warning">
+                                                    <span class="glyphicon glyphicon-folder-open"></span>
+                                              </button>',
                                             Url::to(['tree/index', 'unit_id' => $data->unit_id]),
                                             [
-                                                'id' => 'tree-link' . $data->unit_id, 'title' => 'Перейти в папку',
+                                                'id' => 'tree-link' . $data->unit_id, 'title' => 'Перейти в папку c подключением',
                                                 'onclick' => 'return saveScroll(this);'
                                             ]
                                         ) . '</div>'
-                                            // "&nbsp;&nbsp;&nbsp;" . $data->name
-                                        ;
-                                    }
-                                },
+                                        // "&nbsp;&nbsp;&nbsp;" . $data->name
+                                    ;
+                                }
+                            },
                                 'format' => 'raw',
                             ],
                             [
@@ -436,7 +440,32 @@ $this->title = 'Адресная книга';
                             ],
                             [
                                 'attribute' => 'ipaddr',
-                                'contentOptions' => ['style' => 'max-width: 80px;']
+                                'contentOptions' => ['style' => 'max-width: 90px;'],
+                                'format' => 'raw',
+                                'value' => function ($data) {
+                                    $duplicates = $data::connectionsByiP($data->ipaddr, $data->id)->all();
+                                    if (count($duplicates) == 0) {
+                                        return $data->ipaddr;
+                                    } else {
+                                        $request = Yii::$app->request;
+                                        $unit_id = $request->get('unit_id');
+                                        $text = $data->ipaddr;
+                                        $text = $text . '&nbsp;&nbsp;'  .
+
+                                            Html::a('<button title="У этого IP есть дубли, нажмите для поиска всех соединений с этим IP!" type="button" class="btn btn-sm btn-danger">
+                                        <span class="glyphicon glyphicon-search"></span></button>', ['/tree/index?unit_id=' . $unit_id], [
+                                                'data' => [
+                                                    'method' => 'POST',
+                                                    'params' => [
+                                                        'SearchForm[byipsearch]' => 1,
+                                                        'SearchForm[keyword]' => $data->ipaddr,
+                                                        'search-button' => 'btn-name'
+                                                    ],
+                                                ],
+                                            ]);
+                                        return $text;
+                                    };
+                                }
                             ],
                             [
                                 'attribute' => 'device_type_id',
@@ -471,7 +500,7 @@ $this->title = 'Адресная книга';
                                             ]
                                         ]);
                                     },
-                                    
+
                                     'delete' => function ($url, $model, $key) {
                                         $name = strip_tags($model->name);
                                         return Html::a('<button class="glyphicon glyphicon-trash"></button>', ['/connections/delete', 'id' => $model->id, 'from_tree' => 1, 'unit_id' => $model->unit_id], [
@@ -704,6 +733,7 @@ function sendStats(connectionId)
     $.post('stats', {connectionId: connectionId}, function(data){        
     });
 }
+
 JS;
 
 $this->registerJs($updateScript, yii\web\View::POS_END);
