@@ -371,11 +371,12 @@ $this->title = 'Адресная книга';
                                 function ($data) {
 
                                     if (str_contains(Yii::$app->request->url, 'unit_id=' . $data->unit_id)) {
-                                        return $data->name;
+                                        return $data->hostname?"<p><b id='hostname'>".$data->hostname."</b> ".str_replace("<p>","",$data->name):$data->name;
                                     } else {
-                                        return $data->name . '<div align="right">' .
+                                        $nameText =  $data->hostname?"<p><b id='hostname'>".$data->hostname."</b> ".str_replace("<p>","",$data->name):$data->name;
+                                        return $nameText . '<div align="right">' .
                                         Html::a(
-                                            //'<button class="glyphicon glyphicon-folder-open"></button>                                                
+                                            //'<button class="glyphicon glyphicon-folder-open"></button>
                                             ' <button type="button" class="btn btn-sm btn-warning">
                                                     <span class="glyphicon glyphicon-folder-open"></span>
                                               </button>',
@@ -730,7 +731,7 @@ function sendStats(connectionId)
 {
     //alert(connectionId);
     //$.post('stats', {connectionId: connectionId});
-    $.post('stats', {connectionId: connectionId}, function(data){        
+    $.post('stats', {connectionId: connectionId}, function(data){
     });
 }
 

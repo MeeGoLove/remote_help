@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "connections".
  *
  * @property int $id
+ * @property string $hostname
  * @property string $name
  * @property string $ipaddr
  * @property string|null $comment
@@ -15,7 +16,7 @@ use Yii;
  * @property int|null $unit_id
  * @property int|null $count_connect
  *
- * @property ConnectionStats[] $connectionStats 
+ * @property ConnectionStats[] $connectionStats
  * @property DeviceTypes $deviceType
  * @property Units $unit
  */
@@ -38,7 +39,7 @@ class Connections extends \yii\db\ActiveRecord
         return [
             [['name', 'ipaddr', 'device_type_id'], 'required'],
             [['device_type_id', 'unit_id', 'count_connect'], 'integer'],
-            [['name', 'ipaddr', 'comment'], 'string', 'max' => 255],
+            [['name', 'hostname' , 'ipaddr', 'comment'], 'string', 'max' => 255],
             [['device_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => DeviceTypes::className(), 'targetAttribute' => ['device_type_id' => 'id']],
             [['unit_id'], 'exist', 'skipOnError' => true, 'targetClass' => Units::className(), 'targetAttribute' => ['unit_id' => 'id']],
         ];
@@ -51,6 +52,7 @@ class Connections extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'hostname' => 'DNS имя хоста',
             'name' => 'Имя',
             'ipaddr' => 'IP-адрес',
             'comment' => 'Комментарий',
@@ -60,10 +62,10 @@ class Connections extends \yii\db\ActiveRecord
         ];
     }
 
-    /** 
-     * Gets query for [[ConnectionStats]]. 
-     * 
-     * @return \yii\db\ActiveQuery 
+    /**
+     * Gets query for [[ConnectionStats]].
+     *
+     * @return \yii\db\ActiveQuery
      */
     public function getConnectionStats()
     {
@@ -98,19 +100,25 @@ class Connections extends \yii\db\ActiveRecord
 
     public static function connectionsBySearch($keyword, $onlyName)
     {
-        
+
         $layout = self::switcher($keyword,1);
         $layout1 = self::switcher($keyword,2);
         if ($onlyName) {
             $data = Connections::find()->where(['like', 'name', '%' . $keyword . '%', false])->
             orWhere(['like', 'name', '%' . $layout . '%', false])->
             orWhere(['like', 'name', '%' . $layout1 . '%', false])->
+            orWhere(['like', 'hostname', '%' . $keyword . '%', false])->
+            orWhere(['like', 'hostname', '%' . $layout . '%', false])->
+            orWhere(['like', 'hostname', '%' . $layout1 . '%', false])->
             orderBy(['name' => 'SORT_ASC']);
             return $data;
         } else {
             $data = Connections::find()->where(['like', 'name', '%' . $keyword . '%', false])->
             orWhere(['like', 'name', '%' . $layout . '%', false])->
             orWhere(['like', 'name', '%' . $layout1 . '%', false])->
+            orWhere(['like', 'hostname', '%' . $keyword . '%', false])->
+            orWhere(['like', 'hostname', '%' . $layout . '%', false])->
+            orWhere(['like', 'hostname', '%' . $layout1 . '%', false])->
             orWhere(['like', 'ipaddr', '%' . $keyword . '%', false])->orderBy(['name' => 'SORT_ASC']);
             return $data;
         }

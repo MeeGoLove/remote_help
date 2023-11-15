@@ -346,6 +346,9 @@ $this->title = 'Адресная книга';
                         <img class="buttonAllCheck" src="/images/reload.png" height=20px"> Проверить online у всех
                         [медленно! не жми в больших папках, займёт > 3 минут]
                     </button>
+                    <button class="btn btn-danger" onclick="checkDns()" title="Проверить DNS имена хостов">
+                        <img class="buttonDNSCheck" src="/images/reload.png" height=20px">Проверить DNS имена хостов
+                    </button>
                 </p>
             <?php
                 echo GridView::widget(
@@ -371,11 +374,12 @@ $this->title = 'Адресная книга';
                                 function ($data) {
 
                                     if (str_contains(Yii::$app->request->url, 'unit_id=' . $data->unit_id)) {
-                                        return $data->name;
+                                        return $data->hostname?"<p><b id='hostname'>".$data->hostname."</b> ".str_replace("<p>","",$data->name):$data->name;
                                     } else {
-                                        return $data->name . '<div align="right">' .
+                                        $nameText =  $data->hostname?"<p><b id='hostname'>".$data->hostname."</b> ".str_replace("<p>","",$data->name):$data->name;
+                                        return $nameText . '<div align="right">' .
                                             Html::a(
-                                                //'<button class="glyphicon glyphicon-folder-open"></button>                                                
+                                                //'<button class="glyphicon glyphicon-folder-open"></button>
                                                 ' <button type="button" class="btn btn-sm btn-warning">
                                                         <span class="glyphicon glyphicon-folder-open"></span>
                                                   </button>',
@@ -760,6 +764,66 @@ function sendStats(connectionId)
     $.post('stats', {connectionId: connectionId}, function(data){
     });
 }
+
+
+
+
+function checkDns()
+{
+    //jQuery('.button').addClass('loading');
+    //var links = [];
+    // перебрать элементы div на странице
+	$('b#hostname').each(function (index, element)
+	{
+        $('.buttonAllCheck').attr('class', 'buttonAllCheck loading');
+        //links.push($(this).attr('href'));
+		// index (число) - текущий индекс итерации (цикла)
+		// данное значение является числом
+		// начинается отсчёт с 0 и заканчивается количеству элементов в текущем наборе минус 1
+		// element - содержит DOM-ссылку на текущий элемент
+		var link = $(this).text();
+		console.log(link);
+		$.post('check', {link: link}, function(data)
+		{   $('.buttonAllCheck.loading').attr('class', 'buttonAllCheck');
+			if (data.checkResult == true)
+				{
+					$(element).attr('class', 'ip-addr-ready');
+				} else {
+                        $(element).attr('class', 'ip-addr-noready');
+                }
+		});
+
+	});
+
+    /*$.ajax({
+			url: 'check',
+			method: 'post',
+			dataType: 'json',
+			data: {links: links},
+            async:true,
+			success: function(data)
+				{
+                    $('.button.loading').attr('class', 'button');
+					if (data.checkResult == true)
+						{
+
+							//$(element).attr('class', 'ip-addr-ready');
+						};
+				}
+			});*/
+
+
+    //jQuery('.button').removeClass('loading');
+};
+
+
+
+
+
+
+
+
+
 JS;
 
 $this->registerJs($updateScript, yii\web\View::POS_END);

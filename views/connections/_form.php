@@ -17,6 +17,7 @@ use froala\froalaeditor\FroalaEditorWidget;
     $units = Units::unitsDropdownList();
     $items_units = ArrayHelper::map($units, 'id', 'name');
     ?>
+    <?= $form->field($model, 'hostname')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'name')->widget(FroalaEditorWidget::class, [
         'name' => 'content',
         'options' => [
@@ -30,9 +31,9 @@ use froala\froalaeditor\FroalaEditorWidget;
             'language' => 'ru', // optional: ar, bs, cs, da, de, en_ca, en_gb, en_us ...
             'key' => "1C%kZV[IX)_SL}UJHAEFZMUJOYGYQE[\\ZJ]RAe(+%$==",
             'attribution' => false,
-            'toolbarButtons'   => ['bold', 'italic', 'underline', 
-            'strikeThrough', 'subscript', 'superscript', 
-            'fontFamily', 'fontSize', 'color', 'inlineStyle', 'paragraphStyle', 
+            'toolbarButtons'   => ['bold', 'italic', 'underline',
+            'strikeThrough', 'subscript', 'superscript',
+            'fontFamily', 'fontSize', 'color', 'inlineStyle', 'paragraphStyle',
             'paragraphFormat', 'align', 'clearFormatting', 'html'],
         ]
     ])
