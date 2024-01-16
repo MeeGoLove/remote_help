@@ -1,19 +1,18 @@
 <?php
 
-use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\GridView;
+use app\components\connectionswidget\ConnectionsGridWidget;
+use app\models\ConnectionTypes;
+use app\models\Units;
+use leandrogehlen\treegrid\TreeGrid;
+use lo\widgets\modal\ModalAjax;
 use yii\bootstrap\ActiveForm;
 use yii\data\ActiveDataProvider;
+use yii\grid\GridView;
+use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\Pjax;
-use app\components\connectionswidget\ConnectionsGridWidget;
-use lo\widgets\modal\ModalAjax;
 
 /* * *ext** */
-
-use leandrogehlen\treegrid\TreeGrid;
-use app\models\Units;
-use app\models\ConnectionTypes;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -43,20 +42,20 @@ $this->title = 'Адресная книга';
             <!-- Левый блок с иерархией -->
             <?php
             ?><?=
-                TreeGrid::widget([
-                    'dataProvider' => $dataProvider,
-                    'keyColumnName' => 'id',
-                    'showOnEmpty' => FALSE,
-                    'parentColumnName' => 'parent_id',
-                    //способ подсвечивать текущее выбранное подразделение
-                    'rowOptions' => function ($model, $key) {
-                        $request = Yii::$app->request;
-                        $unit_id = $request->get('unit_id');
-                        if ($key == $unit_id) {
-                            return ['class' => 'info'];
-                        }
-                    },
-                    'columns' =>
+            TreeGrid::widget([
+                'dataProvider' => $dataProvider,
+                'keyColumnName' => 'id',
+                'showOnEmpty' => FALSE,
+                'parentColumnName' => 'parent_id',
+                //способ подсвечивать текущее выбранное подразделение
+                'rowOptions' => function ($model, $key) {
+                    $request = Yii::$app->request;
+                    $unit_id = $request->get('unit_id');
+                    if ($key == $unit_id) {
+                        return ['class' => 'info'];
+                    }
+                },
+                'columns' =>
                     [
                         [
                             'label' => 'Иерархия',
@@ -135,8 +134,8 @@ $this->title = 'Адресная книга';
                             ]
                         ]
                     ]
-                ]);
-                ?>
+            ]);
+            ?>
         </div>
 
         <!-- Верхний блок с фильтрами-->
@@ -164,7 +163,8 @@ $this->title = 'Адресная книга';
                         ])->label(false) ?>
 
                         <div class="dropdown col-sm-2 col-md-2 col-lg-1">
-                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                 Подключиться по
                                 <span class="caret"></span>
                             </button>
@@ -176,12 +176,12 @@ $this->title = 'Адресная книга';
                                 foreach ($connectionsTypes as $connectionsType) {
                                     echo '<li><a href="#" onclick="quickConnect(\'' . $connectionsType->protocol_link . '\')">' . $connectionsType->name . '</a></li>';
                                     //echo $connectionsType->protocol_link;
-                                ?>
+                                    ?>
                                     <?= $connectionsType->protocol_link_readonly !== null ? '<li><a href="#" onclick="quickConnect(\'' . $connectionsType->protocol_link_readonly . '\')">' . $connectionsType->name . ': просмотр</a></li>' : "" ?>
                                     <?= $connectionsType->protocol_link_telnet !== null ? '<li><a href="#" onclick="quickConnect(\'' . $connectionsType->protocol_link_telnet . '\')">' . $connectionsType->name . ': telnet</a></li>' : "" ?>
                                     <?= $connectionsType->protocol_link_file_transfer !== null ? '<li><a href="#" onclick="quickConnect(\'' . $connectionsType->protocol_link_file_transfer . '\')">' . $connectionsType->name . ': файлы</a></li>' : "" ?>
                                     <?= $connectionsType->protocol_link_power !== null ? '<li><a href="#" onclick="quickConnect(\'' . $connectionsType->protocol_link_power . '\')">' . $connectionsType->name . ': питание</a></li>' : "" ?>
-                                <?php
+                                    <?php
                                     if (++$i !== $numItems) {
                                         echo '<li role="separator" class="divider"></li>';
                                     }
@@ -268,7 +268,7 @@ $this->title = 'Адресная книга';
                     <?php
                     if ($editing) {
                         echo
-                        '<button class="btn btn-success" onclick="$(\'#createConnection' . $unit_id_ . '\').modal();"  title="Создать новое подключение">
+                            '<button class="btn btn-success" onclick="$(\'#createConnection' . $unit_id_ . '\').modal();"  title="Создать новое подключение">
                         <i class="fa fa-plus"></i> Создать подключение </button>' .
                             ModalAjax::widget([
                                 'id' => 'createConnection' . ($unit_id_),
@@ -318,39 +318,47 @@ $this->title = 'Адресная книга';
                         ]),
                         //'layout' => "\n{items}\n{summary}\n{pager}",
                         'columns' =>
-                        [
                             [
-                                'attribute' => 'name',
-                                'value' => function (\app\models\Units $data, $view_type) {
-                                    return Html::a(
-                                        Html::encode($data->name),
-                                        Url::to(['tree/index', 'unit_id' => $data->id, 'view_type' => $view_type]),
-                                        [
-                                            'id' => 'tree-link' . $data->id, 'title' => 'Перейти в ' . $data->name,
-                                            'onclick' => 'return saveScroll(this);'
-                                        ]
-                                    );
-                                },
-                                'format' => 'raw',
-                                'label' => 'Дочерние папки'
-                            ],
-                        ]
+                                [
+                                    'attribute' => 'name',
+                                    'value' => function (\app\models\Units $data, $view_type) {
+                                        return Html::a(
+                                            Html::encode($data->name),
+                                            Url::to(['tree/index', 'unit_id' => $data->id, 'view_type' => $view_type]),
+                                            [
+                                                'id' => 'tree-link' . $data->id, 'title' => 'Перейти в ' . $data->name,
+                                                'onclick' => 'return saveScroll(this);'
+                                            ]
+                                        );
+                                    },
+                                    'format' => 'raw',
+                                    'label' => 'Дочерние папки'
+                                ],
+                            ]
                     ]
                 );
                 //Затем подключения
                 echo '<p></p><h4>Список подключений / Список найденных подключений при поиске</h4>';
-            ?>
-
+                ?>
                 <p>
-                    <button class="btn btn-success" onclick="checkOnline()" title="[медленно! не жми в больших папках, займёт > 3 минут], работает только в виде список">
+
+                    <?php
+                    if ($parent_id !== null) {
+                        echo
+                            '<a href=\'' . Url::to(['tree/index', 'unit_id' => $parent_id]) .
+                            '\' title="Вверх" class="btn btn-info glyphicon glyphicon-level-up"></a>';
+                    }
+                    ?>
+                    <button class="btn btn-success" onclick="checkOnline()"
+                            title="[медленно! не жми в больших папках, займёт > 3 минут], работает только в виде список">
                         <img class="buttonAllCheck" src="/images/reload.png" height=20px"> Проверить online у всех
                         [медленно! не жми в больших папках, займёт > 3 минут]
                     </button>
-                    <button class="btn btn-danger" onclick="checkDns()" title="Проверить DNS имена хостов">
-                        <img class="buttonDNSCheck" src="/images/reload.png" height=20px">Проверить DNS имена хостов
+                    <button class="btn btn-danger" onclick="checkDns()" title="Проверить DNS имена хостов (только ПК!)">
+                        <img class="buttonDNSCheck" src="/images/reload.png" height=20px">Проверить DNS имена хостов (только ПК!)
                     </button>
                 </p>
-            <?php
+                <?php
                 echo GridView::widget(
                     [
                         'dataProvider' => new ActiveDataProvider([
@@ -365,208 +373,209 @@ $this->title = 'Адресная книга';
                         ],
                         'layout' => "\n{items}{summary}",
                         'columns' =>
-                        [
                             [
-                                //'attribute' => 'name',
-                                'label' => 'Имя',
-                                'contentOptions' => ['style' => 'max-width: 180px; mix-width: 180px;'],
-                                'value' =>
-                                function ($data) {
+                                [
+                                    //'attribute' => 'name',
+                                    'label' => 'Имя',
+                                    'contentOptions' => ['style' => 'max-width: 180px; mix-width: 180px;'],
+                                    'value' =>
+                                        function ($data) {
 
-                                    if (str_contains(Yii::$app->request->url, 'unit_id=' . $data->unit_id)) {
-                                        return $data->hostname?"<p><b id='hostname'>".$data->hostname."</b> ".str_replace("<p>","",$data->name):$data->name;
-                                    } else {
-                                        $nameText =  $data->hostname?"<p><b id='hostname'>".$data->hostname."</b> ".str_replace("<p>","",$data->name):$data->name;
-                                        return $nameText . '<div align="right">' .
-                                            Html::a(
-                                                //'<button class="glyphicon glyphicon-folder-open"></button>
-                                                ' <button type="button" class="btn btn-sm btn-warning">
+                                            if (str_contains(Yii::$app->request->url, 'unit_id=' . $data->unit_id)) {
+                                                return $data->hostname ? "<p><b id='hostname'>" . $data->hostname . "</b> " . str_replace("<p>", "", $data->name) : $data->name;
+                                            } else {
+                                                $nameText = $data->hostname ? "<p><b id='hostname'>" . $data->hostname . "</b> " . str_replace("<p>", "", $data->name) : $data->name;
+                                                return $nameText . '<div align="right">' .
+                                                    Html::a(
+                                                    //'<button class="glyphicon glyphicon-folder-open"></button>
+                                                        ' <button type="button" class="btn btn-sm btn-warning">
                                                         <span class="glyphicon glyphicon-folder-open"></span>
                                                   </button>',
-                                                Url::to(['tree/index', 'unit_id' => $data->unit_id]),
-                                                [
-                                                    'id' => 'tree-link' . $data->unit_id, 'title' => 'Перейти в папку c подключением',
-                                                    'onclick' => 'return saveScroll(this);'
-                                                ]
-                                            ) . '</div>'
-                                            // "&nbsp;&nbsp;&nbsp;" . $data->name
-                                        ;
-                                    }
-                                },
-                                'format' => 'raw',
-                            ],
-                            [
-                                'contentOptions' => ['style' => 'max-width: 125px; word-wrap: break-word;'],
-                                'value' => function ($data) {
-                                    $name = $data->deviceType->defaultConnectionType->name;
-                                    $defaultLink = $data->deviceType->defaultConnectionType->protocol_link . $data->ipaddr;
-                                    $defaultLinkViewOnly = (!empty($data->deviceType->defaultConnectionType->protocol_link_readonly)) ?
-                                        Html::a("<i class='fa fa-eye' aria-hidden='true'  title='только просмотр'></i>", $data->deviceType->defaultConnectionType->protocol_link_readonly
-                                            . $data->ipaddr) . "&nbsp;&nbsp;" : "";
-                                    $defaultLinkTelnet = (!empty($data->deviceType->defaultConnectionType->protocol_link_telnet)) ?
-                                        Html::a("<i class='fa fa-terminal' aria-hidden='true'  title='подключение в режиме telnet'></i>", $data->deviceType->defaultConnectionType->protocol_link_telnet
-                                            . $data->ipaddr) . "&nbsp;&nbsp;" : "";
-                                    $defaultLinkFile = (!empty($data->deviceType->defaultConnectionType->protocol_link_file_transfer)) ?
-                                        Html::a("<i class='fa fa-file' aria-hidden='true'  title='передача файлов'></i>", $data->deviceType->defaultConnectionType->protocol_link_file_transfer
-                                            . $data->ipaddr) . "&nbsp;&nbsp;" : "";
-                                    $defaultLinkPower = (!empty($data->deviceType->defaultConnectionType->protocol_link_power)) ?
-                                        Html::a("<i class='fa fa-power-off' aria-hidden='true' title='управление питанием'></i>", $data->deviceType->defaultConnectionType->protocol_link_power
-                                            . $data->ipaddr) . "&nbsp;&nbsp;" : "";
+                                                        Url::to(['tree/index', 'unit_id' => $data->unit_id]),
+                                                        [
+                                                            'id' => 'tree-link' . $data->unit_id, 'title' => 'Перейти в папку c подключением',
+                                                            'onclick' => 'return saveScroll(this);'
+                                                        ]
+                                                    ) . '</div>'// "&nbsp;&nbsp;&nbsp;" . $data->name
+                                                    ;
+                                            }
+                                        },
+                                    'format' => 'raw',
+                                ],
+                                [
+                                    'contentOptions' => ['style' => 'max-width: 125px; word-wrap: break-word;'],
+                                    'value' => function ($data) {
+                                        $name = $data->deviceType->defaultConnectionType->name;
+                                        $defaultLink = $data->deviceType->defaultConnectionType->protocol_link . $data->ipaddr;
+                                        $defaultLinkViewOnly = (!empty($data->deviceType->defaultConnectionType->protocol_link_readonly)) ?
+                                            Html::a("<i class='fa fa-eye' aria-hidden='true'  title='только просмотр'></i>", $data->deviceType->defaultConnectionType->protocol_link_readonly
+                                                . $data->ipaddr) . "&nbsp;&nbsp;" : "";
+                                        $defaultLinkTelnet = (!empty($data->deviceType->defaultConnectionType->protocol_link_telnet)) ?
+                                            Html::a("<i class='fa fa-terminal' aria-hidden='true'  title='подключение в режиме telnet'></i>", $data->deviceType->defaultConnectionType->protocol_link_telnet
+                                                . $data->ipaddr) . "&nbsp;&nbsp;" : "";
+                                        $defaultLinkFile = (!empty($data->deviceType->defaultConnectionType->protocol_link_file_transfer)) ?
+                                            Html::a("<i class='fa fa-file' aria-hidden='true'  title='передача файлов'></i>", $data->deviceType->defaultConnectionType->protocol_link_file_transfer
+                                                . $data->ipaddr) . "&nbsp;&nbsp;" : "";
+                                        $defaultLinkPower = (!empty($data->deviceType->defaultConnectionType->protocol_link_power)) ?
+                                            Html::a("<i class='fa fa-power-off' aria-hidden='true' title='управление питанием'></i>", $data->deviceType->defaultConnectionType->protocol_link_power
+                                                . $data->ipaddr) . "&nbsp;&nbsp;" : "";
 
 
-                                    if ($data->deviceType->optionalConnectionType !== null) {
-                                        $optionalLink = $data->deviceType->optionalConnectionType->protocol_link . $data->ipaddr;
-                                        $nameOptional = $data->deviceType->optionalConnectionType->name;
-                                        $optionalLinkViewOnly = (!empty($data->deviceType->optionalConnectionType->protocol_link_readonly)) ?
-                                            Html::a("<i class='fa fa-eye' aria-hidden='true'  title='только просмотр'></i>", $data->deviceType->optionalConnectionType->protocol_link_readonly
-                                                . $data->ipaddr) . "&nbsp;&nbsp;" : "";
-                                        $optionalLinkTelnet = (!empty($data->deviceType->optionalConnectionType->protocol_link_telnet)) ?
-                                            Html::a("<i class='fa fa-terminal' aria-hidden='true'  title='подключение в режиме telnet'></i>", $data->deviceType->optionalConnectionType->protocol_link_telnet
-                                                . $data->ipaddr) . "&nbsp;&nbsp;" : "";
-                                        $optionalLinkFile = (!empty($data->deviceType->optionalConnectionType->protocol_link_file_transfer)) ?
-                                            Html::a("<i class='fa fa-file' aria-hidden='true'  title='передача файлов'></i>", $data->deviceType->optionalConnectionType->protocol_link_file_transfer
-                                                . $data->ipaddr) . "&nbsp;&nbsp;" : "";
-                                        $optionalLinkPower = (!empty($data->deviceType->optionalConnectionType->protocol_link_power)) ?
-                                            Html::a("<i class='fa fa-power-off' aria-hidden='true' title='управление питанием'></i>", $data->deviceType->optionalConnectionType->protocol_link_power
-                                                . $data->ipaddr) . "&nbsp;&nbsp;" : "";
-                                        return
-                                            Html::a($name, $defaultLink, [
-                                                'id' => 'ipaddr-remote', 'title' => 'Подключиться в режиме управления',
-                                                'onclick' => "sendStats('" . $data->id . "')"
-                                            ])
-                                            . "&nbsp;"
-                                            . $defaultLinkViewOnly
-                                            . $defaultLinkTelnet
-                                            . $defaultLinkFile
-                                            . $defaultLinkPower
-                                            . "<br>"
-                                            . Html::a($nameOptional, $optionalLink, [
-                                                'id' => 'ipaddr-remote', 'title' => 'Подключиться в режиме управления',
-                                                'onclick' => "sendStats('" . $data->id . "')"
-                                            ])
-                                            . "&nbsp;"
-                                            . $optionalLinkViewOnly
-                                            . $optionalLinkTelnet
-                                            . $optionalLinkFile
-                                            . $optionalLinkPower
-                                            . '<button class="" onclick="checkOnlineRow(\'' . $data->id . '\', \'' . $defaultLink . '\', \'' . $optionalLink . '\')">' .
-                                            '<img class="button link' . $data->id . '" src="/images/reload.png" height=15px"></button></div>';
-                                    } else
-                                        return
-                                            Html::a($name, $defaultLink, [
-                                                'id' => 'ipaddr-remote', 'title' => 'Подключиться в режиме управления',
-                                                'onclick' => "sendStats('" . $data->id . "')"
-                                            ])
-                                            . "&nbsp;"
-                                            . $defaultLinkViewOnly
-                                            . $defaultLinkTelnet
-                                            . $defaultLinkFile
-                                            . $defaultLinkPower
-                                            .
-                                            '<button class="" onclick="checkOnlineRow(\'' . $data->id . '\', \'' . $defaultLink . '\')">' .
-                                            '<img class="button link' . $data->id . '" src="/images/reload.png" height=15px"></button></div>';
-                                },
-                                //'attribute' => '',
-                                'format' => 'raw',
-                                'label' => 'Подключиться по',
-                            ],
-                            [
-                                'attribute' => 'ipaddr',
-                                'contentOptions' => ['style' => 'max-width: 100px;'],
-                                'format' => 'raw',
-                                'value' => function ($data) {
-                                    $duplicates = $data::connectionsByiP($data->ipaddr, $data->id)->all();
-                                    if (count($duplicates) == 0) {
-                                        return $data->ipaddr;
-                                    } else {
-                                        $request = Yii::$app->request;
-                                        $unit_id = $request->get('unit_id');
-                                        $text = $data->ipaddr;
-                                        $text = $text . '&nbsp;&nbsp;'  .
+                                        if ($data->deviceType->optionalConnectionType !== null) {
+                                            $optionalLink = $data->deviceType->optionalConnectionType->protocol_link . $data->ipaddr;
+                                            $nameOptional = $data->deviceType->optionalConnectionType->name;
+                                            $optionalLinkViewOnly = (!empty($data->deviceType->optionalConnectionType->protocol_link_readonly)) ?
+                                                Html::a("<i class='fa fa-eye' aria-hidden='true'  title='только просмотр'></i>", $data->deviceType->optionalConnectionType->protocol_link_readonly
+                                                    . $data->ipaddr) . "&nbsp;&nbsp;" : "";
+                                            $optionalLinkTelnet = (!empty($data->deviceType->optionalConnectionType->protocol_link_telnet)) ?
+                                                Html::a("<i class='fa fa-terminal' aria-hidden='true'  title='подключение в режиме telnet'></i>", $data->deviceType->optionalConnectionType->protocol_link_telnet
+                                                    . $data->ipaddr) . "&nbsp;&nbsp;" : "";
+                                            $optionalLinkFile = (!empty($data->deviceType->optionalConnectionType->protocol_link_file_transfer)) ?
+                                                Html::a("<i class='fa fa-file' aria-hidden='true'  title='передача файлов'></i>", $data->deviceType->optionalConnectionType->protocol_link_file_transfer
+                                                    . $data->ipaddr) . "&nbsp;&nbsp;" : "";
+                                            $optionalLinkPower = (!empty($data->deviceType->optionalConnectionType->protocol_link_power)) ?
+                                                Html::a("<i class='fa fa-power-off' aria-hidden='true' title='управление питанием'></i>", $data->deviceType->optionalConnectionType->protocol_link_power
+                                                    . $data->ipaddr) . "&nbsp;&nbsp;" : "";
+                                            return
+                                                "<div>" .
+                                                Html::a($name, $defaultLink, [
+                                                    'id' => 'ipaddr-remote', 'title' => 'Подключиться в режиме управления',
+                                                    'onclick' => "sendStats('" . $data->id . "')"
+                                                ])
+                                                . "&nbsp;"
+                                                . $defaultLinkViewOnly
+                                                . $defaultLinkTelnet
+                                                . $defaultLinkFile
+                                                . $defaultLinkPower
+                                                . "</div><div>"
+                                                . Html::a($nameOptional, $optionalLink, [
+                                                    'id' => 'ipaddr-remote', 'title' => 'Подключиться в режиме управления',
+                                                    'onclick' => "sendStats('" . $data->id . "')"
+                                                ])
 
-                                            Html::a('<button title="У этого IP есть дубли, нажмите для поиска всех соединений с этим IP!" type="button" class="btn btn-sm btn-danger">
+                                                . "&nbsp;"
+                                                . $optionalLinkViewOnly
+                                                . $optionalLinkTelnet
+                                                . $optionalLinkFile
+                                                . $optionalLinkPower
+                                                . '<button class="" onclick="checkOnlineRow(\'' . $data->id . '\', \'' . $defaultLink . '\', \'' . $optionalLink . '\')">' .
+                                                '<img class="button link' . $data->id . '" src="/images/reload.png" height=15px"></button></div></div>';
+                                        } else
+                                            return
+                                                Html::a($name, $defaultLink, [
+                                                    'id' => 'ipaddr-remote', 'title' => 'Подключиться в режиме управления',
+                                                    'onclick' => "sendStats('" . $data->id . "')"
+                                                ])
+                                                . "&nbsp;"
+                                                . $defaultLinkViewOnly
+                                                . $defaultLinkTelnet
+                                                . $defaultLinkFile
+                                                . $defaultLinkPower
+                                                .
+                                                '<button class="" onclick="checkOnlineRow(\'' . $data->id . '\', \'' . $defaultLink . '\')">' .
+                                                '<img class="button link' . $data->id . '" src="/images/reload.png" height=15px"></button></div>';
+                                    },
+                                    //'attribute' => '',
+                                    'format' => 'raw',
+                                    'label' => 'Подключиться по',
+                                ],
+                                [
+                                    'attribute' => 'ipaddr',
+                                    'contentOptions' => ['style' => 'max-width: 100px;'],
+                                    'format' => 'raw',
+                                    'value' => function ($data) {
+                                        $duplicates = $data::connectionsByiP($data->ipaddr, $data->id)->all();
+                                        if (count($duplicates) == 0) {
+                                            return $data->ipaddr;
+                                        } else {
+                                            $request = Yii::$app->request;
+                                            $unit_id = $request->get('unit_id');
+                                            $text = $data->ipaddr;
+                                            $text = $text . '&nbsp;&nbsp;' .
+
+                                                Html::a('<button title="У этого IP есть дубли, нажмите для поиска всех соединений с этим IP!" type="button" class="btn btn-sm btn-danger">
                                             <span class="glyphicon glyphicon-search"></span></button>', ['/tree/index?unit_id=' . $unit_id], [
-                                                'data' => [
-                                                    'method' => 'POST',
-                                                    'params' => [
-                                                        'SearchForm[byipsearch]' => 1,
-                                                        'SearchForm[keyword]' => $data->ipaddr,
-                                                        'search-button' => 'btn-name'
+                                                    'data' => [
+                                                        'method' => 'POST',
+                                                        'params' => [
+                                                            'SearchForm[byipsearch]' => 1,
+                                                            'SearchForm[keyword]' => $data->ipaddr,
+                                                            'search-button' => 'btn-name'
+                                                        ],
                                                     ],
+                                                ]);
+                                            return $text;
+                                        };
+                                    }
+                                ],
+                                [
+                                    'attribute' => 'device_type_id',
+                                    'value' => function ($model, $key, $index, $widget) {
+                                        return $model->deviceType->name;
+                                    },
+                                    'format' => 'raw',
+                                ],
+                                [
+                                    'class' => 'yii\grid\ActionColumn',
+                                    'visible' => $editing,
+                                    'contentOptions' => ['style' => 'min-width: 45px; max-width: 65px'],
+                                    'template' => '{update}{delete} {copy}',
+                                    'buttons' => [
+                                        'update' => function ($url, $model, $key) {
+                                            return ModalAjax::widget([
+                                                'id' => 'updateConnection' . ($model->id),
+                                                'header' => 'Изменить подключение <u>' . $model->name . '</u>',
+                                                'url' => '/connections/update?id=' . $model->id, // Ajax view with form to load
+                                                'toggleButton' => [
+                                                    'label' => '',
+                                                    'class' => 'glyphicon glyphicon-pencil',
+                                                    'title' => 'Изменить подключение'
+                                                ],
+                                                'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
+                                                'size' => ModalAjax::SIZE_LARGE,
+                                                'options' => ['class' => 'header-primary'],
+                                                'autoClose' => true,
+                                                'pjaxContainer' => '#grid-company-pjax',
+                                                'events' => [
+                                                    ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
+                                                ]
+                                            ]);
+                                        },
+                                        'delete' => function ($url, $model, $key) {
+                                            $name = strip_tags($model->name);
+                                            return Html::a('<button class="glyphicon glyphicon-trash"></button>', ['/connections/delete', 'id' => $model->id, 'from_tree' => 1, 'unit_id' => $model->unit_id], [
+                                                'title' => 'Удалить подключение',
+                                                'data' => [
+                                                    'confirm' => 'Вы действительно хотите удалить ' . $name . '?',
+                                                    'method' => 'post',
                                                 ],
                                             ]);
-                                        return $text;
-                                    };
-                                }
-                            ],
-                            [
-                                'attribute' => 'device_type_id',
-                                'value' => function ($model, $key, $index, $widget) {
-                                    return $model->deviceType->name;
-                                },
-                                'format' => 'raw',
-                            ],
-                            [
-                                'class' => 'yii\grid\ActionColumn',
-                                'visible' => $editing,
-                                'contentOptions' => ['style' => 'min-width: 45px; max-width: 65px'],
-                                'template' => '{update}{delete} {copy}',
-                                'buttons' => [
-                                    'update' => function ($url, $model, $key) {
-                                        return ModalAjax::widget([
-                                            'id' => 'updateConnection' . ($model->id),
-                                            'header' => 'Изменить подключение <u>' . $model->name . '</u>',
-                                            'url' => '/connections/update?id=' . $model->id, // Ajax view with form to load
-                                            'toggleButton' => [
-                                                'label' => '',
-                                                'class' => 'glyphicon glyphicon-pencil',
-                                                'title' => 'Изменить подключение'
-                                            ],
-                                            'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
-                                            'size' => ModalAjax::SIZE_LARGE,
-                                            'options' => ['class' => 'header-primary'],
-                                            'autoClose' => true,
-                                            'pjaxContainer' => '#grid-company-pjax',
-                                            'events' => [
-                                                ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
-                                            ]
-                                        ]);
-                                    },
-                                    'delete' => function ($url, $model, $key) {
-                                        $name = strip_tags($model->name);
-                                        return Html::a('<button class="glyphicon glyphicon-trash"></button>', ['/connections/delete', 'id' => $model->id, 'from_tree' => 1, 'unit_id' => $model->unit_id], [
-                                            'title' => 'Удалить подключение',
-                                            'data' => [
-                                                'confirm' => 'Вы действительно хотите удалить ' . $name . '?',
-                                                'method' => 'post',
-                                            ],
-                                        ]);
-                                    },
+                                        },
 
-                                    'copy' => function ($url, $model, $key) {
-                                        return ModalAjax::widget([
-                                            'id' => 'copyConnection' . ($model->id),
-                                            'header' => 'Копировать подключение',
-                                            'url' => '/connections/copy?id=' . $model->id, // Ajax view with form to load
-                                            'toggleButton' => [
-                                                'label' => '',
-                                                'class' => 'glyphicon glyphicon-plus',
-                                                'title' => 'Копировать подключение'
-                                            ],
-                                            'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
-                                            'size' => ModalAjax::SIZE_LARGE,
-                                            'options' => ['class' => 'header-primary'],
-                                            'autoClose' => true,
-                                            'pjaxContainer' => '#grid-company-pjax',
-                                            'events' => [
-                                                ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
-                                            ]
-                                        ]);
-                                    },
+                                        'copy' => function ($url, $model, $key) {
+                                            return ModalAjax::widget([
+                                                'id' => 'copyConnection' . ($model->id),
+                                                'header' => 'Копировать подключение',
+                                                'url' => '/connections/copy?id=' . $model->id, // Ajax view with form to load
+                                                'toggleButton' => [
+                                                    'label' => '',
+                                                    'class' => 'glyphicon glyphicon-plus',
+                                                    'title' => 'Копировать подключение'
+                                                ],
+                                                'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
+                                                'size' => ModalAjax::SIZE_LARGE,
+                                                'options' => ['class' => 'header-primary'],
+                                                'autoClose' => true,
+                                                'pjaxContainer' => '#grid-company-pjax',
+                                                'events' => [
+                                                    ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
+                                                ]
+                                            ]);
+                                        },
 
+                                    ]
                                 ]
                             ]
-                        ]
                     ]
                 );
             }
@@ -627,9 +636,9 @@ function checkOnline()
 		{   $('.buttonAllCheck.loading').attr('class', 'buttonAllCheck');
 			if (data.checkResult == true)
 				{
-					$(element).attr('class', 'ip-addr-ready');
+					$(element).parent().attr('class', 'ip-addr-ready');
 				} else {
-                        $(element).attr('class', 'ip-addr-noready');
+                        $(element).parent().attr('class', 'ip-addr-noready');
                 }
 		});
 
@@ -770,6 +779,12 @@ function sendStats(connectionId)
 
 function checkDns()
 {
+    $.ajax({
+    url: "",
+    context: document.body,
+    success: function(s,x){
+        $(this).html(s);
+
     //jQuery('.button').addClass('loading');
     //var links = [];
     // перебрать элементы div на странице
@@ -781,19 +796,42 @@ function checkDns()
 		// данное значение является числом
 		// начинается отсчёт с 0 и заканчивается количеству элементов в текущем наборе минус 1
 		// element - содержит DOM-ссылку на текущий элемент
-		var link = $(this).text();
-		console.log(link);
-		$.post('check', {link: link}, function(data)
+		var link = $(this).parent().parent().next().next().text();
+		$.post('check-dns', {link: link}, function(data)
 		{   $('.buttonAllCheck.loading').attr('class', 'buttonAllCheck');
-			if (data.checkResult == true)
+            console.log($(element).text() +' '+ link + ' ' + data.checkResult);
+			if (data.checkResult == $(element).text() )
 				{
-					$(element).attr('class', 'ip-addr-ready');
+					$(element).parent().parent().attr('class', 'ip-addr-ready');
 				} else {
-                        $(element).attr('class', 'ip-addr-noready');
-                }
-		});
+                        $(element).parent().parent().attr('class', 'ip-addr-noready');
 
-	});
+
+            if (data.checkResult === 'NOTFOUNDBYIP')
+                {
+                    $('b#hostname').each(function (i, el){
+                        if (el.textContent == $(element).text())
+                            {
+                                el.textContent = 'Хост ' + $(element).text() + ' не найден в обратной зоне DNS! ';
+                            }
+
+                    })
+                }
+            else //if(data.checkResult !== $(element).text())
+            {
+                $('b#hostname').each(function (i, el){
+                        if (el.textContent == $(element).text())
+                            {
+                                el.textContent = 'Имя в адресной ' + $(element).text() + ' не совпадает с ' + data.checkResult + ' в обратной зоне DNS! ';
+                            }
+
+                    })
+            }
+            }
+          		});
+
+	//return false;
+    });
 
     /*$.ajax({
 			url: 'check',
@@ -814,7 +852,8 @@ function checkDns()
 
 
     //jQuery('.button').removeClass('loading');
-};
+}
+});}
 
 
 

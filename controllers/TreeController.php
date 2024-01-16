@@ -480,4 +480,27 @@ class TreeController extends Controller
             return true;
         }
     }
+
+    public function actionCheckDns()
+    {
+        $request = Yii::$app->request;
+        if ($request->isAjax) { /* текущий запрос является AJAX запросом */
+            set_time_limit(0);
+            $link = $request->post('link');
+
+            $link = explode("  \n", $link );
+            $ipAddr = $link[0];
+            $name = gethostbyaddr($ipAddr);
+            if ($name == $ipAddr)
+            {
+                $name = "NOTFOUNDBYIP";
+            }
+            else {
+                $name = strtok($name, ".");
+            }
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            return ['checkResult' => $name];
+            //return ['checkResult' => $linkE[0]];
+        }
+    }
 }
