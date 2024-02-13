@@ -2,9 +2,8 @@
 
 namespace app\models;
 
-use Yii;
-
 $unit_res = [];
+
 /**
  * This is the model class for table "units".
  *
@@ -38,6 +37,7 @@ class Units extends \yii\db\ActiveRecord
             [['parent_id'], 'integer'],
             [['name', 'location'], 'string', 'max' => 255],
             [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Units::className(), 'targetAttribute' => ['parent_id' => 'id']],
+            [['parent_id'], 'compare', 'compareAttribute' => 'id', 'operator' => '!==']
         ];
     }
 
@@ -111,21 +111,39 @@ class Units extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * Returns child units by unit_id
+     *
+     * @param $unit_id
+     * @return \yii\db\ActiveQuery
+     */
     public static function childUnitsByUnitId($unit_id)
     {
-        $data =  Units::find()->where(['parent_id' => $unit_id])->orderBy('name');
+        $data = Units::find()->where(['parent_id' => $unit_id])->orderBy('name');
         return $data;
     }
 
-
+    /**
+     * Search units by keyword
+     *
+     * @param $keyword
+     * @return \yii\db\ActiveQuery
+     */
     public static function unitsBySearch($keyword)
-    {       
+    {
         $layout = Connections::switcher($keyword, 1);
         $layout1 = Connections::switcher($keyword, 2);
         $data = Units::find()->where(['like', 'name', '%' . $keyword . '%', false])->orWhere(['like', 'name', '%' . $layout . '%', false])->orWhere(['like', 'name', '%' . $layout1 . '%', false])->orderBy(['name' => 'SORT_ASC']);
         return $data;
     }
 
+
+    /**
+     * Generate breadcrumbs for unit_id
+     *
+     * @param $unit_id
+     * @return string
+     */
     public static function unitsBreadCrumbs($unit_id)
     {
         $unit = Units::findOne($unit_id);
@@ -140,6 +158,24 @@ class Units extends \yii\db\ActiveRecord
             return "<li> Корневой элемент не найден!</li>";
         }
     }
+
+    /**
+     * Returns true if unit_id has no parent (this is root unit)
+     *
+     * @param $unit_id
+     * @return bool
+     */
+    public static function isRoot($unit_id)
+    {
+        $unit = Units::findOne($unit_id);
+        if ($unit !== null) {
+            if ($unit->parent_id == null) {
+                return True;
+            }
+        }
+        return False;
+    }
+
 
     /**
      * Override fields function for working REST API

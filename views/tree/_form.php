@@ -18,7 +18,9 @@ use app\models\Units;
     $form = ActiveForm::begin();
     ?>
         <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($model, 'parent_id')->dropDownList($items_units, ['encodeSpaces' => true]) ?>
+        <?= !Units::isRoot($model->id)?$form->field($model, 'parent_id')->dropDownList($items_units, ['encodeSpaces' => true]):"" ?>
+
+
     <div class="form-group">
     <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Изменить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>

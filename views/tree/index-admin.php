@@ -312,11 +312,13 @@ $this->title = 'Адресная книга';
                     [
                         'dataProvider' => new ActiveDataProvider([
                             'query' => $child_units,
-                            'pagination' => [
+                            /*'pagination' => [
                                 'pageSize' => 5
-                            ],
+                            ],*/
+                            'sort' =>false,
                         ]),
                         //'layout' => "\n{items}\n{summary}\n{pager}",
+                        'layout' => "{items}",
                         'columns' =>
                             [
                                 [
@@ -363,6 +365,7 @@ $this->title = 'Адресная книга';
                     [
                         'dataProvider' => new ActiveDataProvider([
                             'query' => $connections,
+                            'sort' =>false,
                             'pagination' => [
                                 'pageSize' => 0, // ALL results, no pagination
                             ],
