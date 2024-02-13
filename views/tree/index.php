@@ -122,7 +122,7 @@ $this->title = 'Адресная книга';
                                 'delete' => function ($url, $model, $key) {
                                     $request = Yii::$app->request;
                                     $unit_id = $request->get('unit_id');
-                                    return Html::a('<button class="glyphicon glyphicon-trash"></button>', ['delete', 'id' => $key, 'from_tree' => 1, 'unit_id' => $unit_id], [
+                                    return $model->parent_id ? Html::a('<button class="glyphicon glyphicon-trash"></button>', ['delete', 'id' => $key, 'from_tree' => 1, 'unit_id' => $unit_id], [
                                         //'class' => 'file-item-dropdown-menu',
                                         'onclick' => 'return saveScroll(this);',
                                         'title' => 'Удалить',
@@ -130,7 +130,7 @@ $this->title = 'Адресная книга';
                                             'confirm' => 'Вы действительно хотите удалить ' . $model->name . '?',
                                             'method' => 'post',
                                         ],
-                                    ]);
+                                    ]) : "";
                                 },
                             ]
                         ]
