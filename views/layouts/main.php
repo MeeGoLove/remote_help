@@ -29,7 +29,7 @@ AppAsset::register($this);
 <body>
     <?php $this->beginBody() ?>
 
-    <div class="wrap">
+    <div class="custom-container">
         <?php
         NavBar::begin([
             'brandLabel' => Yii::$app->name,
@@ -37,6 +37,7 @@ AppAsset::register($this);
             'options' => [
                 'class' => 'navbar-inverse navbar-fixed-top',
             ],
+            'innerContainerOptions' => ['class' => 'container-fluid'],
         ]);
         echo Nav::widget([
             'options' => ['class' => 'navbar-nav navbar-right'],
@@ -93,13 +94,13 @@ AppAsset::register($this);
         </div>
     </div>
 
-    <footer class="footer">
-        <div class="container">
-            <p class="pull-left">&copy; ГАУЗ "ООКБ" <?= date('Y') ?></p>
+    <!--<footer class="footer">
+        <div class="container-fuid">
+            <p class="pull-left">&copy; ГАУЗ "ООКБ им. В.И. Войнова" <?= date('Y') ?></p>
 
-            <p class="pull-right"><?= Yii::powered() ?></p>
+            <p class="pull-right"><!= Yii::powered() ?></p>
         </div>
-    </footer>
+    </footer>-->
 
     <?php $this->endBody() ?>
 </body>

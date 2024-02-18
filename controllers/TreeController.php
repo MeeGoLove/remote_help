@@ -130,7 +130,7 @@ class TreeController extends Controller
         }
 
 
-        $defaultView = 'index';
+        $defaultView = 'index-admin';
 
         if ($admin) {
             $defaultView = 'index-admin';
@@ -185,7 +185,9 @@ class TreeController extends Controller
                         'unit_name' => 'Корневой элемент не найден!',
                         'unit_id_' => null,
                         'view_type' => $view_type,
-                        'editing' => $editing
+                        'editing' => $editing,
+                        'admin' => $admin
+
                     ]);
                 }
             }
@@ -199,7 +201,8 @@ class TreeController extends Controller
                 'unit_name' => 'Результаты поиска по строке: ' . $model_search->keyword,
                 'unit_id_' => $unit_id,
                 'view_type' => $view_type,
-                'editing' => $editing
+                'editing' => $editing,
+                'admin' => $admin
             ]);
         }
 
@@ -239,7 +242,8 @@ class TreeController extends Controller
                     'unit_name' => 'Корневой элемент не найден!',
                     'unit_id_' => null,
                     'view_type' => $view_type,
-                    'editing' => $editing
+                    'editing' => $editing,
+                    'admin' => $admin
                 ]);
             }
         }
@@ -253,7 +257,8 @@ class TreeController extends Controller
                 'unit_name' => $unit_name,
                 'unit_id_' => $unit_id,
                 'view_type' => $view_type,
-                'editing' => $editing
+                'editing' => $editing,
+                'admin' => $admin
             ]);
         } else {
             return $this->render($defaultView, [
@@ -265,7 +270,8 @@ class TreeController extends Controller
                 'unit_name' => $unit_name,
                 'unit_id_' => $unit_id,
                 'view_type' => $view_type,
-                'editing' => $editing
+                'editing' => $editing,
+                'admin' => $admin
             ]);
         }
     }

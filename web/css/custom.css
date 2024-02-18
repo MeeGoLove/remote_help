@@ -1,0 +1,96 @@
+.folders-block {
+    
+    border: 2px;
+    border-color: darkgray darkgray;
+    /* Цвет границы */
+    border-style: solid;
+    /* Стиль границы */
+    border-radius: 4px;
+    /*background-color: lightyellow;*/
+ 
+    padding: 0px;
+    /*Прокрутка блока, а не всей страницы*/
+    overflow-y: scroll;
+    height: 80vh;
+    padding-right: 5px;
+}
+
+.folders-block a {
+    color: black;    
+}
+
+.folders-block a:hover{
+    color:black;
+}
+ .table-striped  tbody  tr:nth-of-type(2n+1)
+{
+    background-color: white;
+}
+
+
+td
+{
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.breadcrumb
+{
+    margin-bottom: 10px;
+}
+
+.row {
+    margin-right: 0px;
+    margin-left: 0px;
+  }
+
+
+
+
+  .right-half
+  {
+    
+    overflow-y: scroll;
+    height: 80vh;
+    padding-left: 5px;
+    padding-right: 5px;
+    /*scrollbar-width: none;*/
+  }
+
+
+  .footer
+  {
+    padding: 15px;
+  }
+
+
+  .custom-container {
+    display: flex;
+    min-height: 99vh;
+    height: 99vh;
+    border: 1px solid black;
+    padding-top: 61px;    
+    overflow-y: scroll;
+  }
+  
+
+
+  #myBtn {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed/sticky position */
+    bottom: 20px; /* Place the button at the bottom of the page */
+    right: 30px; /* Place the button 30px from the right */
+    z-index: 99; /* Make sure it does not overlap */
+    border: none; /* Remove borders */
+    outline: none; /* Remove outline */
+    background-color: red; /* Set a background color */
+    color: white; /* Text color */
+    cursor: pointer; /* Add a mouse pointer on hover */
+    padding: 15px; /* Some padding */
+    border-radius: 10px; /* Rounded corners */
+    font-size: 18px; /* Increase font size */
+  }
+  
+  #myBtn:hover {
+    background-color: #555; /* Add a dark-grey background on hover */
+  }
