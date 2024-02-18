@@ -198,6 +198,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this t
     /* Стиль границы */
     border-radius: 4px;
     background-color: lightgray;
+    padding-left: 10px;  
+    padding-right: 10px;
 }
 
 .search-block h3 {
@@ -214,6 +216,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/css.css to edit this t
     /* Стиль границы */
     border-radius: 4px;
     background-color:lightblue;
+    padding-left: 10px;  
+    padding-right: 10px;  
 }
 
 .search-block-admin  h3 {

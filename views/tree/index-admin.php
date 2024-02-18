@@ -165,7 +165,8 @@ $this->registerJs($topButtonScript, yii\web\View::POS_BEGIN);
 
         <div class="right-half" id="right-half" onscroll="scrollFunction()">
             <!-- Верхний блок с фильтрами-->
-            <div class="search-block-admin">
+
+            <div class="<?=$admin? "search-block-admin": "search-block" ?>">
                 <div class="content-header-wrapper">
                     <h3 class="title">
                         <?php echo $unit_name; ?>
