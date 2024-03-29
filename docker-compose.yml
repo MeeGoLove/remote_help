@@ -1,9 +1,48 @@
-version: '2'
+version: '3'
+
+networks:
+  default:
+    driver: bridge
+
 services:
   php:
     image: yiisoftware/yii2-php:7.4-apache
     volumes:
       - ~/.composer-docker/cache:/root/.composer/cache:delegated
       - ./:/app:delegated
+      - ./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+      - ./docker/apache/000-default.conf:/etc/apache2/sites-available/000-default.conf
+    environment:
+      - PHP_ENABLE_XDEBUG=1
+      - PHP_IDE_CONFIG=serverName=MyTestServer
     ports:
-      - '8000:80'
+      - '80:80'
+    networks:
+      - default
+    depends_on:
+      - db
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      - MYSQL_DATABASE=remotehelp
+      - MYSQL_USER=remotehelp
+      - MYSQL_PASSWORD=2WQsQUy6fwKzaZVZ!z
+      - MYSQL_ROOT_PASSWORD=2WQsQUy6fwKzaZVZ!z
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+#    volumes:
+#      - "./docker/mysql:/var/lib/mysql"
+    networks:
+      - default
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - '8888:80'
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+    depends_on:
+      - db
