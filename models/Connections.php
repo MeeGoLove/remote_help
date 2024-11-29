@@ -94,23 +94,28 @@ class Connections extends \yii\db\ActiveRecord
 
     public static function connectionsByUnitId($unit_id)
     {
-        $data = Connections::find()->where(['unit_id' => $unit_id])->orderBy(['name' => 'SORT_ASC']);
+        $data = Connections::find()->where(['unit_id' => $unit_id])->orderBy(['hostname' => 'SORT_ASC','name' => 'SORT_ASC']);
         return $data;
     }
 
-    public static function connectionsBySearch($keyword, $onlyName)
+    public static function connectionsBySearch($keyword, $strictIp, $onlyNames)
     {
 
         $layout = self::switcher($keyword,1);
         $layout1 = self::switcher($keyword,2);
-        if ($onlyName) {
+        if ($onlyNames) {
             $data = Connections::find()->where(['like', 'name', '%' . $keyword . '%', false])->
             orWhere(['like', 'name', '%' . $layout . '%', false])->
             orWhere(['like', 'name', '%' . $layout1 . '%', false])->
             orWhere(['like', 'hostname', '%' . $keyword . '%', false])->
             orWhere(['like', 'hostname', '%' . $layout . '%', false])->
             orWhere(['like', 'hostname', '%' . $layout1 . '%', false])->
-            orderBy(['name' => 'SORT_ASC']);
+            orderBy(['hostname' => 'SORT_ASC','name' => 'SORT_ASC']);
+            return $data;            
+    }
+    else {      
+        if ($strictIp) {
+            $data = Connections::find()->where(['like', 'ipaddr',  $keyword , false])->orderBy(['hostname' => 'SORT_ASC','name' => 'SORT_ASC']);
             return $data;
         } else {
             $data = Connections::find()->where(['like', 'name', '%' . $keyword . '%', false])->
@@ -119,10 +124,12 @@ class Connections extends \yii\db\ActiveRecord
             orWhere(['like', 'hostname', '%' . $keyword . '%', false])->
             orWhere(['like', 'hostname', '%' . $layout . '%', false])->
             orWhere(['like', 'hostname', '%' . $layout1 . '%', false])->
-            orWhere(['like', 'ipaddr', '%' . $keyword . '%', false])->orderBy(['name' => 'SORT_ASC']);
+            orWhere(['like', 'ipaddr', '%' . $keyword . '%', false])->orderBy(['hostname' => 'SORT_ASC','name' => 'SORT_ASC']);
             return $data;
-        }
+        }      
     }
+    }
+
 
     public static function connectionsByiP($ipaddr, $id)
     {

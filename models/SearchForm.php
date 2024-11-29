@@ -13,6 +13,7 @@ class SearchForm extends Model {
 
     public $keyword;
     public $byipsearch;
+    public $onlyNames;
 
     /**
      * @return array the validation rules.
@@ -23,6 +24,7 @@ class SearchForm extends Model {
             [['keyword'], 'string', 'length' => [2]],
             [['keyword'], 'required'],
             ['byipsearch', 'boolean'],
+            ['onlyNames', 'boolean'],
         ];
     }
 
@@ -33,7 +35,8 @@ class SearchForm extends Model {
     public function attributeLabels() {
         return [
             'keyword' => 'Ключевое слово',
-            'byipsearch' => 'Включая IP-адреса',
+            'byipsearch' => 'Точный поиск IP',
+            'onlyNames' => 'Поиск только по имени'
         ];
     }
 

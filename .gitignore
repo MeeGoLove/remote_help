@@ -39,3 +39,6 @@ composer.lock
 composer.lock
 web/file-export.csv
 web/file.csv
+/node_modules
+package-lock.json
+package.json

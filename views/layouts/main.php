@@ -39,38 +39,54 @@ AppAsset::register($this);
             ],
             'innerContainerOptions' => ['class' => 'container-fluid'],
         ]);
+
+
+        $menuItems = [
+            ['label' => 'Главная', 'url' => ['/site/index']],
+            ['label' => 'Адресная книга', 'url' => ['/tree/index']],
+            //['label' => 'Тест', 'url' => ['/tree/check']],               
+            ['label' => 'Справочники',  'items' =>
+            [
+                ['label' => 'Удаленные протоколы', 'url' => ['/connection-types/index']],
+                ['label' => 'Типы устройств', 'url' => ['/device-types/index']],  
+                ['label' => 'Подключения', 'url' => ['/connections/index']],
+                ['label' => 'Подразделения', 'url' => ['/units/index']],
+            ]],
+            ['label' => 'Генератор helppack', 'url' => ['/help-pack/index']],
+            ['label' => 'Импорт',  'items' =>
+            [
+                ['label' => 'Из Radmin', 'url' => ['/import/radmin']],
+                ['label' => 'Из LiteManager', 'url' => ['/import/lm']],
+                ['label' => 'Из TS Gateway', 'url' => ['/import/msrdpgtw']],
+                ['label' => 'Из TS LocalSessionManager', 'url' => ['/import/msrdplsm']],
+                ['label' => 'Из выданных терминалок', 'url' => ['/import/excel']],
+
+            ]],
+            ['label' => 'Экспорт',  'items' =>
+            [
+                ['label' => 'В Radmin', 'url' => ['/export/radmin']],
+                ['label' => 'В LiteManager', 'url' => ['/export/lm']],                    
+                ['label' => 'В Excel', 'url' => ['/export/excel']],
+
+            ]]];
+            if (Yii::$app->user->isGuest) {
+                $menuItems[] = ['label' => 'Регистрация', 'url' => ['/site/signup']];
+                $menuItems[] = ['label' => 'Вход', 'url' => ['/site/login']];
+            } else {
+                $menuItems[] = '<li>'
+                    . Html::beginForm(['/site/logout'], 'post')
+                    . Html::submitButton(
+                        'Выход (' . Yii::$app->user->identity->username . ')',
+                        ['class' => 'btn btn-link logout']
+                    )
+                    . Html::endForm()
+                    . '</li>';
+            }        
         echo Nav::widget([
             'options' => ['class' => 'navbar-nav navbar-right'],
-            'items' => [
-                ['label' => 'Главная', 'url' => ['/site/index']],
-                ['label' => 'Адресная книга', 'url' => ['/tree/index']],
-                //['label' => 'Тест', 'url' => ['/tree/check']],               
-                ['label' => 'Справочники',  'items' =>
-                [
-                    ['label' => 'Удаленные протоколы', 'url' => ['/connection-types/index']],
-                    ['label' => 'Типы устройств', 'url' => ['/device-types/index']],  
-                    ['label' => 'Подключения', 'url' => ['/connections/index']],
-                    ['label' => 'Подразделения', 'url' => ['/units/index']],
-                ]],
-                ['label' => 'Генератор helppack', 'url' => ['/help-pack/index']],
-                ['label' => 'Импорт',  'items' =>
-                [
-                    ['label' => 'Из Radmin', 'url' => ['/import/radmin']],
-                    ['label' => 'Из LiteManager', 'url' => ['/import/lm']],
-                    ['label' => 'Из TS Gateway', 'url' => ['/import/msrdpgtw']],
-                    ['label' => 'Из TS LocalSessionManager', 'url' => ['/import/msrdplsm']],
-                    ['label' => 'Из выданных терминалок', 'url' => ['/import/excel']],
+            'items' => $menuItems]);                    
 
-                ]],
-                ['label' => 'Экспорт',  'items' =>
-                [
-                    ['label' => 'В Radmin', 'url' => ['/export/radmin']],
-                    ['label' => 'В LiteManager', 'url' => ['/export/lm']],                    
-                    ['label' => 'В Excel', 'url' => ['/export/excel']],
-
-                ]],
-
-                Yii::$app->user->isGuest ? (['label' => 'Login', 'url' => ['/site/login']]
+               /* Yii::$app->user->isGuest ? (['label' => 'Login', 'url' => ['/site/login']]
                 ) : ('<li>'
                     . Html::beginForm(['/site/logout'], 'post')
                     . Html::submitButton(
@@ -81,7 +97,7 @@ AppAsset::register($this);
                     . '</li>'
                 )
             ],
-        ]);
+        ]);*/
         NavBar::end();
         ?>
 
@@ -94,13 +110,13 @@ AppAsset::register($this);
         </div>
     </div>
 
-    <!--<footer class="footer">
-        <div class="container-fuid">
+    <footer class="footer">
+        <div class="container-fluid">
             <p class="pull-left">&copy; ГАУЗ "ООКБ им. В.И. Войнова" <?= date('Y') ?></p>
 
             <p class="pull-right"><!= Yii::powered() ?></p>
         </div>
-    </footer>-->
+    </footer>
 
     <?php $this->endBody() ?>
 </body>

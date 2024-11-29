@@ -166,7 +166,7 @@ $this->registerJs($topButtonScript, yii\web\View::POS_BEGIN);
         <div class="right-half" id="right-half" onscroll="scrollFunction()">
             <!-- Верхний блок с фильтрами-->
 
-            <div class="<?=$admin? "search-block-admin": "search-block" ?>">
+            <div class="<?= $admin ? "search-block-admin" : "search-block" ?>">
                 <div class="content-header-wrapper">
                     <h3 class="title">
                         <?php echo $unit_name; ?>
@@ -226,9 +226,28 @@ $this->registerJs($topButtonScript, yii\web\View::POS_BEGIN);
 
                         <div class="form-inline ">
 
+                            <?php
+                            //echo print_r($strictedIP);
+                            if ($onlyNames) {
 
-                            <?= $form->field($model_search, 'byipsearch')->checkbox(['style' => 'mardin-left:10px;margin-top:-10px ;margin-bottom:10px']); ?>
-                            <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary', 'name' => 'search-button', 'value' => 'btn-name', 'style' => 'margin-left:30px;margin-top:-10px ;margin-bottom:10px']) ?>
+                                echo $form->field($model_search, 'onlyNames')->checkbox(['checked ' => true, 'style' => 'mardin-left:10px;margin-top:-10px ;margin-bottom:10px']);
+                            } else {
+                                echo $form->field($model_search, 'onlyNames')->checkbox(['checked ' => false, 'style' => 'mardin-left:10px;margin-top:-10px ;margin-bottom:10px']);
+                            } ?>
+                            <br>
+
+                            <?php
+                            //echo print_r($strictedIP);
+                            if ($strictedIP) {
+
+                                echo $form->field($model_search, 'byipsearch')->checkbox(['checked ' => true, 'style' => 'mardin-left:10px;margin-top:-10px ;margin-bottom:10px']);
+                            } else {
+                                echo $form->field($model_search, 'byipsearch')->checkbox(['checked ' => false, 'style' => 'mardin-left:10px;margin-top:-10px ;margin-bottom:10px']);
+                            } ?>
+
+
+                            <?= Html::submitButton('&nbsp;&nbsp;&nbsp;ПОИСК&nbsp;&nbsp;&nbsp;', ['class' => 'btn btn-primary', 'name' => 'search-button', 'value' => 'btn-name', 'style' => 'margin-left:30px;margin-top:-10px ;margin-bottom:10px']) ?>
+
 
                         </div>
 
@@ -310,8 +329,8 @@ $this->registerJs($topButtonScript, yii\web\View::POS_BEGIN);
                                     'autoClose' => true,
                                     'pjaxContainer' => '#grid-company-pjax',
                                     'events' => [
-                                        ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
-                                    ]
+                                            ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
+                                        ]
                                 ]);
                         }
                         ?>
@@ -561,59 +580,59 @@ $this->registerJs($topButtonScript, yii\web\View::POS_BEGIN);
                                         'contentOptions' => ['style' => 'min-width: 45px; max-width: 65px'],
                                         'template' => '{update}{delete} {copy}',
                                         'buttons' => [
-                                            'update' => function ($url, $model, $key) {
-                                                return ModalAjax::widget([
-                                                    'id' => 'updateConnection' . ($model->id),
-                                                    'header' => 'Изменить подключение <u>' . $model->name . '</u>',
-                                                    'url' => '/connections/update?id=' . $model->id, // Ajax view with form to load
-                                                    'toggleButton' => [
-                                                        'label' => '',
-                                                        'class' => 'glyphicon glyphicon-pencil',
-                                                        'title' => 'Изменить подключение'
-                                                    ],
-                                                    'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
-                                                    'size' => ModalAjax::SIZE_LARGE,
-                                                    'options' => ['class' => 'header-primary'],
-                                                    'autoClose' => true,
-                                                    'pjaxContainer' => '#grid-company-pjax',
-                                                    'events' => [
-                                                        ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
-                                                    ]
-                                                ]);
-                                            },
-                                            'delete' => function ($url, $model, $key) {
-                                                $name = strip_tags($model->name);
-                                                return Html::a('<button class="glyphicon glyphicon-trash"></button>', ['/connections/delete', 'id' => $model->id, 'from_tree' => 1, 'unit_id' => $model->unit_id], [
-                                                    'title' => 'Удалить подключение',
-                                                    'data' => [
-                                                        'confirm' => 'Вы действительно хотите удалить ' . $name . '?',
-                                                        'method' => 'post',
-                                                    ],
-                                                ]);
-                                            },
+                                                'update' => function ($url, $model, $key) {
+                                                    return ModalAjax::widget([
+                                                        'id' => 'updateConnection' . ($model->id),
+                                                        'header' => 'Изменить подключение <u>' . $model->name . '</u>',
+                                                        'url' => '/connections/update?id=' . $model->id, // Ajax view with form to load
+                                                        'toggleButton' => [
+                                                            'label' => '',
+                                                            'class' => 'glyphicon glyphicon-pencil',
+                                                            'title' => 'Изменить подключение'
+                                                        ],
+                                                        'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
+                                                        'size' => ModalAjax::SIZE_LARGE,
+                                                        'options' => ['class' => 'header-primary'],
+                                                        'autoClose' => true,
+                                                        'pjaxContainer' => '#grid-company-pjax',
+                                                        'events' => [
+                                                                ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
+                                                            ]
+                                                    ]);
+                                                },
+                                                'delete' => function ($url, $model, $key) {
+                                                    $name = strip_tags($model->name);
+                                                    return Html::a('<button class="glyphicon glyphicon-trash"></button>', ['/connections/delete', 'id' => $model->id, 'from_tree' => 1, 'unit_id' => $model->unit_id], [
+                                                        'title' => 'Удалить подключение',
+                                                        'data' => [
+                                                            'confirm' => 'Вы действительно хотите удалить ' . $name . '?',
+                                                            'method' => 'post',
+                                                        ],
+                                                    ]);
+                                                },
 
-                                            'copy' => function ($url, $model, $key) {
-                                                return ModalAjax::widget([
-                                                    'id' => 'copyConnection' . ($model->id),
-                                                    'header' => 'Копировать подключение',
-                                                    'url' => '/connections/copy?id=' . $model->id, // Ajax view with form to load
-                                                    'toggleButton' => [
-                                                        'label' => '',
-                                                        'class' => 'glyphicon glyphicon-plus',
-                                                        'title' => 'Копировать подключение'
-                                                    ],
-                                                    'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
-                                                    'size' => ModalAjax::SIZE_LARGE,
-                                                    'options' => ['class' => 'header-primary'],
-                                                    'autoClose' => true,
-                                                    'pjaxContainer' => '#grid-company-pjax',
-                                                    'events' => [
-                                                        ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
-                                                    ]
-                                                ]);
-                                            },
+                                                'copy' => function ($url, $model, $key) {
+                                                    return ModalAjax::widget([
+                                                        'id' => 'copyConnection' . ($model->id),
+                                                        'header' => 'Копировать подключение',
+                                                        'url' => '/connections/copy?id=' . $model->id, // Ajax view with form to load
+                                                        'toggleButton' => [
+                                                            'label' => '',
+                                                            'class' => 'glyphicon glyphicon-plus',
+                                                            'title' => 'Копировать подключение'
+                                                        ],
+                                                        'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
+                                                        'size' => ModalAjax::SIZE_LARGE,
+                                                        'options' => ['class' => 'header-primary'],
+                                                        'autoClose' => true,
+                                                        'pjaxContainer' => '#grid-company-pjax',
+                                                        'events' => [
+                                                                ModalAjax::EVENT_MODAL_SUBMIT => new \yii\web\JsExpression("function(event, data, status, xhr, selector) {window.location.reload();}")
+                                                            ]
+                                                    ]);
+                                                },
 
-                                        ]
+                                            ]
                                     ]
                                 ]
                         ]

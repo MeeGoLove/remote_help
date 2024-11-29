@@ -55,7 +55,9 @@ class TreeController extends Controller
         $editing = false,
         $changeEditing = false,
         $admin = false,
-        $changeAdmin = false
+        $changeAdmin = false,
+        $strictedIP = false,
+        $onlyNames = true
     )
     {
         //Через куки проверяем в каком виде будет отражаться папки и подключения
@@ -102,6 +104,28 @@ class TreeController extends Controller
             }
         }
 
+
+                //Аналогично с кнопкой редактирвоание
+                if (!$cookies->has('strictedIP')) {
+                    Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                        'name' => 'strictedIP',
+                        'value' => $strictedIP
+                    ]));
+                } else {
+                    //Если нажимали переключатель, то сохраним в куке вид                    
+                        $strictedIP = $cookies->get('strictedIP');                    
+                }
+
+                //Аналогично с кнопкой редактирвоание
+                                if (!$cookies->has('onlyNames')) {
+                                    Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                                        'name' => 'onlyNames',
+                                        'value' => $onlyNames
+                                    ]));
+                                } else {
+                                    //Если нажимали переключатель, то сохраним в куке вид                    
+                                        $onlyNames = $cookies->get('onlyNames');                    
+                                }
 
         //Аналогично с режимом администратора
         if (!$cookies->has('admin')) {
@@ -156,13 +180,38 @@ class TreeController extends Controller
 
         if ($model_search->load(Yii::$app->request->post()) && $model_search->validate()) {
             //return var_dump($model_search->keyword);
-            if (!$model_search->byipsearch) {
+            Yii::$app->response->cookies->remove('strictedIP');
+                        Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                            'name' => 'strictedIP',
+                            'value' => $model_search->byipsearch
+                        ]));
+                        $strictedIP = $model_search->byipsearch;
+                        if ($strictedIP == "1") {
+                            $strictedIP = true;
+                        } else {
+                            $strictedIP = false;
+                        }
+                Yii::$app->response->cookies->remove('onlyNames');
+                        Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                            'name' => 'onlyNames',
+                            'value' => $model_search->onlyNames
+                        ]));
+                        $onlyNames = $model_search->onlyNames;
+                        if ($onlyNames == "1") {
+                            $onlyNames = true;
+                        } else {
+                            $onlyNames = false;
+                        }
+           /* if (!$model_search->byipsearch) {
                 $connections = Connections::connectionsBySearch($model_search->keyword, true);
                 $child_units = Units::unitsBySearch($model_search->keyword);
             } else {
                 $connections = Connections::connectionsBySearch($model_search->keyword, false);
                 $child_units = Units::unitsBySearch($model_search->keyword);;
             }
+*/
+            $connections = Connections::connectionsBySearch($model_search->keyword, $strictedIP, $onlyNames);
+            $child_units = Units::unitsBySearch($model_search->keyword);
             /* $connections = Connections::connectionsBySearch($model_search->keyword);
               $child_units = Units::unitsBySearch($model_search->keyword); */
             $unit = Units::findOne(['id' => $unit_id]);
@@ -186,8 +235,9 @@ class TreeController extends Controller
                         'unit_id_' => null,
                         'view_type' => $view_type,
                         'editing' => $editing,
-                        'admin' => $admin
-
+                        'admin' => $admin,
+                        'strictedIP' =>  $strictedIP,
+                        'onlyNames' => $onlyNames
                     ]);
                 }
             }
@@ -202,7 +252,9 @@ class TreeController extends Controller
                 'unit_id_' => $unit_id,
                 'view_type' => $view_type,
                 'editing' => $editing,
-                'admin' => $admin
+                'admin' => $admin,
+                'strictedIP' =>  $strictedIP,
+                'onlyNames' => $onlyNames
             ]);
         }
 
@@ -222,7 +274,11 @@ class TreeController extends Controller
         $connections = Connections::connectionsByUnitId($unit_id);
         $child_units = Units::childUnitsByUnitId($unit_id);
         $unit = Units::findOne(['id' => $unit_id]);
-
+        if ($strictedIP == "1") {
+            $strictedIP = true;
+        } else {
+            $strictedIP = false;
+        }
         if ($unit !== null) {
             $parent_id = $unit->parent_id;
             $unit_name = $unit->name;
@@ -243,7 +299,9 @@ class TreeController extends Controller
                     'unit_id_' => null,
                     'view_type' => $view_type,
                     'editing' => $editing,
-                    'admin' => $admin
+                    'admin' => $admin,
+                    'strictedIP' =>  $strictedIP,
+                    'onlyNames' => $onlyNames
                 ]);
             }
         }
@@ -258,7 +316,9 @@ class TreeController extends Controller
                 'unit_id_' => $unit_id,
                 'view_type' => $view_type,
                 'editing' => $editing,
-                'admin' => $admin
+                'admin' => $admin,
+                'strictedIP' =>  $strictedIP,
+                'onlyNames' => $onlyNames
             ]);
         } else {
             return $this->render($defaultView, [
@@ -271,7 +331,9 @@ class TreeController extends Controller
                 'unit_id_' => $unit_id,
                 'view_type' => $view_type,
                 'editing' => $editing,
-                'admin' => $admin
+                'admin' => $admin,
+                'strictedIP' =>  $strictedIP,
+                'onlyNames' => $onlyNames
             ]);
         }
     }

@@ -196,21 +196,14 @@ $this->title = 'Адресная книга';
                     </div>
 
 
-                    <div class="form-inline ">
-
-
-                        <?= $form->field($model_search, 'byipsearch')->checkbox(['style' => 'mardin-left:10px;margin-top:-10px ;margin-bottom:10px']); ?>
-                        <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary', 'name' => 'search-button', 'value' => 'btn-name', 'style' => 'margin-left:30px;margin-top:-10px ;margin-bottom:10px']) ?>
 
                     </div>
-
 
                     <?php ActiveForm::end(); ?>
                 </div>
                 <!-- Кнопки вида и создания нового подключения -->
                 <div class="actions">
                     <div class="page-nav">
-
                         <label>Редактор: </label>
                         <div class="btn-group btn-toggle">
                             <?php
